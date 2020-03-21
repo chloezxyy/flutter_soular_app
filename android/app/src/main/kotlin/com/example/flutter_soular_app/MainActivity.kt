@@ -1,4 +1,4 @@
-package com.example.flutter_smart_course
+package com.example.flutter_soular_app
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_course/src/helper/courseModel.dart';
-import 'package:flutter_smart_course/src/helper/quad_clipper.dart';
-import 'package:flutter_smart_course/src/pages/home_page.dart';
-import 'package:flutter_smart_course/src/theme/color/light_color.dart';
-import 'package:flutter_smart_course/src/theme/theme.dart';
+import 'package:flutter_soular_app/src/helper/courseModel.dart';
+import 'package:flutter_soular_app/src/helper/quad_clipper.dart';
+import 'package:flutter_soular_app/src/theme/color/light_color.dart';
+import 'package:flutter_soular_app/src/theme/theme.dart';
 
-class RecomendedPage extends StatelessWidget {
-  RecomendedPage({Key key}) : super(key: key);
+class RecomendedPage extends StatefulWidget{
+    RecomendedPage({Key key}) : super(key: key);
+
+    @override 
+    _RecomendedPageState createState() => _RecomendedPageState();
+
+}
+
+class _RecomendedPageState extends State<RecomendedPage> {
 
   double width;
 
@@ -46,15 +52,11 @@ class RecomendedPage extends StatelessWidget {
                       padding: EdgeInsets.symmetric(horizontal: 20),
                       child: Stack(
                         children: <Widget>[
-                          Icon(
-                            Icons.keyboard_arrow_left,
-                            color: Colors.white,
-                            size: 40,
-                          ),
+                        
                           Align(
                               alignment: Alignment.center,
                               child: Text(
-                                "Recomended",
+                                "View your bills",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 30,
@@ -107,13 +109,8 @@ class RecomendedPage extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 children: <Widget>[
                   SizedBox(width: 20),
-                  _chip("Data Scientist", LightColor.yellow, height: 5),
-                  SizedBox(width: 10),
-                  _chip("Data Analyst", LightColor.seeBlue, height: 5),
-                  SizedBox(width: 10),
-                  _chip("Data Engineer", LightColor.orange, height: 5),
-                  SizedBox(width: 10),
-                  _chip("Data Scientist", LightColor.lightBlue, height: 5),
+                  _chip("Last month", LightColor.purple, height: 5),
+                  SizedBox(width: 10)
                 ],
               )),
           SizedBox(height: 10)
@@ -137,15 +134,15 @@ class RecomendedPage extends StatelessWidget {
               endIndent: 20,
               indent: 20,
             ),
-            _courceInfo(CourseList.list[1], _decorationContainerB(),
-                background: LightColor.darkOrange),
-            Divider(
-              thickness: 1,
-              endIndent: 20,
-              indent: 20,
-            ),
-            _courceInfo(CourseList.list[2], _decorationContainerC(),
-                background: LightColor.lightOrange2),
+            // _courceInfo(CourseList.list[1], _decorationContainerB(),
+            //     background: LightColor.darkOrange),
+            // Divider(
+            //   thickness: 1,
+            //   endIndent: 20,
+            //   indent: 20,
+            // ),
+            // _courceInfo(CourseList.list[2], _decorationContainerC(),
+            //     background: LightColor.lightOrange2),
           ],
         ),
       ),
@@ -174,6 +171,7 @@ class RecomendedPage extends StatelessWidget {
           child: backWidget,
         ));
   }
+
 
   Widget _courceInfo(CourseModel model, Widget decoration, {Color background}) {
     return Container(
@@ -291,63 +289,63 @@ class RecomendedPage extends StatelessWidget {
     );
   }
 
-  Widget _decorationContainerB() {
-    return Stack(
-      children: <Widget>[
-        Positioned(
-          top: -65,
-          left: -65,
-          child: CircleAvatar(
-            radius: 70,
-            backgroundColor: LightColor.lightOrange2,
-            child: CircleAvatar(
-                radius: 30, backgroundColor: LightColor.darkOrange),
-          ),
-        ),
-        Positioned(
-            bottom: -35,
-            right: -40,
-            child:
-                CircleAvatar(backgroundColor: LightColor.yellow, radius: 40)),
-        Positioned(
-          top: 50,
-          left: -40,
-          child: _circularContainer(70, Colors.transparent,
-              borderColor: Colors.white),
-        ),
-      ],
-    );
-  }
+  // Widget _decorationContainerB() {
+  //   return Stack(
+  //     children: <Widget>[
+  //       Positioned(
+  //         top: -65,
+  //         left: -65,
+  //         child: CircleAvatar(
+  //           radius: 70,
+  //           backgroundColor: LightColor.lightOrange2,
+  //           child: CircleAvatar(
+  //               radius: 30, backgroundColor: LightColor.darkOrange),
+  //         ),
+  //       ),
+  //       Positioned(
+  //           bottom: -35,
+  //           right: -40,
+  //           child:
+  //               CircleAvatar(backgroundColor: LightColor.yellow, radius: 40)),
+  //       Positioned(
+  //         top: 50,
+  //         left: -40,
+  //         child: _circularContainer(70, Colors.transparent,
+  //             borderColor: Colors.white),
+  //       ),
+  //     ],
+  //   );
+  // }
 
-  Widget _decorationContainerC() {
-    return Stack(
-      children: <Widget>[
-        Positioned(
-          bottom: -65,
-          left: -35,
-          child: CircleAvatar(
-            radius: 70,
-            backgroundColor: Color(0xfffeeaea),
-          ),
-        ),
-        Positioned(
-            bottom: -30,
-            right: -25,
-            child: ClipRect(
-                clipper: QuadClipper(),
-                child: CircleAvatar(
-                    backgroundColor: LightColor.yellow, radius: 40))),
-        _smallContainer(
-          Colors.yellow,
-          35,
-          70,
-        ),
-      ],
-    );
-  }
+  // Widget _decorationContainerC() {
+  //   return Stack(
+  //     children: <Widget>[
+  //       Positioned(
+  //         bottom: -65,
+  //         left: -35,
+  //         child: CircleAvatar(
+  //           radius: 70,
+  //           backgroundColor: Color(0xfffeeaea),
+  //         ),
+  //       ),
+  //       Positioned(
+  //           bottom: -30,
+  //           right: -25,
+  //           child: ClipRect(
+  //               clipper: QuadClipper(),
+  //               child: CircleAvatar(
+  //                   backgroundColor: LightColor.yellow, radius: 40))),
+  //       _smallContainer(
+  //         Colors.yellow,
+  //         35,
+  //         70,
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Positioned _smallContainer(Color primaryColor, double top, double left,
-      {double radius = 10}) {
+      {double radius = 0}) {
     return Positioned(
         top: top,
         left: left,
@@ -357,42 +355,18 @@ class RecomendedPage extends StatelessWidget {
         ));
   }
 
-  BottomNavigationBarItem _bottomIcons(IconData icon) {
-    return BottomNavigationBarItem(
-        //  backgroundColor: Colors.blue,
-        icon: Icon(icon),
-        title: Text(""));
-  }
-
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     return Scaffold(
-        bottomNavigationBar: BottomNavigationBar(
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          selectedItemColor: LightColor.purple,
-          unselectedItemColor: Colors.grey.shade300,
-          type: BottomNavigationBarType.fixed,
-          currentIndex: 1,
-          items: [
-            _bottomIcons(Icons.home),
-            _bottomIcons(Icons.star_border),
-            _bottomIcons(Icons.book),
-            _bottomIcons(Icons.person),
-          ],
-          onTap: (index) {
-            Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => HomePage()));
-          },
-        ),
+      
         body: SingleChildScrollView(
             child: Container(
           child: Column(
             children: <Widget>[
               _header(context),
               SizedBox(height: 20),
-              _categoryRow("Start a new career"),
+              _categoryRow("Bills"),
               _courseList()
             ],
           ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_soular_app/src/pages/main_page.dart';
 
 import 'src/pages/home_page.dart';
 import 'src/theme/theme.dart';
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: AppTheme.lightTheme,
-      home: HomePage(),
+      home: MainPage(),
       debugShowCheckedModeBanner: false,
     );
   }

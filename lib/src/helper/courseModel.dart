@@ -18,13 +18,14 @@ class CourseModel {
 class CourseList {
   static List<CourseModel> list = [
     CourseModel(
-        name: "Data Science",
+        name: "Feburary's Electricity Bill ",
         description:
-            "Launch your career in data science. A sweet-cource introduction to data science, develop and taught by leading professors.",
-        university: "Jons Hopkins University",
-        noOfCource: "17 courses",
-        tag1: "Data science",
-        tag2: "Machine Learning"),
+            "This is FEB's electricity consumption",
+        university: "SOULAR",
+        noOfCource: "Feb",
+        tag1: "Feb1",
+        tag2: "Feb2"
+        ),
     CourseModel(
         name: "Machine Learning",
         description:

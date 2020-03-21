@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_course/src/helper/quad_clipper.dart';
-import 'package:flutter_smart_course/src/pages/recomended_page.dart';
-import 'package:flutter_smart_course/src/theme/color/light_color.dart';
+import 'package:flutter_soular_app/src/helper/quad_clipper.dart';
+import 'package:flutter_soular_app/src/theme/color/light_color.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
 
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   double width;
 
   Widget _header(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     return ClipRRect(
-      borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(50), bottomRight: Radius.circular(50)),
       child: Container(
-          height: 200,
+          height: 175,
           width: width,
           decoration: BoxDecoration(
             color: LightColor.purple,
@@ -41,42 +43,44 @@ class HomePage extends StatelessWidget {
                   left: 0,
                   child: Container(
                       width: width,
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      child: Column(
+                      padding: EdgeInsets.symmetric(horizontal: 30),
+                      child: new Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Icon(
-                            Icons.keyboard_arrow_left,
-                            color: Colors.white,
-                            size: 40,
-                          ),
                           SizedBox(height: 10),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Text(
-                                "Search courses",
+                                "Your Account Value",
                                 style: TextStyle(
-                                    color: Colors.white,
+                                    color: Colors.white60,
                                     fontWeight: FontWeight.w500),
                               ),
-                              Icon(
-                                Icons.search,
-                                color: Colors.white,
-                                size: 30,
+                              FlatButton(
+                                onPressed: null,
+                                child: Text('MANAGE WALLET',
+                                    style: TextStyle(color: Colors.white)),
+                                // textColor: Colors.lime,
+                                shape: RoundedRectangleBorder(
+                                    side: BorderSide(
+                                        color: Colors.white,
+                                        width: 1,
+                                        style: BorderStyle.solid),
+                                    borderRadius: BorderRadius.circular(20)),
                               )
                             ],
                           ),
-                          SizedBox(height: 20),
+                          SizedBox(height: 1),
                           Text(
-                            "Type Something...",
+                            " USD 48.42 ",
                             style: TextStyle(
-                                color: Colors.white54,
+                                color: Colors.white,
                                 fontSize: 30,
-                                fontWeight: FontWeight.w500),
-                          )
+                                fontWeight: FontWeight.w600),
+                          ),
                         ],
-                      )))
+                      ))),
             ],
           )),
     );
@@ -95,10 +99,88 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  Widget _graph(String title) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 20),
+      height: 30,
+      // padding: const EdgeInsets.all(3.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            title,
+            style: TextStyle(
+                color: LightColor.titleTextColor, fontWeight: FontWeight.bold),
+          ),
+
+          // _chip("Manage", primary)
+        ],
+      ),
+    );
+  }
+
+  Widget _buyRow() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 17),
+      height: 40,
+      child: Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(
+              " Buy Electricity From Microgrid",
+              style: TextStyle(
+                  color: LightColor.titleTextColor,
+                  fontWeight: FontWeight.bold),
+            ),
+            FlatButton(
+              onPressed: null,
+              child: Text('BUY', style: TextStyle(color: Colors.blueAccent)),
+              // textColor: Colors.lime,
+              shape: RoundedRectangleBorder(
+                  side: BorderSide(
+                      color: Colors.blueAccent,
+                      width: 1,
+                      style: BorderStyle.solid),
+                  borderRadius: BorderRadius.circular(20)),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _sellRow() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 17),
+      height: 40,
+      child: Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(
+              " Sell Electricity From Microgrid",
+              style: TextStyle(
+                  color: LightColor.titleTextColor,
+                  fontWeight: FontWeight.bold),
+            ),
+            FlatButton(
+              onPressed: null,
+              child: Text('SELL', style: TextStyle(color: Colors.green)),
+              // textColor: Colors.lime,
+              shape: RoundedRectangleBorder(
+                  side: BorderSide(
+                      color: Colors.green, width: 1, style: BorderStyle.solid),
+                  borderRadius: BorderRadius.circular(20)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _categoryRow(
     String title,
-    Color primary,
-    Color textColor,
   ) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 20),
@@ -111,58 +193,8 @@ class HomePage extends StatelessWidget {
             style: TextStyle(
                 color: LightColor.titleTextColor, fontWeight: FontWeight.bold),
           ),
-          _chip("See all", primary)
+          // _chip("Manage", primary)
         ],
-      ),
-    );
-  }
-
-  Widget _featuredRowA() {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: <Widget>[
-            _card(
-                primary: LightColor.orange,
-                backWidget:
-                    _decorationContainerA(LightColor.lightOrange, 50, -30),
-                chipColor: LightColor.orange,
-                chipText1: "Find the right degree for you",
-                chipText2: "8 Cources",
-                isPrimaryCard: true,
-                imgPath:
-                    "https://jshopping.in/images/detailed/591/ibboll-Fashion-Mens-Optical-Glasses-Frames-Classic-Square-Wrap-Frame-Luxury-Brand-Men-Clear-Eyeglasses-Frame.jpg"),
-            _card(
-                primary: Colors.white,
-                chipColor: LightColor.seeBlue,
-                backWidget: _decorationContainerB(Colors.white, 90, -40),
-                chipText1: "Become a data scientist",
-                chipText2: "8 Cources",
-                imgPath:
-                    "https://hips.hearstapps.com/esquireuk.cdnds.net/16/39/980x980/square-1475143834-david-gandy.jpg?resize=480:*"),
-            _card(
-                primary: Colors.white,
-                chipColor: LightColor.lightOrange,
-                backWidget: _decorationContainerC(Colors.white, 50, -30),
-                chipText1: "Become a digital marketer",
-                chipText2: "8 Cources",
-                imgPath:
-                    "https://www.visafranchise.com/wp-content/uploads/2019/05/patrick-findaro-visa-franchise-square.jpg"),
-            _card(
-                primary: Colors.white,
-                chipColor: LightColor.seeBlue,
-                backWidget: _decorationContainerD(LightColor.seeBlue, -50, 30,
-                    secondary: LightColor.lightseeBlue,
-                    secondaryAccent: LightColor.darkseeBlue),
-                chipText1: "Become a machine learner",
-                chipText2: "8 Cources",
-                imgPath:
-                    "https://d1mo3tzxttab3n.cloudfront.net/static/img/shop/560x580/vint0080.jpg"),
-          ],
-        ),
       ),
     );
   }
@@ -182,11 +214,10 @@ class HomePage extends StatelessWidget {
                     LightColor.darkseeBlue, -100, -65,
                     secondary: LightColor.lightseeBlue,
                     secondaryAccent: LightColor.seeBlue),
-                chipText1: "English for career development ",
-                chipText2: "8 Cources",
+                chipText1: "House 1 ",
+                chipText2: "Electricity",
                 isPrimaryCard: true,
-                imgPath:
-                    "https://www.reiss.com/media/product/946/218/silk-paisley-printed-pocket-square-mens-morocco-in-pink-red-20.jpg?format=jpeg&auto=webp&quality=85&width=1200&height=1200&fit=bounds"),
+                imgPath: ""),
             _card(
                 primary: Colors.white,
                 chipColor: LightColor.lightpurple,
@@ -196,35 +227,52 @@ class HomePage extends StatelessWidget {
                   -40,
                   secondary: LightColor.lightseeBlue,
                 ),
-                chipText1: "Bussiness foundation",
-                chipText2: "8 Cources",
-                imgPath:
-                    "https://i.dailymail.co.uk/i/pix/2016/08/05/19/36E9139400000578-3725856-image-a-58_1470422921868.jpg"),
+                chipText1: "House 2",
+                chipText2: "Electricity",
+                imgPath: ""),
             _card(
                 primary: Colors.white,
                 chipColor: LightColor.lightOrange,
                 backWidget: _decorationContainerF(
                     LightColor.lightOrange, LightColor.orange, 50, -30),
-                chipText1: "Excel skill for business",
-                chipText2: "8 Cources",
-                imgPath:
-                    "https://www.reiss.com/media/product/945/066/03-2.jpg?format=jpeg&auto=webp&quality=85&width=632&height=725&fit=bounds"),
-            _card(
-                primary: Colors.white,
-                chipColor: LightColor.seeBlue,
-                backWidget: _decorationContainerA(
-                  Colors.white,
-                  -50,
-                  30,
-                ),
-                chipText1: "Beacame a data analyst",
-                chipText2: "8 Cources",
-                imgPath:
-                    "https://img.alicdn.com/imgextra/i4/52031722/O1CN0165X68s1OaiaYCEX6U_!!52031722.jpg"),
+                chipText1: "House 3",
+                chipText2: "Electricity",
+                imgPath: ""),
           ],
         ),
       ),
     );
+  }
+
+  Widget _featuredRowNews() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Container(
+        child: Column(
+          children: <Widget>[
+            _newsCard(chipText1: ""),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _newsCard({Color primaryColor = Colors.white, String chipText1}) {
+    return Container(
+        height: 190,
+        width: width * 2,
+        margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        decoration: BoxDecoration(
+          color: primaryColor,
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+                offset: Offset(0, 5), blurRadius: 10, color: Color(0x12000000))
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+        ));
   }
 
   Widget _card(
@@ -258,7 +306,7 @@ class HomePage extends StatelessWidget {
                     top: 20,
                     left: 10,
                     child: CircleAvatar(
-                      backgroundColor: Colors.grey.shade300,
+                      backgroundColor: Colors.white,
                       backgroundImage: NetworkImage(imgPath),
                     )),
                 Positioned(
@@ -487,46 +535,38 @@ class HomePage extends StatelessWidget {
         ));
   }
 
-  BottomNavigationBarItem _bottomIcons(IconData icon) {
-    return BottomNavigationBarItem(icon: Icon(icon), title: Text(""));
-  }
-
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     return Scaffold(
-        bottomNavigationBar: BottomNavigationBar(
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          selectedItemColor: LightColor.purple,
-          unselectedItemColor: Colors.grey.shade300,
-          type: BottomNavigationBarType.fixed,
-          currentIndex: 0,
-          items: [
-            _bottomIcons(Icons.home),
-            _bottomIcons(Icons.star_border),
-            _bottomIcons(Icons.book),
-            _bottomIcons(Icons.person),
+      body: SingleChildScrollView(
+          child: Container(
+        child: Column(
+          children: <Widget>[
+            _header(context),
+            SizedBox(height: 20),
+            _buyRow(),
+            Divider(
+              thickness: 1,
+              endIndent: 20,
+              indent: 20,
+            ),
+            _sellRow(),
+            Divider(
+              thickness: 1,
+              endIndent: 20,
+              indent: 20,
+            ),
+            _graph("Your Electricity Consumption"),
+            Image.asset('assets/images/graph.jpg'),
+            _categoryRow("Houses"),
+            _featuredRowB(),
+            SizedBox(height: 5),
+            _categoryRow("News"),
+            _featuredRowNews(),
           ],
-          onTap: (index) {
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => RecomendedPage()));
-          },
         ),
-        body: SingleChildScrollView(
-            child: Container(
-          child: Column(
-            children: <Widget>[
-              _header(context),
-              SizedBox(height: 20),
-              _categoryRow("Featured", LightColor.orange, LightColor.orange),
-              _featuredRowA(),
-              SizedBox(height: 0),
-              _categoryRow(
-                  "Featured", LightColor.purple, LightColor.darkpurple),
-              _featuredRowB()
-            ],
-          ),
-        )));
+      )),
+    );
   }
 }
