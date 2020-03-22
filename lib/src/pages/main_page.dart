@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_soular_app/src/helper/quad_clipper.dart';
+// import 'package:flutter_soular_app/src/helper/quad_clipper.dart';
 import 'package:flutter_soular_app/src/pages/explore_page.dart';
 import 'package:flutter_soular_app/src/pages/recomended_page.dart';
 import 'package:flutter_soular_app/src/theme/color/light_color.dart';
