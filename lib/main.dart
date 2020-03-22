@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_soular_app/src/pages/main_page.dart';
 
-import 'src/pages/home_page.dart';
 import 'src/theme/theme.dart';
 
 void main() => runApp(MyApp());

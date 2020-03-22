@@ -15,7 +15,7 @@ class ExplorePage extends StatelessWidget {
           height: 120,
           width: width,
           decoration: BoxDecoration(
-            color: LightColor.orange,
+            color: LightColor.yellow,
           ),
           child: Stack(
             fit: StackFit.expand,
@@ -24,11 +24,11 @@ class ExplorePage extends StatelessWidget {
               Positioned(
                   top: 10,
                   right: -120,
-                  child: _circularContainer(300, LightColor.lightGrey)),
+                  child: _circularContainer(300, LightColor.yellow)),
               Positioned(
                   top: -60,
                   left: -65,
-                  child: _circularContainer(width * .5, LightColor.grey)),
+                  child: _circularContainer(width * .5, LightColor.yellow)),
               Positioned(
                   top: -230,
                   right: -30,

@@ -84,7 +84,6 @@ class _RecomendedPageState extends State<RecomendedPage> {
 
   Widget _categoryRow(String title) {
     return Container(
-      // margin: EdgeInsets.symmetric(horizontal: 20),
       height: 68,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -110,7 +109,8 @@ class _RecomendedPageState extends State<RecomendedPage> {
                 children: <Widget>[
                   SizedBox(width: 20),
                   _chip("Last month", LightColor.purple, height: 5),
-                  SizedBox(width: 10)
+                  SizedBox(width: 10),
+                  _chip("Last month", LightColor.purple, height: 5),
                 ],
               )),
           SizedBox(height: 10)
@@ -134,13 +134,13 @@ class _RecomendedPageState extends State<RecomendedPage> {
               endIndent: 20,
               indent: 20,
             ),
-            // _courceInfo(CourseList.list[1], _decorationContainerB(),
-            //     background: LightColor.darkOrange),
-            // Divider(
-            //   thickness: 1,
-            //   endIndent: 20,
-            //   indent: 20,
-            // ),
+            _courceInfo(CourseList.list[1], _decorationContainerB(),
+                background: LightColor.darkOrange),
+            Divider(
+              thickness: 1,
+              endIndent: 20,
+              indent: 20,
+            ),
             // _courceInfo(CourseList.list[2], _decorationContainerC(),
             //     background: LightColor.lightOrange2),
           ],
@@ -175,7 +175,7 @@ class _RecomendedPageState extends State<RecomendedPage> {
 
   Widget _courceInfo(CourseModel model, Widget decoration, {Color background}) {
     return Container(
-        height: 170,
+        height: 100,
         width: width - 20,
         child: Row(
           children: <Widget>[
@@ -226,13 +226,13 @@ class _RecomendedPageState extends State<RecomendedPage> {
                         fontSize: 12, color: LightColor.extraDarkPurple)),
                 SizedBox(height: 15),
                 Row(
-                  children: <Widget>[
-                    _chip(model.tag1, LightColor.darkOrange, height: 5),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    _chip(model.tag2, LightColor.seeBlue, height: 5),
-                  ],
+                  // children: <Widget>[
+                  //   _chip(model.tag1, LightColor.darkOrange, height: 5),
+                  //   SizedBox(
+                  //     width: 10,
+                  //   ),
+                  //   _chip(model.tag2, LightColor.seeBlue, height: 5),
+                  // ],
                 )
               ],
             ))
@@ -289,33 +289,33 @@ class _RecomendedPageState extends State<RecomendedPage> {
     );
   }
 
-  // Widget _decorationContainerB() {
-  //   return Stack(
-  //     children: <Widget>[
-  //       Positioned(
-  //         top: -65,
-  //         left: -65,
-  //         child: CircleAvatar(
-  //           radius: 70,
-  //           backgroundColor: LightColor.lightOrange2,
-  //           child: CircleAvatar(
-  //               radius: 30, backgroundColor: LightColor.darkOrange),
-  //         ),
-  //       ),
-  //       Positioned(
-  //           bottom: -35,
-  //           right: -40,
-  //           child:
-  //               CircleAvatar(backgroundColor: LightColor.yellow, radius: 40)),
-  //       Positioned(
-  //         top: 50,
-  //         left: -40,
-  //         child: _circularContainer(70, Colors.transparent,
-  //             borderColor: Colors.white),
-  //       ),
-  //     ],
-  //   );
-  // }
+  Widget _decorationContainerB() {
+    return Stack(
+      children: <Widget>[
+        Positioned(
+          top: -65,
+          left: -65,
+          child: CircleAvatar(
+            radius: 70,
+            backgroundColor: LightColor.lightOrange2,
+            child: CircleAvatar(
+                radius: 30, backgroundColor: LightColor.darkOrange),
+          ),
+        ),
+        Positioned(
+            bottom: -35,
+            right: -40,
+            child:
+                CircleAvatar(backgroundColor: LightColor.yellow, radius: 40)),
+        Positioned(
+          top: 50,
+          left: -40,
+          child: _circularContainer(70, Colors.transparent,
+              borderColor: Colors.white),
+        ),
+      ],
+    );
+  }
 
   // Widget _decorationContainerC() {
   //   return Stack(

@@ -18,22 +18,23 @@ class CourseModel {
 class CourseList {
   static List<CourseModel> list = [
     CourseModel(
+        name: "March's Electricity Bill ",
+        description:
+            "Your outstanding Payment: zero dollars",
+        university: "SOULAR",
+        noOfCource: "29/03/2020",
+        tag1: "Mar1",
+        tag2: "Mar2"
+        ),
+    CourseModel(
         name: "Feburary's Electricity Bill ",
         description:
-            "This is FEB's electricity consumption",
+            "Your outstanding Payment: zero dollars",
         university: "SOULAR",
-        noOfCource: "Feb",
+        noOfCource: "29/02/2020",
         tag1: "Feb1",
         tag2: "Feb2"
         ),
-    CourseModel(
-        name: "Machine Learning",
-        description:
-            "This specialization from leading researchers at university of washington introduce to you to the exciting high-demand field of machine learning ",
-        university: "University of washington",
-        noOfCource: "8 courses",
-        tag1: "Machine Learning",
-        tag2: "Decision Tree"),
     CourseModel(
         name: "Big Data",
         description:

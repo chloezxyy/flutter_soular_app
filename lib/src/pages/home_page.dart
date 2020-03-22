@@ -15,6 +15,8 @@ class _HomePageState extends State<HomePage> {
   Widget _header(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     return ClipRRect(
+      borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(50), bottomRight: Radius.circular(50)),
       child: Container(
           height: 175,
           width: width,
