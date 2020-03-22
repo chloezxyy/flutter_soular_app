@@ -12,6 +12,8 @@ class LightColor {
   static const Color darkgrey = Color(0xff625f6a);
 
   static const Color yellow = Color(0xfffbbd5c);
+  static const Color lightYellow = Color(0xfffbbd5c);
+
 
   static const Color orange = Color(0xfff96d5b);
   static const Color darkOrange = Color(0xfff46352);
