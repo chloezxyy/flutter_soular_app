@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: AppTheme.lightTheme,
-      home: MainPage(),
+      home: LoginPage(),
       debugShowCheckedModeBanner: false,
     );
   }
