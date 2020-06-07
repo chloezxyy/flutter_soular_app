@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_soular_app/src/pages/main_page.dart';
 
-
 class LoginPage extends StatefulWidget {
   static String tag = 'login-page';
   @override
@@ -42,17 +41,32 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     final loginButton = Padding(
-      padding: EdgeInsets.symmetric(vertical: 16.0),
+      padding: EdgeInsets.symmetric(vertical: 1.0),
       child: RaisedButton(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () {
-          // Navigator.of(context).pushNamed(MainPage);
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => MainPage()));
         },
         padding: EdgeInsets.all(12),
         color: Colors.lightBlueAccent,
         child: Text('Log In', style: TextStyle(color: Colors.white)),
+      ),
+    );
+
+    final registerButton = Padding(
+      padding: EdgeInsets.symmetric(vertical: 1.0),
+      child: RaisedButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
+        ),
+        onPressed: () {},
+        padding: EdgeInsets.all(12),
+        color: Colors.white,
+        child:
+            Text('Register', style: TextStyle(color: Colors.lightBlueAccent)),
       ),
     );
 
@@ -78,7 +92,8 @@ class _LoginPageState extends State<LoginPage> {
             password,
             SizedBox(height: 24.0),
             loginButton,
-            forgotLabel
+            registerButton,
+            forgotLabel,
           ],
         ),
       ),

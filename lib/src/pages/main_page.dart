@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_soular_app/src/helper/quad_clipper.dart';
 import 'package:flutter_soular_app/src/pages/explore_page.dart';
 import 'package:flutter_soular_app/src/pages/recomended_page.dart';
+import 'package:flutter_soular_app/src/pages/profile_page.dart';
+
 import 'package:flutter_soular_app/src/theme/color/light_color.dart';
 
 import 'home_page.dart';
@@ -18,13 +20,12 @@ class _MainPageState extends State<MainPage> {
 
   int _selectedIndex = 0;
   final List<Widget> _children = [
-    
-    // HomePage(),
+  
     HomePage(),
     RecomendedPage(),
     ExplorePage(),
     RecomendedPage(),
-    RecomendedPage()
+    ProfilePage()
   ];
 
   void _onItemTapped(int index) {

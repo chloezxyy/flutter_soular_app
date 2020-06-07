@@ -9,7 +9,6 @@ class RecomendedPage extends StatefulWidget{
 
     @override 
     _RecomendedPageState createState() => _RecomendedPageState();
-
 }
 
 class _RecomendedPageState extends State<RecomendedPage> {

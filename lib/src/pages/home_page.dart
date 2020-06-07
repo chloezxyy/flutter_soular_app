@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_soular_app/src/helper/quad_clipper.dart';
+import 'package:flutter_soular_app/src/widgets/newsList.dart';
 import 'package:flutter_soular_app/src/theme/color/light_color.dart';
 
 class HomePage extends StatefulWidget {
@@ -566,6 +567,7 @@ class _HomePageState extends State<HomePage> {
             SizedBox(height: 5),
             _categoryRow("News"),
             _featuredRowNews(),
+            
           ],
         ),
       )),
