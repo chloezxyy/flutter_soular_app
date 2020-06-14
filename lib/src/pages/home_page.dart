@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_soular_app/src/helper/quad_clipper.dart';
+import 'package:flutter_soular_app/src/pages/marketplace/marketplace.dart';
 import 'package:flutter_soular_app/src/widgets/newsList.dart';
 import 'package:flutter_soular_app/src/theme/color/light_color.dart';
+import 'package:flutter_soular_app/src/pages/wallet/wallet_page.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'dart:convert' show json, base64, ascii;
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -11,6 +16,20 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  // final String jwt;
+  // final Map<String, dynamic> payload;
+
+  // HomePage(this.jwt, this.payload);
+  // factory HomePage.fromBase64(String jwt) =>
+  //   HomePage(
+  //     jwt,
+  //     json.decode(
+  //       ascii.decode(
+  //         base64.decode(base64.normalize(jwt.split(".")[1]))
+  //       )
+  //     )
+  //   );
+
   double width;
 
   Widget _header(BuildContext context) {
@@ -61,7 +80,12 @@ class _HomePageState extends State<HomePage> {
                                     fontWeight: FontWeight.w500),
                               ),
                               FlatButton(
-                                onPressed: null,
+                                onPressed: () {
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(builder:(context) => WalletPage())
+                                  // );
+                                },
                                 child: Text('MANAGE WALLET',
                                     style: TextStyle(color: Colors.white)),
                                 // textColor: Colors.lime,
@@ -137,7 +161,10 @@ class _HomePageState extends State<HomePage> {
                   fontWeight: FontWeight.bold),
             ),
             FlatButton(
-              onPressed: null,
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => MarketPlace()));
+              },
               child: Text('BUY', style: TextStyle(color: Colors.blueAccent)),
               // textColor: Colors.lime,
               shape: RoundedRectangleBorder(
@@ -168,7 +195,10 @@ class _HomePageState extends State<HomePage> {
                   fontWeight: FontWeight.bold),
             ),
             FlatButton(
-              onPressed: null,
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => MarketPlace()));
+              },
               child: Text('SELL', style: TextStyle(color: Colors.green)),
               // textColor: Colors.lime,
               shape: RoundedRectangleBorder(
@@ -247,18 +277,18 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _featuredRowNews() {
-    return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: Container(
-        child: Column(
-          children: <Widget>[
-            _newsCard(chipText1: ""),
-          ],
-        ),
-      ),
-    );
-  }
+  // Widget _featuredRowNews() {
+  //   return SingleChildScrollView(
+  //     // scrollDirection: Axis.vertical,
+  //     child: Container(
+  //       child: Column(
+  //         children: <Widget>[
+  //           // _newsCard(chipText1: ""),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _newsCard({Color primaryColor = Colors.white, String chipText1}) {
     return Container(
@@ -566,8 +596,8 @@ class _HomePageState extends State<HomePage> {
             _featuredRowB(),
             SizedBox(height: 5),
             _categoryRow("News"),
-            _featuredRowNews(),
-            
+            // NewsList()
+            // _featuredRowNews(),
           ],
         ),
       )),

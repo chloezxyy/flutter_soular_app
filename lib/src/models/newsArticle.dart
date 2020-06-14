@@ -1,19 +1,37 @@
+
+import 'dart:convert';
+
+import 'package:flutter_soular_app/src/services/webService.dart';
+import 'package:flutter_soular_app/src/utils/constants.dart';
+
 class NewsArticle {
-
+  
   final String title; 
-  final String description; 
+  final String descrption; 
   final String urlToImage; 
-  final String url; 
 
-  NewsArticle({this.title, this.description, this.urlToImage, this.url});
+  NewsArticle({this.title, this.descrption, this.urlToImage});
 
-  factory NewsArticle.fromJSON(Map<String, dynamic> json) {
+  factory NewsArticle.fromJson(Map<String,dynamic> json) {
     return NewsArticle(
-      title: json["title"],
-      description: json["description"], 
-      urlToImage: json["urlToImage"], 
-      url: json["url"]
+      title: json['title'], 
+      descrption: json['description'], 
+      urlToImage: json['urlToImage'] ?? Constants.NEWS_PLACEHOLDER_IMAGE_ASSET_URL
     );
+  
+}
+
+  static Resource<List<NewsArticle>> get all {
+    
+    return Resource(
+      url: Constants.HEADLINE_NEWS_URL,
+      parse: (response) {
+        final result = json.decode(response.body); 
+        Iterable list = result['articles'];
+        return list.map((model) => NewsArticle.fromJson(model)).toList();
+      }
+    );
+
   }
 
 }

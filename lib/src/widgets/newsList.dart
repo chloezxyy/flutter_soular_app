@@ -1,37 +1,55 @@
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_soular_app/src/viewmodels/newsArticleViewModel.dart';
+import 'package:flutter_soular_app/src/models/newsArticle.dart';
+import 'package:flutter_soular_app/src/services/webService.dart';
+import 'package:flutter_soular_app/src/utils/constants.dart';
 
+class NewsListState extends State<NewsList> {
 
-class NewsList extends StatelessWidget {
-
-  final List<NewsArticleViewModel> articles;
-  final Function(NewsArticleViewModel article) onSelected;  
-
-  NewsList({this.articles,this.onSelected});
-
+  List<NewsArticle> _newsArticles = List<NewsArticle>(); 
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+    _populateNewsArticles(); 
+  }
 
-    return ListView.builder(
-        itemCount: articles.length,
-        itemBuilder: (context, index) {
+  void _populateNewsArticles() {
+   
+    Webservice().load(NewsArticle.all).then((newsArticles) => {
+      setState(() => {
+        _newsArticles = newsArticles
+      })
+    });
 
-          final article = articles[index];
+  }
 
-          return ListTile(
-            onTap: () {
-              this.onSelected(article); 
-            },
-            leading: Container(
-              width: 100,
-              height: 100,
-              child: article.imageURL == null ? Image.asset("images/news-placeholder.png") : Image.network(article.imageURL)),
-            title: Text(article.title),
-          );
-        },
+  ListTile _buildItemsForListView(BuildContext context, int index) {
+      return ListTile(
+        title: _newsArticles[index].urlToImage == null ? Image.asset(Constants.NEWS_PLACEHOLDER_IMAGE_ASSET_URL) : Image.network(_newsArticles[index].urlToImage), 
+        subtitle: Text(_newsArticles[index].title, style: TextStyle(fontSize: 18)),
       );
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('News'),
+        ),
+        body: ListView.builder(
+          // itemCount: _newsArticles.length,
+          itemCount: 3,
+
+          itemBuilder: _buildItemsForListView,
+        )
+      );
+  }
+}
+
+class NewsList extends StatefulWidget {
+
+  @override
+  createState() => NewsListState(); 
 }

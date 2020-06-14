@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_soular_app/src/pages/marketplace/marketplace.dart';
 import 'package:flutter_soular_app/src/theme/color/light_color.dart';
+import 'package:flutter_soular_app/src/widgets/category_card.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
 
 class ExplorePage extends StatelessWidget {
   ExplorePage({Key key}) : super(key: key);
 
   double width;
+  static const IconData account_balance =
+      IconData(0xe84f, fontFamily: 'MaterialIcons');
 
   Widget _header(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -15,7 +22,7 @@ class ExplorePage extends StatelessWidget {
           height: 120,
           width: width,
           decoration: BoxDecoration(
-            color: LightColor.yellow,
+            color: LightColor.lightYellow,
           ),
           child: Stack(
             fit: StackFit.expand,
@@ -28,7 +35,7 @@ class ExplorePage extends StatelessWidget {
               Positioned(
                   top: -60,
                   left: -65,
-                  child: _circularContainer(width * .5, LightColor.yellow)),
+                  child: _circularContainer(width * .5, Colors.yellow[700])),
               Positioned(
                   top: -230,
                   right: -30,
@@ -58,6 +65,62 @@ class ExplorePage extends StatelessWidget {
     );
   }
 
+  Widget _grid() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 17),
+      height: 1000.0,
+      child: Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Expanded(
+                flex: 2,
+                child: GridView.count(
+                    crossAxisCount: 3,
+                    childAspectRatio: 1,
+                    crossAxisSpacing: 5,
+                    mainAxisSpacing: 5,
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.all(30),
+                        child: InkWell(
+                            onTap: () {
+                              
+                            },
+                            child: Column(children: <Widget>[
+                              Icon(MdiIcons.help, color: Colors.grey),
+                              Spacer(),
+                              Text(
+                                "Help Me",
+                              )
+                            ])),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(30),
+                        child: InkWell(
+                            onTap: () {
+                                
+                            },
+                            child: Column(children: <Widget>[
+                          
+                              Icon(MdiIcons.store, color: Colors.grey),
+                              Spacer(),
+                              
+                              Text(
+                                "Energy Store",
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 2,
+                                textAlign: TextAlign.center
+                              )
+                            ])),
+                      )
+                    ])),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _circularContainer(double height, Color color,
       {Color borderColor = Colors.transparent, double borderWidth = 2}) {
     return Container(
@@ -75,15 +138,15 @@ class ExplorePage extends StatelessWidget {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     return Scaffold(
-       
         body: SingleChildScrollView(
             child: Container(
-          child: Column(
-            children: <Widget>[
-              _header(context),
-              SizedBox(height: 20),
-            ],
-          ),
-        )));
+      child: Column(
+        children: <Widget>[
+          _header(context),
+          SizedBox(height: 20),
+          _grid(),
+        ],
+      ),
+    )));
   }
 }

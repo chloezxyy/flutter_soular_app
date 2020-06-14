@@ -1,38 +1,23 @@
-import 'dart:convert';
-
-import 'package:flutter_soular_app/src/models/newsArticle.dart';
-import 'package:flutter_soular_app/src/utils/constants.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
+
+class Resource<T> {
+  final String url; 
+  T Function(Response response) parse;
+
+  Resource({this.url,this.parse});
+}
 
 class Webservice {
-  
 
-  Future<List<NewsArticle>> fetchHeadlinesByKeyword(String keyword) async {
+  Future<T> load<T>(Resource<T> resource) async {
 
-    final response = await http.get(Constants.headlinesFor(keyword));
-
-    if(response.statusCode == 200) {
-      final result = jsonDecode(response.body); 
-      Iterable list = result["articles"];
-      return list.map((json) => NewsArticle.fromJSON(json)).toList();
-    } else {
-      throw Exception("Failed to get news");
-    }
+      final response = await http.get(resource.url);
+      if(response.statusCode == 200) {
+        return resource.parse(response);
+      } else {
+        throw Exception('Failed to load data!');
+      }
   }
 
-  Future<List<NewsArticle>> fetchTopHeadlines() async {
-    
-    final response = await http.get(Constants.TOP_HEADLINES_URL);
-
-    if(response.statusCode == 200) {
-
-      final result = jsonDecode(response.body);
-      Iterable list = result["articles"];
-      return list.map((article) => NewsArticle.fromJSON(article)).toList();
-
-    } else {
-      throw Exception("Failed to get top news");
-    }
-
-  }
 }

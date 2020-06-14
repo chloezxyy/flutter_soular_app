@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_soular_app/src/pages/explore_page.dart';
 import 'package:flutter_soular_app/src/pages/recomended_page.dart';
 import 'package:flutter_soular_app/src/pages/profile_page.dart';
-
+import 'package:flutter_soular_app/src/pages/notification_page.dart';
 import 'package:flutter_soular_app/src/theme/color/light_color.dart';
-
 import 'home_page.dart';
 
 class MainPage extends StatefulWidget {
@@ -21,10 +20,11 @@ class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
   final List<Widget> _children = [
   
+    // HomePage.fromBase64(jwt),
     HomePage(),
     RecomendedPage(),
     ExplorePage(),
-    RecomendedPage(),
+    NotificationPage(),
     ProfilePage()
   ];
 
@@ -33,7 +33,6 @@ class _MainPageState extends State<MainPage> {
       _selectedIndex = index;
   });
 }
-
   
   BottomNavigationBarItem _bottomIcons(IconData icon) {
     return BottomNavigationBarItem(

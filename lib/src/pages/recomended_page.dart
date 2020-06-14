@@ -125,7 +125,7 @@ class _RecomendedPageState extends State<RecomendedPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            _courceInfo(CourseList.list[0],
+            _courseInfo(CourseList.list[0],
                 _decorationContainerA(Colors.redAccent, -110, -85),
                 background: LightColor.seeBlue),
             Divider(
@@ -133,14 +133,14 @@ class _RecomendedPageState extends State<RecomendedPage> {
               endIndent: 20,
               indent: 20,
             ),
-            _courceInfo(CourseList.list[1], _decorationContainerB(),
+            _courseInfo(CourseList.list[1], _decorationContainerB(),
                 background: LightColor.darkOrange),
             Divider(
               thickness: 1,
               endIndent: 20,
               indent: 20,
             ),
-            // _courceInfo(CourseList.list[2], _decorationContainerC(),
+            // _courseInfo(CourseList.list[2], _decorationContainerC(),
             //     background: LightColor.lightOrange2),
           ],
         ),
@@ -172,7 +172,7 @@ class _RecomendedPageState extends State<RecomendedPage> {
   }
 
 
-  Widget _courceInfo(CourseModel model, Widget decoration, {Color background}) {
+  Widget _courseInfo(CourseModel model, Widget decoration, {Color background}) {
     return Container(
         height: 100,
         width: width - 20,
@@ -358,7 +358,6 @@ class _RecomendedPageState extends State<RecomendedPage> {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     return Scaffold(
-      
         body: SingleChildScrollView(
             child: Container(
           child: Column(

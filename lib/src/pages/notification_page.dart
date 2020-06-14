@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_soular_app/src/pages/login_page.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:flutter_soular_app/src/theme/color/light_color.dart';
 import 'package:flutter_soular_app/src/pages/recomended_page.dart';
 
-class ProfilePage extends StatefulWidget {
-  ProfilePage({Key key}) : super(key: key);
+class NotificationPage extends StatefulWidget {
+  NotificationPage({Key key}) : super(key: key);
 
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  _NotificationPageState createState() => _NotificationPageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _NotificationPageState extends State<NotificationPage> {
   double width;
   var profileInfo = ['1234', '99999999'];
   String getProfileInfoString() {
@@ -31,7 +30,7 @@ class _ProfilePageState extends State<ProfilePage> {
           height: 120,
           width: width,
           decoration: BoxDecoration(
-            color: LightColor.grey,
+            color: LightColor.lightBlue,
           ),
           child: Stack(
             fit: StackFit.expand,
@@ -40,11 +39,11 @@ class _ProfilePageState extends State<ProfilePage> {
               Positioned(
                   top: 10,
                   right: -120,
-                  child: _circularContainer(300, LightColor.grey)),
+                  child: _circularContainer(300, LightColor.lightBlue)),
               Positioned(
                   top: -60,
                   left: -65,
-                  child: _circularContainer(width * .5, Colors.grey[600])),
+                  child: _circularContainer(width * .5,Colors.indigo[900])),
               Positioned(
                   top: -230,
                   right: -30,
@@ -61,7 +60,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           Align(
                               alignment: Alignment.center,
                               child: Text(
-                                "Your Profile",
+                                "Your Notifications",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 30,
@@ -85,6 +84,27 @@ class _ProfilePageState extends State<ProfilePage> {
         border: Border.all(color: borderColor, width: borderWidth),
       ),
     );
+
+    Widget _courseList() {
+      return Container(
+        child: Column(
+          // mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Text("Hi"),
+            Divider(
+              thickness: 1,
+              endIndent: 20,
+              indent: 20,
+            ),
+            Divider(
+              thickness: 1,
+              endIndent: 20,
+              indent: 20,
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   Widget _profile() {
@@ -116,28 +136,14 @@ class _ProfilePageState extends State<ProfilePage> {
           )),
         ),
         RaisedButton(
-          textColor: Colors.white,
-          color: Colors.grey,
-          child: Text("Edit Profile"),
-          onPressed: () {},
-          shape: new RoundedRectangleBorder(
-            borderRadius: new BorderRadius.circular(30.0),
-          ),
-        ),
-        RaisedButton(
-          textColor: Colors.white,
-          color: Colors.redAccent,
-          child: Text("Sign Out"),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => LoginPage()),
-            );
-          },
-          shape: new RoundedRectangleBorder(
-            borderRadius: new BorderRadius.circular(30.0),
-          ),
-        )
+    textColor: Colors.white,
+    color: Colors.grey,
+    child: Text("Edit Profile"),
+    onPressed: () {},
+    shape: new RoundedRectangleBorder(
+      borderRadius: new BorderRadius.circular(30.0),
+    ),
+  ),
       ],
     )));
   }
