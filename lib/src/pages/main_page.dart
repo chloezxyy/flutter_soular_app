@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 // import 'package:flutter_soular_app/src/helper/quad_clipper.dart';
 import 'package:flutter_soular_app/src/pages/explore_page.dart';
@@ -8,11 +10,26 @@ import 'package:flutter_soular_app/src/theme/color/light_color.dart';
 import 'home_page.dart';
 
 class MainPage extends StatefulWidget {
-  MainPage({Key key}) : super(key: key);
+  MainPage(this.jwt, this.payload);
 
   @override
   _MainPageState createState() => _MainPageState();
+
+  final String jwt;
+  final Map<String, dynamic> payload;
+
+  factory MainPage.fromBase64(String jwt) =>
+    MainPage(
+      jwt,
+      json.decode(
+        ascii.decode(
+          // get the username ?
+          base64.decode(base64.normalize(jwt.split(".")[1]))
+        )
+      )
+    );
 }
+
 
 class _MainPageState extends State<MainPage> {
   double width;
@@ -27,6 +44,9 @@ class _MainPageState extends State<MainPage> {
     NotificationPage(),
     ProfilePage()
   ];
+
+  // static String get jwt => null;
+
 
   void _onItemTapped(int index) {
     setState(() {

@@ -9,13 +9,11 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert' show json, base64, ascii;
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key}) : super(key: key);
+  // HomePage({Key key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
-}
 
-class _HomePageState extends State<HomePage> {
   // final String jwt;
   // final Map<String, dynamic> payload;
 
@@ -25,11 +23,16 @@ class _HomePageState extends State<HomePage> {
   //     jwt,
   //     json.decode(
   //       ascii.decode(
+  //         // get the username ?
   //         base64.decode(base64.normalize(jwt.split(".")[1]))
   //       )
   //     )
   //   );
+}
 
+class _HomePageState extends State<HomePage> {
+// class HomePage extends StatelessWidget{
+  
   double width;
 
   Widget _header(BuildContext context) {
@@ -232,50 +235,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _featuredRowB() {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: <Widget>[
-            _card(
-                primary: LightColor.seeBlue,
-                chipColor: LightColor.seeBlue,
-                backWidget: _decorationContainerD(
-                    LightColor.darkseeBlue, -100, -65,
-                    secondary: LightColor.lightseeBlue,
-                    secondaryAccent: LightColor.seeBlue),
-                chipText1: "House 1 ",
-                chipText2: "Electricity",
-                isPrimaryCard: true,
-                imgPath: ""),
-            _card(
-                primary: Colors.white,
-                chipColor: LightColor.lightpurple,
-                backWidget: _decorationContainerE(
-                  LightColor.lightpurple,
-                  90,
-                  -40,
-                  secondary: LightColor.lightseeBlue,
-                ),
-                chipText1: "House 2",
-                chipText2: "Electricity",
-                imgPath: ""),
-            _card(
-                primary: Colors.white,
-                chipColor: LightColor.lightOrange,
-                backWidget: _decorationContainerF(
-                    LightColor.lightOrange, LightColor.orange, 50, -30),
-                chipText1: "House 3",
-                chipText2: "Electricity",
-                imgPath: ""),
-          ],
-        ),
-      ),
-    );
-  }
+ 
 
   // Widget _featuredRowNews() {
   //   return SingleChildScrollView(
@@ -290,283 +250,97 @@ class _HomePageState extends State<HomePage> {
   //   );
   // }
 
-  Widget _newsCard({Color primaryColor = Colors.white, String chipText1}) {
-    return Container(
-        height: 190,
-        width: width * 2,
-        margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        decoration: BoxDecoration(
-          color: primaryColor,
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-                offset: Offset(0, 5), blurRadius: 10, color: Color(0x12000000))
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-        ));
-  }
+  // Widget _newsCard({Color primaryColor = Colors.white, String chipText1}) {
+  //   return Container(
+  //       height: 190,
+  //       width: width * 2,
+  //       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+  //       decoration: BoxDecoration(
+  //         color: primaryColor,
+  //         borderRadius: BorderRadius.all(Radius.circular(20)),
+  //         boxShadow: <BoxShadow>[
+  //           BoxShadow(
+  //               offset: Offset(0, 5), blurRadius: 10, color: Color(0x12000000))
+  //         ],
+  //       ),
+  //       child: ClipRRect(
+  //         borderRadius: BorderRadius.all(Radius.circular(20)),
+  //       ));
+  // }
 
-  Widget _card(
-      {Color primary = Colors.redAccent,
-      String imgPath,
-      String chipText1 = '',
-      String chipText2 = '',
-      Widget backWidget,
-      Color chipColor = LightColor.orange,
-      bool isPrimaryCard = false}) {
-    return Container(
-        height: isPrimaryCard ? 190 : 180,
-        width: isPrimaryCard ? width * .32 : width * .32,
-        margin: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-        decoration: BoxDecoration(
-            color: primary.withAlpha(200),
-            borderRadius: BorderRadius.all(Radius.circular(20)),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                  offset: Offset(0, 5),
-                  blurRadius: 10,
-                  color: LightColor.lightpurple.withAlpha(20))
-            ]),
-        child: ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-          child: Container(
-            child: Stack(
-              children: <Widget>[
-                backWidget,
-                Positioned(
-                    top: 20,
-                    left: 10,
-                    child: CircleAvatar(
-                      backgroundColor: Colors.white,
-                      backgroundImage: NetworkImage(imgPath),
-                    )),
-                Positioned(
-                  bottom: 10,
-                  left: 10,
-                  child: _cardInfo(chipText1, chipText2,
-                      LightColor.titleTextColor, chipColor,
-                      isPrimaryCard: isPrimaryCard),
-                )
-              ],
-            ),
-          ),
-        ));
-  }
 
-  Widget _cardInfo(String title, String courses, Color textColor, Color primary,
-      {bool isPrimaryCard = false}) {
-    return Align(
-      alignment: Alignment.bottomLeft,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.only(right: 10),
-            width: width * .32,
-            alignment: Alignment.topCenter,
-            child: Text(
-              title,
-              style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.bold,
-                  color: isPrimaryCard ? Colors.white : textColor),
-            ),
-          ),
-          SizedBox(height: 5),
-          _chip(courses, primary, height: 5, isPrimaryCard: isPrimaryCard)
-        ],
-      ),
-    );
-  }
+  // Widget _decorationContainerA(Color primary, double top, double left) {
+  //   return Stack(
+  //     children: <Widget>[
+  //       Positioned(
+  //         top: top,
+  //         left: left,
+  //         child: CircleAvatar(
+  //           radius: 100,
+  //           backgroundColor: primary.withAlpha(255),
+  //         ),
+  //       ),
+  //       _smallContainer(primary, 20, 40),
+  //       Positioned(
+  //         top: 20,
+  //         right: -30,
+  //         child: _circularContainer(80, Colors.transparent,
+  //             borderColor: Colors.white),
+  //       )
+  //     ],
+  //   );
+  // }
 
-  Widget _chip(String text, Color textColor,
-      {double height = 0, bool isPrimaryCard = false}) {
-    return Container(
-      alignment: Alignment.center,
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: height),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(15)),
-        color: textColor.withAlpha(isPrimaryCard ? 200 : 50),
-      ),
-      child: Text(
-        text,
-        style: TextStyle(
-            color: isPrimaryCard ? Colors.white : textColor, fontSize: 12),
-      ),
-    );
-  }
+  // Widget _decorationContainerB(Color primary, double top, double left) {
+  //   return Stack(
+  //     children: <Widget>[
+  //       Positioned(
+  //         top: -65,
+  //         right: -65,
+  //         child: CircleAvatar(
+  //           radius: 70,
+  //           backgroundColor: Colors.blue.shade100,
+  //           child: CircleAvatar(radius: 30, backgroundColor: primary),
+  //         ),
+  //       ),
+  //       Positioned(
+  //           top: 35,
+  //           right: -40,
+  //           child: ClipRect(
+  //               clipper: QuadClipper(),
+  //               child: CircleAvatar(
+  //                   backgroundColor: LightColor.lightseeBlue, radius: 40)))
+  //     ],
+  //   );
+  // }
 
-  Widget _decorationContainerA(Color primary, double top, double left) {
-    return Stack(
-      children: <Widget>[
-        Positioned(
-          top: top,
-          left: left,
-          child: CircleAvatar(
-            radius: 100,
-            backgroundColor: primary.withAlpha(255),
-          ),
-        ),
-        _smallContainer(primary, 20, 40),
-        Positioned(
-          top: 20,
-          right: -30,
-          child: _circularContainer(80, Colors.transparent,
-              borderColor: Colors.white),
-        )
-      ],
-    );
-  }
+  // Widget _decorationContainerC(Color primary, double top, double left) {
+  //   return Stack(
+  //     children: <Widget>[
+  //       Positioned(
+  //         top: -105,
+  //         left: -35,
+  //         child: CircleAvatar(
+  //           radius: 70,
+  //           backgroundColor: LightColor.orange.withAlpha(100),
+  //         ),
+  //       ),
+  //       Positioned(
+  //           top: 35,
+  //           right: -40,
+  //           child: ClipRect(
+  //               clipper: QuadClipper(),
+  //               child: CircleAvatar(
+  //                   backgroundColor: LightColor.orange, radius: 40))),
+  //       _smallContainer(
+  //         LightColor.yellow,
+  //         35,
+  //         70,
+  //       )
+  //     ],
+  //   );
+  // }
 
-  Widget _decorationContainerB(Color primary, double top, double left) {
-    return Stack(
-      children: <Widget>[
-        Positioned(
-          top: -65,
-          right: -65,
-          child: CircleAvatar(
-            radius: 70,
-            backgroundColor: Colors.blue.shade100,
-            child: CircleAvatar(radius: 30, backgroundColor: primary),
-          ),
-        ),
-        Positioned(
-            top: 35,
-            right: -40,
-            child: ClipRect(
-                clipper: QuadClipper(),
-                child: CircleAvatar(
-                    backgroundColor: LightColor.lightseeBlue, radius: 40)))
-      ],
-    );
-  }
-
-  Widget _decorationContainerC(Color primary, double top, double left) {
-    return Stack(
-      children: <Widget>[
-        Positioned(
-          top: -105,
-          left: -35,
-          child: CircleAvatar(
-            radius: 70,
-            backgroundColor: LightColor.orange.withAlpha(100),
-          ),
-        ),
-        Positioned(
-            top: 35,
-            right: -40,
-            child: ClipRect(
-                clipper: QuadClipper(),
-                child: CircleAvatar(
-                    backgroundColor: LightColor.orange, radius: 40))),
-        _smallContainer(
-          LightColor.yellow,
-          35,
-          70,
-        )
-      ],
-    );
-  }
-
-  Widget _decorationContainerD(Color primary, double top, double left,
-      {Color secondary, Color secondaryAccent}) {
-    return Stack(
-      children: <Widget>[
-        Positioned(
-          top: top,
-          left: left,
-          child: CircleAvatar(
-            radius: 100,
-            backgroundColor: secondary,
-          ),
-        ),
-        _smallContainer(LightColor.yellow, 18, 35, radius: 12),
-        Positioned(
-          top: 130,
-          left: -50,
-          child: CircleAvatar(
-            radius: 80,
-            backgroundColor: primary,
-            child: CircleAvatar(radius: 50, backgroundColor: secondaryAccent),
-          ),
-        ),
-        Positioned(
-          top: -30,
-          right: -40,
-          child: _circularContainer(80, Colors.transparent,
-              borderColor: Colors.white),
-        )
-      ],
-    );
-  }
-
-  Widget _decorationContainerE(Color primary, double top, double left,
-      {Color secondary}) {
-    return Stack(
-      children: <Widget>[
-        Positioned(
-          top: -105,
-          left: -35,
-          child: CircleAvatar(
-            radius: 70,
-            backgroundColor: primary.withAlpha(100),
-          ),
-        ),
-        Positioned(
-            top: 40,
-            right: -25,
-            child: ClipRect(
-                clipper: QuadClipper(),
-                child: CircleAvatar(backgroundColor: primary, radius: 40))),
-        Positioned(
-            top: 45,
-            right: -50,
-            child: ClipRect(
-                clipper: QuadClipper(),
-                child: CircleAvatar(backgroundColor: secondary, radius: 50))),
-        _smallContainer(LightColor.yellow, 15, 90, radius: 5)
-      ],
-    );
-  }
-
-  Widget _decorationContainerF(
-      Color primary, Color secondary, double top, double left) {
-    return Stack(
-      children: <Widget>[
-        Positioned(
-            top: 25,
-            right: -20,
-            child: RotatedBox(
-              quarterTurns: 1,
-              child: ClipRect(
-                  clipper: QuadClipper(),
-                  child: CircleAvatar(
-                      backgroundColor: primary.withAlpha(100), radius: 50)),
-            )),
-        Positioned(
-            top: 34,
-            right: -8,
-            child: ClipRect(
-                clipper: QuadClipper(),
-                child: CircleAvatar(
-                    backgroundColor: secondary.withAlpha(100), radius: 40))),
-        _smallContainer(LightColor.yellow, 15, 90, radius: 5)
-      ],
-    );
-  }
-
-  Positioned _smallContainer(Color primary, double top, double left,
-      {double radius = 10}) {
-    return Positioned(
-        top: top,
-        left: left,
-        child: CircleAvatar(
-          radius: radius,
-          backgroundColor: primary.withAlpha(255),
-        ));
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -592,8 +366,8 @@ class _HomePageState extends State<HomePage> {
             ),
             _graph("Your Electricity Consumption"),
             Image.asset('assets/images/graph.jpg'),
-            _categoryRow("Houses"),
-            _featuredRowB(),
+            // _categoryRow("Houses"),
+            // _featuredRowB(),
             SizedBox(height: 5),
             _categoryRow("News"),
             // NewsList()

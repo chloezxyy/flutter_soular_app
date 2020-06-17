@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
 
       // for dark theme 
         // theme: AppTheme.lightTheme,
-        home: MainPage(),
+        home: LoginPage(),
         debugShowCheckedModeBanner: false,
         );
   }

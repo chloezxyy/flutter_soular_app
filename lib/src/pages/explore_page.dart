@@ -6,9 +6,14 @@ import 'package:flutter_soular_app/src/widgets/category_card.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 
-class ExplorePage extends StatelessWidget {
+class ExplorePage extends StatefulWidget {
   ExplorePage({Key key}) : super(key: key);
 
+  @override
+  _ExplorePageState createState() => _ExplorePageState();
+}
+
+class _ExplorePageState extends State<ExplorePage>{
   double width;
   static const IconData account_balance =
       IconData(0xe84f, fontFamily: 'MaterialIcons');
@@ -99,7 +104,10 @@ class ExplorePage extends StatelessWidget {
                         padding: EdgeInsets.all(30),
                         child: InkWell(
                             onTap: () {
-                                
+                                Navigator.push(
+  context,
+  MaterialPageRoute(builder: (context) => MarketPlace()));
+
                             },
                             child: Column(children: <Widget>[
                           
