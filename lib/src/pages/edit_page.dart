@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_soular_app/src/pages/edit_page.dart';
 import 'package:flutter_soular_app/src/pages/login_page.dart';
 import 'package:flutter_soular_app/src/theme/color/light_color.dart';
 
-class ProfilePage extends StatefulWidget {
+class EditPage extends StatefulWidget {
 
   // profilepage's constructor
-  ProfilePage({Key key}) : super(key: key);
+  EditPage({Key key}) : super(key: key);
 
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  _EditPageState createState() => _EditPageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _EditPageState extends State<EditPage> {
   var _usernameController = TextEditingController();
   var _passwordController = TextEditingController();
 
@@ -23,14 +22,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final formKey = GlobalKey<FormState>();
 
   double width;
-  var profileInfo = ['1234', '99999999'];
-  String getProfileInfoString() {
-    StringBuffer sb = new StringBuffer();
-    for (String line in profileInfo) {
-      sb.write(line + "\n");
-    }
-    return sb.toString();
-  }
+  
     @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
@@ -71,14 +63,23 @@ class _ProfilePageState extends State<ProfilePage> {
                   top: 50,
                   left: 0,
                   child: Container(
+                    //  padding: EdgeInsets.fromLTRB(20, 5, 20, 20),
                       width: width,
-                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      padding: EdgeInsets.symmetric(horizontal: 10),
                       child: Stack(
                         children: <Widget>[
+                           Align(
+                              alignment: Alignment.centerLeft,
+                              child: IconButton(
+                                  icon: Icon(Icons.arrow_back),
+                                  color: Colors.white,
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  })),
                           Align(
                               alignment: Alignment.center,
                               child: Text(
-                                "Your Profile",
+                                "Edit Profile",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 30,
@@ -111,9 +112,7 @@ class _ProfilePageState extends State<ProfilePage> {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        CircleAvatar(
-            backgroundImage: AssetImage('assets/images/profilepic.jpg'),
-            radius: 60.0),
+
         SizedBox(height: 20.0),
         Text(
           "Kham Keow",
@@ -125,51 +124,44 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Center(
           child: Column(
             children: <Widget>[
-              Container(
-          child: Center(
-              child: Text(
-            getProfileInfoString(),
-            textAlign: TextAlign.center,
-            maxLines: 20,
-            style: TextStyle(
+              TextFormField(
+                onFieldSubmitted: (term) {
+          _fieldFocusChange(context, _usernameFocus, _passwordFocus);},
+                textInputAction: TextInputAction.next,
+                focusNode: _usernameFocus,
+                decoration: InputDecoration(labelText: 'Username'),
+                validator:(input) => input.length < 5 ? 'You need at least 5 characters': null,
+                 onSaved: (input) => _usernameController.text = input,
+                style: TextStyle(
               fontSize: 16.0,
-              color: Colors.grey,
-            ),
-          )),
-        ),
-              
+              color: Colors.grey)
+              ),
+              TextFormField(
+          //       onFieldSubmitted: (term) {
+          // _fieldFocusChange(context, _usernameFocus, _passwordFocus);},
+                textInputAction: TextInputAction.done,
+                focusNode: _passwordFocus,
+                decoration: InputDecoration(labelText: 'Password'),
+                 validator:(input) => input.length < 8 ? 'You need at least 8 characters': null,
+                 onSaved: (input) => _passwordController.text = input,
+                style: TextStyle(
+              fontSize: 16.0,
+              color: Colors.grey)
+              )
             ],
           ),
         )),
         SizedBox(height: 20),
         RaisedButton(
           textColor: Colors.white,
-          color: Colors.grey,
-          child: Text("Edit Profile"),
-          onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => EditPage()),
-                      );
-                    },
+          color: Colors.green,
+          child: Text("Submit"),
+          onPressed:() {},
                     shape: new RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(30.0),
                     ),
                   ),
-                  RaisedButton(
-                    textColor: Colors.white,
-                    color: Colors.redAccent,
-                    child: Text("Sign Out"),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
-                      );
-                    },
-                    shape: new RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(30.0),
-                    ),
-                  )
+                  
                 ],
               )));
             }
@@ -182,7 +174,11 @@ class _ProfilePageState extends State<ProfilePage> {
             //    }
             //   }
 
-
+              _fieldFocusChange(BuildContext context, FocusNode currentFocus,FocusNode nextFocus) {
+    currentFocus.unfocus();
+    FocusScope.of(context).requestFocus(nextFocus);  
+}
+          
             @override
             Widget build(BuildContext context) {
               width = MediaQuery.of(context).size.width;

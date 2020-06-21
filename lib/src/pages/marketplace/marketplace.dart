@@ -82,29 +82,27 @@ class MarketPlace extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 17),
       height: 1000.0,
       child: Container(
+ 
         child: GridView.count(
           primary: true,
           padding: const EdgeInsets.all(10),
           crossAxisSpacing: 10,
           mainAxisSpacing: 10,
           crossAxisCount: 2,
-          children: <Widget>[_houseContainer(), _houseContainer()],
+          children: <Widget>[_houseContainer("House 1"), _houseContainer("House 2")],
         ),
       ),
     );
   }
 
-  Widget _houseContainer() {
+  Widget _houseContainer(String houseNum) {
     return Container(
         margin: EdgeInsets.all(5),
         decoration: BoxDecoration(
             color: Colors.white,
             shape: BoxShape.rectangle,
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(10.0),
-                topRight: Radius.circular(10.0),
-                bottomLeft: Radius.circular(10.0),
-                bottomRight: Radius.circular(10.0)),
+             borderRadius: BorderRadius.all(Radius.circular(30)
+                ),
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(0.1),
@@ -114,7 +112,8 @@ class MarketPlace extends StatelessWidget {
               )
             ]),
         child: Padding(
-            padding: EdgeInsets.all(16.0), child: Text('House!')));
+            padding: EdgeInsets.all(16.0), child: Text(houseNum))
+            );
   }
 
   Widget _circularContainer(double height, Color color,
@@ -156,17 +155,17 @@ class MarketPlace extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
-            _card(
-                primary: LightColor.seeBlue,
-                chipColor: LightColor.seeBlue,
-                backWidget: _decorationContainerD(
-                    LightColor.darkseeBlue, -100, -65,
-                    secondary: LightColor.lightseeBlue,
-                    secondaryAccent: LightColor.seeBlue),
-                chipText1: "House 1 ",
-                chipText2: "Electricity",
-                isPrimaryCard: true,
-                imgPath: ""),
+            // _card(
+            //     primary: LightColor.seeBlue,
+            //     chipColor: LightColor.seeBlue,
+            //     backWidget: _decorationContainerD(
+            //         LightColor.darkseeBlue, -100, -65,
+            //         secondary: LightColor.lightseeBlue,
+            //         secondaryAccent: LightColor.seeBlue),
+            //     chipText1: "House 1 ",
+            //     chipText2: "Electricity",
+            //     isPrimaryCard: true,
+            //     imgPath: ""),
             _card(
                 primary: Colors.white,
                 chipColor: LightColor.lightpurple,
@@ -300,7 +299,7 @@ class MarketPlace extends StatelessWidget {
       bool isPrimaryCard = false}) {
     return Container(
         height: isPrimaryCard ? 190 : 180,
-        width: isPrimaryCard ? width * .32 : width * .32,
+        width: isPrimaryCard ? width * .4 : width * .4,
         margin: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
         decoration: BoxDecoration(
             color: primary.withAlpha(200),
@@ -393,7 +392,6 @@ class MarketPlace extends StatelessWidget {
           SizedBox(height: 20),
           // _grid(),
           _categoryRow("Contracts"),
-          _featuredRowB(),
           // _featuredRowB(),
           SizedBox(height: 20),
           _grid(),
