@@ -53,26 +53,6 @@ class _LoginPageState extends State<LoginPage> {
     return null;
   }
 
-  // Future<dynamic> attemptRegister(
-  //     String username, String password) async {
-  //   String username = _usernameController.text;
-  //   String password = _passwordController.text;
-  //   String basicAuth = base64Encode(utf8.encode('$username:$password'));
-  //   Map data = {'authorization': basicAuth};
-  //   var body = json.encode(data);
-  //   var url = "https://soular-microservices.azurewebsites.net/api/register";
-  //   var res = await http.post(
-  //       url,
-  //       headers: <String, String>{'authorization': basicAuth},
-  //       body: body);
-
-    // print("basic auth: ${basicAuth}");
-    // print(res.statusCode);
-    // print("Response body: ${res.body}");
-
-    // need to return response body
-  //   return res.body;
-  // }
   Future<http.Response> attemptRegister(String username, String password) async{
         
     String username = _usernameController.text;
@@ -129,10 +109,11 @@ class _LoginPageState extends State<LoginPage> {
                     var username = _usernameController.text;
                     var password = _passwordController.text;
                     var jwt = await attemptLogIn(username, password);
+                    
           
                     if (jwt != null) {
                       _scaffoldKey.currentState.showSnackBar(new SnackBar(
-                        duration: new Duration(seconds: 2),
+                        duration: new Duration(seconds: 3),
                         content: new Row(
                           children: <Widget>[
                             new CircularProgressIndicator(
@@ -142,7 +123,6 @@ class _LoginPageState extends State<LoginPage> {
                           ],
                         ),
                       ));
-          
                       storage.write(key: "jwt", value: jwt);
                       print("push");
                       attemptLogIn(username, password).whenComplete(() => Navigator.push(
@@ -181,9 +161,12 @@ class _LoginPageState extends State<LoginPage> {
                           "The password should be at least 4 characters long");
                     else {
                       var res = await attemptRegister(username, password);
-                      if (res.statusCode == 201)
+                      if (res.statusCode == 201){
                         displayDialog(
                             context, "Success", "The user was created. Log in now.");
+                            _usernameController.clear();
+                            _passwordController.clear();
+                      }
                       else if (res.statusCode == 409)
                         displayDialog(context, "That username is already registered",
                             "Please try to sign up using another username or log in if you already have an account.");

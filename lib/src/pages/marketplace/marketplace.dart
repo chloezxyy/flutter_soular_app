@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_soular_app/src/helper/quad_clipper.dart';
 import 'package:flutter_soular_app/src/pages/home_page.dart';
+import 'package:flutter_soular_app/src/pages/marketplace/buy_page.dart';
 import 'package:flutter_soular_app/src/theme/color/light_color.dart';
 import 'package:flutter_soular_app/src/widgets/category_card.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-class MarketPlace extends StatelessWidget {
-  MarketPlace({Key key}) : super(key: key);
+class MarketPlace extends StatefulWidget {
+  // MarketPlace({Key key}) : super(key: key);
+  _MarketPlaceState createState() => _MarketPlaceState();
+}
 
+class _MarketPlaceState extends State<MarketPlace> {
   double width;
   static const IconData account_balance =
       IconData(0xe84f, fontFamily: 'MaterialIcons');
@@ -82,27 +86,38 @@ class MarketPlace extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 17),
       height: 1000.0,
       child: Container(
- 
         child: GridView.count(
           primary: true,
           padding: const EdgeInsets.all(10),
           crossAxisSpacing: 10,
           mainAxisSpacing: 10,
           crossAxisCount: 2,
-          children: <Widget>[_houseContainer("House 1"), _houseContainer("House 2")],
+          children: <Widget>[
+            InkWell(
+              child: _houseContainer("House 1", " \$ 0.12kWh"),
+              onTap: () {
+                _onButtonPressed();
+              },
+            ),
+            InkWell(
+              child: _houseContainer("House 2", " \$ 0.31kWh"),
+              onTap: () {
+                _onButtonPressed();
+              },
+            )
+          ],
         ),
       ),
     );
   }
 
-  Widget _houseContainer(String houseNum) {
+  Widget _houseContainer(String houseNum, String elecPrice) {
     return Container(
         margin: EdgeInsets.all(5),
         decoration: BoxDecoration(
             color: Colors.white,
             shape: BoxShape.rectangle,
-             borderRadius: BorderRadius.all(Radius.circular(30)
-                ),
+            borderRadius: BorderRadius.all(Radius.circular(30)),
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(0.1),
@@ -111,9 +126,35 @@ class MarketPlace extends StatelessWidget {
                 offset: Offset(0, 2),
               )
             ]),
-        child: Padding(
-            padding: EdgeInsets.all(16.0), child: Text(houseNum))
-            );
+        child: Column(children: <Widget>[
+          InkWell(
+              child: Container(
+                  padding: EdgeInsets.all(30.0),
+                  child: Container(
+                      child: Text(
+                    houseNum,
+                    textAlign: TextAlign.center,
+                    maxLines: 5,
+                    style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
+                  )))),
+          Padding(
+              padding: EdgeInsets.all(1.0),
+              child: Text('Selling at:',
+                  style: TextStyle(fontSize: 10.0, color: Colors.black))),
+          Padding(
+            padding: EdgeInsets.only(top: 1.0),
+            child: Text(
+              elecPrice,
+              style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue),
+            ),
+          ),
+        ]));
   }
 
   Widget _circularContainer(double height, Color color,
@@ -128,6 +169,7 @@ class MarketPlace extends StatelessWidget {
       ),
     );
   }
+
   Widget _categoryRow(
     String title,
   ) {
@@ -147,6 +189,7 @@ class MarketPlace extends StatelessWidget {
       ),
     );
   }
+
   Widget _featuredRowB() {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -191,6 +234,7 @@ class MarketPlace extends StatelessWidget {
       ),
     );
   }
+
   Widget _decorationContainerD(Color primary, double top, double left,
       {Color secondary, Color secondaryAccent}) {
     return Stack(
@@ -379,6 +423,7 @@ class MarketPlace extends StatelessWidget {
     );
   }
 
+  String _selectedItem = '';
 
   @override
   Widget build(BuildContext context) {
@@ -398,5 +443,53 @@ class MarketPlace extends StatelessWidget {
         ],
       ),
     )));
+  }
+
+  void _onButtonPressed() {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+            color: Color(0xFF737373),
+            height: 210,
+                      child: Container(
+              child: _buildBottomNavigationMenu(),
+              decoration: BoxDecoration(
+                  color: Theme.of(context).canvasColor,
+                  borderRadius: BorderRadius.only(
+                      topLeft: const Radius.circular(30),
+                      topRight: const Radius.circular(30))),
+            ),
+          );
+        });
+  }
+
+  Column _buildBottomNavigationMenu() {
+    return Column(
+      children: <Widget>[
+        Padding(
+            padding: EdgeInsets.all(20.0),
+            child: Text('Indicate amount of electricity needed')),
+        ListTile(
+          leading: Icon(Icons.assessment),
+          title: Text('Let the system suggest'),
+          onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => BuyPage())),
+        ),
+        ListTile(
+          leading: Icon(Icons.accessibility_new),
+          title: Text('Input my own amount'),
+          onTap: () => _selectItem('Input my own amount'),
+        ),
+
+      ],
+    );
+  }
+
+  void _selectItem(String name) {
+    // Navigator.pop(context);
+    setState(() {
+      _selectedItem = name;
+    });
   }
 }
