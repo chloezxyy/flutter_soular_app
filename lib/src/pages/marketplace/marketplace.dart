@@ -1,21 +1,40 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_soular_app/src/helper/quad_clipper.dart';
-import 'package:flutter_soular_app/src/pages/home_page.dart';
 import 'package:flutter_soular_app/src/pages/marketplace/buy_page.dart';
 import 'package:flutter_soular_app/src/theme/color/light_color.dart';
-import 'package:flutter_soular_app/src/widgets/category_card.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
 
 class MarketPlace extends StatefulWidget {
+  final String jwt;
+  final Map<String, dynamic> payload;
+  MarketPlace(this.jwt, this.payload);
   // MarketPlace({Key key}) : super(key: key);
-  _MarketPlaceState createState() => _MarketPlaceState();
+  @override
+  _MarketPlaceState createState() => _MarketPlaceState(this.jwt, this.payload);
+
+    factory MarketPlace.fromBase64(String jwt) =>
+    MarketPlace(
+      jwt,
+      json.decode(
+        ascii.decode(
+          // get the username ?
+          base64.decode(base64.normalize(jwt.split(".")[1]))
+        )
+      )
+    );
 }
 
 class _MarketPlaceState extends State<MarketPlace> {
   double width;
-  static const IconData account_balance =
-      IconData(0xe84f, fontFamily: 'MaterialIcons');
+
+  
+  final String jwt;
+  final Map<String, dynamic> payload;
+
+  _MarketPlaceState(this.jwt, this.payload);
 
   Widget _header(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -425,25 +444,6 @@ class _MarketPlaceState extends State<MarketPlace> {
 
   String _selectedItem = '';
 
-  @override
-  Widget build(BuildContext context) {
-    width = MediaQuery.of(context).size.width;
-    return Scaffold(
-        body: SingleChildScrollView(
-            child: Container(
-      child: Column(
-        children: <Widget>[
-          _header(context),
-          SizedBox(height: 20),
-          // _grid(),
-          _categoryRow("Contracts"),
-          // _featuredRowB(),
-          SizedBox(height: 20),
-          _grid(),
-        ],
-      ),
-    )));
-  }
 
   void _onButtonPressed() {
     showModalBottomSheet(
@@ -453,7 +453,7 @@ class _MarketPlaceState extends State<MarketPlace> {
             color: Color(0xFF737373),
             height: 210,
                       child: Container(
-              child: _buildBottomNavigationMenu(),
+              child: _buildBottomNavigationMenu(this.jwt, this.payload),
               decoration: BoxDecoration(
                   color: Theme.of(context).canvasColor,
                   borderRadius: BorderRadius.only(
@@ -464,7 +464,7 @@ class _MarketPlaceState extends State<MarketPlace> {
         });
   }
 
-  Column _buildBottomNavigationMenu() {
+  Column _buildBottomNavigationMenu(String jwt, Map<String, dynamic> payload) {
     return Column(
       children: <Widget>[
         Padding(
@@ -474,7 +474,7 @@ class _MarketPlaceState extends State<MarketPlace> {
           leading: Icon(Icons.assessment),
           title: Text('Let the system suggest'),
           onTap: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => BuyPage())),
+                    MaterialPageRoute(builder: (context) => BuyPage(this.jwt, this.payload))),
         ),
         ListTile(
           leading: Icon(Icons.accessibility_new),
@@ -491,5 +491,25 @@ class _MarketPlaceState extends State<MarketPlace> {
     setState(() {
       _selectedItem = name;
     });
+  }
+
+  
+  @override
+  Widget build(BuildContext context) {
+    width = MediaQuery.of(context).size.width;
+    return Scaffold(
+        body: SingleChildScrollView(
+            child: Container(
+      child: Column(
+        children: <Widget>[
+          _header(context),
+          SizedBox(height: 20),
+          _categoryRow("Contracts"),
+          // _featuredRowB(),
+          SizedBox(height: 20),
+          _grid(),
+        ],
+      ),
+    )));
   }
 }

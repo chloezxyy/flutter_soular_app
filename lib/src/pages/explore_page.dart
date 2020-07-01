@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_soular_app/src/pages/marketplace/marketplace.dart';
@@ -7,10 +9,27 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 
 
 class ExplorePage extends StatefulWidget {
-  ExplorePage({Key key}) : super(key: key);
+
+  
+   ExplorePage(this.jwt, this.payload);
+  // ExplorePage({Key key}) : super(key: key);
 
   @override
   _ExplorePageState createState() => _ExplorePageState();
+
+   final String jwt;
+  final Map<String, dynamic> payload;
+
+    factory ExplorePage.fromBase64(String jwt) =>
+    ExplorePage(
+      jwt,
+      json.decode(
+        ascii.decode(
+          // get the username ?
+          base64.decode(base64.normalize(jwt.split(".")[1]))
+        )
+      )
+    );
 }
 
 class _ExplorePageState extends State<ExplorePage>{
@@ -70,7 +89,7 @@ class _ExplorePageState extends State<ExplorePage>{
     );
   }
 
-  Widget _grid() {
+  Widget _grid(String jwt, Map<String, dynamic> payload) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 17),
       height: 1000.0,
@@ -106,7 +125,7 @@ class _ExplorePageState extends State<ExplorePage>{
                             onTap: () {
                                 Navigator.push(
   context,
-  MaterialPageRoute(builder: (context) => MarketPlace()));
+  MaterialPageRoute(builder: (context) => MarketPlace(this.jwt, this.payload)));
 
                             },
                             child: Column(children: <Widget>[

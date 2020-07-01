@@ -1,6 +1,5 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_soular_app/src/pages/home_page.dart';
 import 'package:flutter_soular_app/src/pages/main_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -109,8 +108,7 @@ class _LoginPageState extends State<LoginPage> {
                     var username = _usernameController.text;
                     var password = _passwordController.text;
                     var jwt = await attemptLogIn(username, password);
-                    
-          
+                             
                     if (jwt != null) {
                       _scaffoldKey.currentState.showSnackBar(new SnackBar(
                         duration: new Duration(seconds: 3),
