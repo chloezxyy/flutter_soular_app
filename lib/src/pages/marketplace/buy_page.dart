@@ -10,33 +10,33 @@ import 'package:flutter_soular_app/src/theme/color/light_color.dart';
 
 class BuyPage extends StatefulWidget {
 
-  BuyPage(this.jwt, this.payload);
-  // BuyPage({Key key, this.jwt, this.payload}) : super(key: key);
+  // BuyPage(this.jwt, this.payload);
+  BuyPage({Key key}) : super(key: key);
   @override
-  _BuyPageState createState() => _BuyPageState(this.jwt, this.payload);
+  _BuyPageState createState() => _BuyPageState();
   
-  final String jwt;
-  final Map<String, dynamic> payload;
+  // final String jwt;
+  // final Map<String, dynamic> payload;
 
-  factory BuyPage.fromBase64(String jwt) =>
-    BuyPage(
-      jwt,
-      json.decode(
-        ascii.decode(
-          // get the username ?
-          base64.decode(base64.normalize(jwt.split(".")[1]))
-        )
-      )
-    );
+  // factory BuyPage.fromBase64(String jwt) =>
+  //   BuyPage(
+  //     jwt,
+  //     json.decode(
+  //       ascii.decode(
+  //         // get the username ?
+  //         base64.decode(base64.normalize(jwt.split(".")[1]))
+  //       )
+  //     )
+  //   );
 }
 
 class _BuyPageState extends State<BuyPage> {
   double width;
 
-  final String jwt;
-  final Map<String, dynamic> payload;
+  // final String jwt;
+  // final Map<String, dynamic> payload;
 
-  _BuyPageState(this.jwt, this.payload);
+  // _BuyPageState(this.jwt, this.payload);
 
   
   Widget _header(BuildContext context) {
@@ -212,7 +212,7 @@ class _BuyPageState extends State<BuyPage> {
         ]));
   }
 
-  void _showDialogPayment(String jwt, Map<String, dynamic> payload) {
+  void _showDialogPayment() {
     // flutter defined function
     showDialog(
       context: context,
@@ -226,7 +226,7 @@ class _BuyPageState extends State<BuyPage> {
               child: new Text("Confirm"),
               onPressed: () {
                 Navigator.of(context).pop();
-                _succesfulPayment(this.jwt, this.payload);
+                _succesfulPayment();
 
               },
             ),
@@ -244,7 +244,7 @@ class _BuyPageState extends State<BuyPage> {
     );
   }
 
-  void _succesfulPayment(String jwt, Map<String, dynamic> payload) {
+  void _succesfulPayment() {
     // flutter defined function
     showDialog(
       context: context,
@@ -261,7 +261,7 @@ class _BuyPageState extends State<BuyPage> {
                 Navigator.of(context).pop();
                 
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) =>MainPage(this.jwt, this.payload)));
+                    MaterialPageRoute(builder: (context) =>HomePage()));
               },
             ),
           ],
@@ -294,7 +294,7 @@ class _BuyPageState extends State<BuyPage> {
                   borderRadius: BorderRadius.circular(18.0),
                   side: BorderSide(color: Colors.green)),
               onPressed: () {
-                _showDialogPayment(this.jwt, this.payload);
+                _showDialogPayment();
               },
               color: Colors.green,
               textColor: Colors.white,

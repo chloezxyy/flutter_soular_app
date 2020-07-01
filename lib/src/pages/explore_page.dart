@@ -11,8 +11,8 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 class ExplorePage extends StatefulWidget {
 
   
-   ExplorePage(this.jwt, this.payload);
-  // ExplorePage({Key key}) : super(key: key);
+  //  ExplorePage(this.jwt, this.payload);
+  ExplorePage({Key key, this.jwt, this.payload}) : super(key: key);
 
   @override
   _ExplorePageState createState() => _ExplorePageState();
@@ -20,16 +20,16 @@ class ExplorePage extends StatefulWidget {
    final String jwt;
   final Map<String, dynamic> payload;
 
-    factory ExplorePage.fromBase64(String jwt) =>
-    ExplorePage(
-      jwt,
-      json.decode(
-        ascii.decode(
-          // get the username ?
-          base64.decode(base64.normalize(jwt.split(".")[1]))
-        )
-      )
-    );
+    // factory ExplorePage.fromBase64(String jwt) =>
+    // ExplorePage(
+    //   jwt,
+    //   json.decode(
+    //     ascii.decode(
+    //       // get the username ?
+    //       base64.decode(base64.normalize(jwt.split(".")[1]))
+    //     )
+    //   )
+    // );
 }
 
 class _ExplorePageState extends State<ExplorePage>{
@@ -89,7 +89,7 @@ class _ExplorePageState extends State<ExplorePage>{
     );
   }
 
-  Widget _grid(String jwt, Map<String, dynamic> payload) {
+  Widget _grid() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 17),
       height: 1000.0,
@@ -123,9 +123,9 @@ class _ExplorePageState extends State<ExplorePage>{
                         padding: EdgeInsets.all(30),
                         child: InkWell(
                             onTap: () {
-                                Navigator.push(
-  context,
-  MaterialPageRoute(builder: (context) => MarketPlace(this.jwt, this.payload)));
+  //                               Navigator.push(
+  // context,
+  // MaterialPageRoute(builder: (context) => MarketPlace(this.jwt, this.payload)));
 
                             },
                             child: Column(children: <Widget>[

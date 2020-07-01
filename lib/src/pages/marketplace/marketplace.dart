@@ -8,33 +8,33 @@ import 'package:flutter_soular_app/src/theme/color/light_color.dart';
 
 
 class MarketPlace extends StatefulWidget {
-  final String jwt;
-  final Map<String, dynamic> payload;
-  MarketPlace(this.jwt, this.payload);
-  // MarketPlace({Key key}) : super(key: key);
+  // final String jwt;
+  // final Map<String, dynamic> payload;
+  // MarketPlace(this.jwt, this.payload);
+  MarketPlace({Key key}) : super(key: key);
   @override
-  _MarketPlaceState createState() => _MarketPlaceState(this.jwt, this.payload);
+  _MarketPlaceState createState() => _MarketPlaceState();
 
-    factory MarketPlace.fromBase64(String jwt) =>
-    MarketPlace(
-      jwt,
-      json.decode(
-        ascii.decode(
-          // get the username ?
-          base64.decode(base64.normalize(jwt.split(".")[1]))
-        )
-      )
-    );
+    // factory MarketPlace.fromBase64(String jwt) =>
+    // MarketPlace(
+    //   jwt,
+    //   json.decode(
+    //     ascii.decode(
+    //       // get the username ?
+    //       base64.decode(base64.normalize(jwt.split(".")[1]))
+    //     )
+    //   )
+    // );
 }
 
 class _MarketPlaceState extends State<MarketPlace> {
   double width;
 
   
-  final String jwt;
-  final Map<String, dynamic> payload;
+  // final String jwt;
+  // final Map<String, dynamic> payload;
 
-  _MarketPlaceState(this.jwt, this.payload);
+  // _MarketPlaceState(this.jwt, this.payload);
 
   Widget _header(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -453,7 +453,7 @@ class _MarketPlaceState extends State<MarketPlace> {
             color: Color(0xFF737373),
             height: 210,
                       child: Container(
-              child: _buildBottomNavigationMenu(this.jwt, this.payload),
+              child: _buildBottomNavigationMenu(),
               decoration: BoxDecoration(
                   color: Theme.of(context).canvasColor,
                   borderRadius: BorderRadius.only(
@@ -464,7 +464,7 @@ class _MarketPlaceState extends State<MarketPlace> {
         });
   }
 
-  Column _buildBottomNavigationMenu(String jwt, Map<String, dynamic> payload) {
+  Column _buildBottomNavigationMenu() {
     return Column(
       children: <Widget>[
         Padding(
@@ -474,7 +474,7 @@ class _MarketPlaceState extends State<MarketPlace> {
           leading: Icon(Icons.assessment),
           title: Text('Let the system suggest'),
           onTap: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => BuyPage(this.jwt, this.payload))),
+                    MaterialPageRoute(builder: (context) => BuyPage())),
         ),
         ListTile(
           leading: Icon(Icons.accessibility_new),
