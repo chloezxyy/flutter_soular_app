@@ -20,15 +20,13 @@ class NewsListState extends State<NewsList> {
         });
   }
 
-  ListTile _listView(BuildContext context, int index){
+  ListTile _listView(BuildContext context, int index) {
     return ListTile(
-
-      leading:  _newsArticles[index].urlToImage == null
-          ? Image.asset(Constants.NEWS_PLACEHOLDER_IMAGE_ASSET_URL)
-          : Image.network(_newsArticles[index].urlToImage),
-          title: Text(_newsArticles[index].title, style: TextStyle(fontSize: 18))
-
-    );
+        leading: _newsArticles[index].urlToImage == null
+            ? Image.asset(Constants.NEWS_PLACEHOLDER_IMAGE_ASSET_URL)
+            : Image.network(_newsArticles[index].urlToImage),
+        title:
+            Text(_newsArticles[index].title, style: TextStyle(fontSize: 18)));
   }
 
   ListTile _buildItemsForListView(BuildContext context, int index) {
@@ -41,13 +39,27 @@ class NewsListState extends State<NewsList> {
     );
   }
 
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //       body: ListView.builder(
+  //     // itemCount: _newsArticles.length,
+  //     itemCount: 3,
+  //     itemBuilder: _listView,
+  //   ));
+  // }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: ListView.builder(
-      // itemCount: _newsArticles.length,
-      itemCount: 3,
-      itemBuilder: _listView,
+    return Container(
+        child: Column(
+      children: [
+        ListView.builder(
+            // itemCount: _newsArticles.length,
+            itemCount: 3,
+            itemBuilder: _listView,
+            shrinkWrap: true)
+      ],
     ));
   }
 }

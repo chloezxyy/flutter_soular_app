@@ -379,7 +379,7 @@ class _HomePageState extends State<HomePage> {
             // _featuredRowB(),
             SizedBox(height: 5),
             _categoryRow("News"),
-            // NewsList(),
+            NewsList(),
             // _featuredRowNews(),
           ],
         ),
