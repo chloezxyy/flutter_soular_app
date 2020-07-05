@@ -6,6 +6,7 @@ import 'package:flutter_soular_app/src/theme/color/light_color.dart';
 import 'package:flutter_soular_app/src/pages/wallet/wallet_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_soular_app/src/widgets/newsList.dart';
 import 'dart:convert' show json, base64, ascii;
 
 class HomePage extends StatefulWidget {
@@ -32,7 +33,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 // class HomePage extends StatelessWidget{
-  
+
   double width;
 
   Widget _header(BuildContext context) {
@@ -129,24 +130,36 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _graph(String title) {
+  Widget _graphTitle(String title) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20),
-      height: 30,
-      // padding: const EdgeInsets.all(3.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            title,
-            style: TextStyle(
-                color: LightColor.titleTextColor, fontWeight: FontWeight.bold),
-          ),
+        margin: EdgeInsets.symmetric(horizontal: 20),
+        height: 30,
+        // padding: const EdgeInsets.all(3.0),
+        child:
+            Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
+          Container(
+            // padding: EdgeInsets.all(1.0),
+            child: Text(
+              title,
+              style: TextStyle(
+                  color: LightColor.titleTextColor,
+                  fontWeight: FontWeight.bold),
+            ),
+          )
+        ]));
+  }
 
-          // _chip("Manage", primary)
-        ],
-      ),
-    );
+  Widget _graphImage() {
+    return Container(
+        margin: EdgeInsets.symmetric(horizontal: 20),
+        height: 200,
+        // padding: const EdgeInsets.all(3.0),
+        child:
+            FittedBox(
+              // padding: EdgeInsets.all(1.0),
+              child: Image.asset('assets/images/graph.jpg'),
+              fit: BoxFit.fill
+    ));
   }
 
   Widget _buyRow() {
@@ -235,8 +248,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
- 
-
   // Widget _featuredRowNews() {
   //   return SingleChildScrollView(
   //     // scrollDirection: Axis.vertical,
@@ -267,7 +278,6 @@ class _HomePageState extends State<HomePage> {
   //         borderRadius: BorderRadius.all(Radius.circular(20)),
   //       ));
   // }
-
 
   // Widget _decorationContainerA(Color primary, double top, double left) {
   //   return Stack(
@@ -341,7 +351,6 @@ class _HomePageState extends State<HomePage> {
   //   );
   // }
 
-
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
@@ -364,13 +373,13 @@ class _HomePageState extends State<HomePage> {
               endIndent: 20,
               indent: 20,
             ),
-            _graph("Your Electricity Consumption"),
-            Image.asset('assets/images/graph.jpg'),
+            _graphTitle("Your Electricity Consumption"),
+            _graphImage(),
             // _categoryRow("Houses"),
             // _featuredRowB(),
             SizedBox(height: 5),
             _categoryRow("News"),
-            // NewsList()
+            // NewsList(),
             // _featuredRowNews(),
           ],
         ),

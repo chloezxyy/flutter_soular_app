@@ -3,6 +3,7 @@ import 'package:flutter_soular_app/src/pages/login_page.dart';
 import 'package:flutter_soular_app/src/pages/main_page.dart';
 import 'package:flutter_soular_app/src/pages/profile_page.dart';
 import 'package:flutter_soular_app/src/theme/theme.dart';
+import 'package:flutter_soular_app/src/widgets/newsList.dart';
 
 void main() => runApp(MyApp());
 
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
 
       // for dark theme 
         // theme: AppTheme.lightTheme,
-        home: LoginPage(),
+        home:LoginPage(),
         debugShowCheckedModeBanner: false,
         );
   }
