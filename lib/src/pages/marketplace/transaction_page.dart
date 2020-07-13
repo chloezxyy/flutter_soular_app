@@ -8,12 +8,12 @@ import 'package:flutter_soular_app/src/pages/marketplace/marketplace.dart';
 import 'package:flutter_soular_app/src/theme/color/light_color.dart';
 
 
-class BuyPage extends StatefulWidget {
+class TransactionPage extends StatefulWidget {
 
   // BuyPage(this.jwt, this.payload);
-  BuyPage({Key key}) : super(key: key);
+  TransactionPage({Key key}) : super(key: key);
   @override
-  _BuyPageState createState() => _BuyPageState();
+  _TransactionPageState createState() => _TransactionPageState();
   
   // final String jwt;
   // final Map<String, dynamic> payload;
@@ -30,7 +30,7 @@ class BuyPage extends StatefulWidget {
   //   );
 }
 
-class _BuyPageState extends State<BuyPage> {
+class _TransactionPageState extends State<TransactionPage> {
   double width;
 
   // final String jwt;
@@ -166,7 +166,8 @@ class _BuyPageState extends State<BuyPage> {
     );
   }
 
-  Widget _houseContainer(String houseNum, String elecPrice) {
+ Widget _houseContainer(
+      String houseNum, String elecPrice, String electricityQuantity) {
     return Container(
         margin: EdgeInsets.all(5),
         decoration: BoxDecoration(
@@ -178,13 +179,13 @@ class _BuyPageState extends State<BuyPage> {
                 color: Colors.grey.withOpacity(0.1),
                 spreadRadius: 1,
                 blurRadius: 20,
-                offset: Offset(0, 2),
+                offset: Offset(0, 5),
               )
             ]),
         child: Column(children: <Widget>[
           InkWell(
               child: Container(
-                  padding: EdgeInsets.all(30.0),
+                  padding: EdgeInsets.all(25.0),
                   child: Container(
                       child: Text(
                     houseNum,
@@ -196,22 +197,35 @@ class _BuyPageState extends State<BuyPage> {
                         color: Colors.black),
                   )))),
           Padding(
-              padding: EdgeInsets.all(1.0),
-              child: Text('Selling at:',
+              padding: EdgeInsets.all(4.0),
+              child: Text('Electricity quantity: ',
                   style: TextStyle(fontSize: 10.0, color: Colors.black))),
           Padding(
-            padding: EdgeInsets.only(bottom: 15.0),
+            padding: EdgeInsets.only(top: 1.0),
             child: Text(
-              elecPrice,
+              electricityQuantity,
               style: TextStyle(
-                  fontSize: 15.0,
+                  fontSize: 10.0,
                   fontWeight: FontWeight.bold,
                   color: Colors.blue),
             ),
           ),
+          Padding(
+              padding: EdgeInsets.symmetric(vertical: 8.0),
+              child: Text('Selling at:',
+                  style: TextStyle(fontSize: 10.0, color: Colors.black))),
+          Padding(
+            padding: EdgeInsets.only(top: 1.0),
+            child: Text(
+              elecPrice,
+              style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.green),
+            ),
+          ),
         ]));
   }
-
   void _showDialogPayment() {
     // flutter defined function
     showDialog(
@@ -283,7 +297,7 @@ class _BuyPageState extends State<BuyPage> {
         _field(),
         SizedBox(height: 20),
         _categoryRow("Selected house"),
-        _houseContainer("House 1", " \$ 0.12kWh"),
+        _houseContainer("House 1", " \$ 0.12kWh", "2kWh"),
         SizedBox(height: 40),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,

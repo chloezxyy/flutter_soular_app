@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_soular_app/src/pages/edit_page.dart';
 import 'package:flutter_soular_app/src/pages/login_page.dart';
 import 'package:flutter_soular_app/src/theme/color/light_color.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
-
   // profilepage's constructor
   ProfilePage({Key key}) : super(key: key);
 
@@ -13,12 +13,22 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  @override
+  void initState() {
+    super.initState();
+    checkLoginStatus();
+  }
+
+  SharedPreferences sharedPreferences;
+
   var _usernameController = TextEditingController();
   var _passwordController = TextEditingController();
 
-  final FocusNode _usernameFocus = FocusNode(); 
-  final FocusNode _passwordFocus = FocusNode(); 
-  
+  // set true when user tape on text
+  bool _isEditingText = false;
+
+  final FocusNode _usernameFocus = FocusNode();
+  final FocusNode _passwordFocus = FocusNode();
 
   final formKey = GlobalKey<FormState>();
 
@@ -31,7 +41,8 @@ class _ProfilePageState extends State<ProfilePage> {
     }
     return sb.toString();
   }
-    @override
+
+  @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
     _usernameController.dispose();
@@ -121,81 +132,96 @@ class _ProfilePageState extends State<ProfilePage> {
           style: TextStyle(fontSize: 22.0, color: Colors.black),
         ),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 90),
+            padding: EdgeInsets.symmetric(horizontal: 90),
             child: Center(
-          child: Column(
-            children: <Widget>[
-              Container(
-          child: Center(
-              child: Text(
-            getProfileInfoString(),
-            textAlign: TextAlign.center,
-            maxLines: 20,
-            style: TextStyle(
-              fontSize: 16.0,
-              color: Colors.grey,
-            ),
-          )),
-        ),
-              
-            ],
-          ),
-        )),
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    child: Center(
+                        child: Text(
+                      getProfileInfoString(),
+                      textAlign: TextAlign.center,
+                      maxLines: 20,
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.grey,
+                      ),
+                    )),
+                  ),
+                ],
+              ),
+            )),
         SizedBox(height: 20),
         RaisedButton(
           textColor: Colors.white,
           color: Colors.grey,
           child: Text("Edit Profile"),
           onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => EditPage()),
-                      );
-                    },
-                    shape: new RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(30.0),
-                    ),
-                  ),
-                  RaisedButton(
-                    textColor: Colors.white,
-                    color: Colors.redAccent,
-                    child: Text("Sign Out"),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
-                      );
-                    },
-                    shape: new RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(30.0),
-                    ),
-                  )
-                ],
-              )));
-            }
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => EditPage()),
+            );
+          },
+          shape: new RoundedRectangleBorder(
+            borderRadius: new BorderRadius.circular(30.0),
+          ),
+        ),
+        RaisedButton(
+          textColor: Colors.white,
+          color: Colors.redAccent,
+          child: Text("Sign Out"),
+          onPressed: () {
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(builder: (context) => LoginPage()),
+            // );
 
-            //  void _saveChanges() {
-            //    if (formKey.currentState.validate()){
-            //      formKey.currentState.save();
-            //      print(_usernameController);
-            //      print(_passwordController);
-            //    }
-            //   }
+            sharedPreferences.clear();
+            // ignore: deprecated_member_use
+            sharedPreferences.commit();
+            // checkLoginStatus();
+            Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+          (Route<dynamic> route) => false);
+          },
+          shape: new RoundedRectangleBorder(
+            borderRadius: new BorderRadius.circular(30.0),
+          ),
+        )
+      ],
+    )));
+  }
 
+  //  void _saveChanges() {
+  //    if (formKey.currentState.validate()){
+  //      formKey.currentState.save();
+  //      print(_usernameController);
+  //      print(_passwordController);
+  //    }
+  //   }
 
-            @override
-            Widget build(BuildContext context) {
-              width = MediaQuery.of(context).size.width;
-              return Scaffold(
-                  body: SingleChildScrollView(
-                      child: Container(
-                child: Column(
-                  children: <Widget>[
-                    _header(context),
-                    SizedBox(height: 20),
-                    _profile(),
-                  ],
-                ),
-              )));
-            }   
+  checkLoginStatus() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    if (sharedPreferences.getString("token") == null) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+          (Route<dynamic> route) => false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    width = MediaQuery.of(context).size.width;
+    return Scaffold(
+        body: SingleChildScrollView(
+            child: Container(
+      child: Column(
+        children: <Widget>[
+          _header(context),
+          SizedBox(height: 20),
+          _profile(),
+        ],
+      ),
+    )));
+  }
 }

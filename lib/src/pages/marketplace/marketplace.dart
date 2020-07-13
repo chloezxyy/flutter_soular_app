@@ -3,9 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_soular_app/src/helper/quad_clipper.dart';
-import 'package:flutter_soular_app/src/pages/marketplace/buy_page.dart';
+import 'package:flutter_soular_app/src/pages/marketplace/transaction_page.dart';
 import 'package:flutter_soular_app/src/theme/color/light_color.dart';
-
 
 class MarketPlace extends StatefulWidget {
   // final String jwt;
@@ -15,22 +14,21 @@ class MarketPlace extends StatefulWidget {
   @override
   _MarketPlaceState createState() => _MarketPlaceState();
 
-    // factory MarketPlace.fromBase64(String jwt) =>
-    // MarketPlace(
-    //   jwt,
-    //   json.decode(
-    //     ascii.decode(
-    //       // get the username ?
-    //       base64.decode(base64.normalize(jwt.split(".")[1]))
-    //     )
-    //   )
-    // );
+  // factory MarketPlace.fromBase64(String jwt) =>
+  // MarketPlace(
+  //   jwt,
+  //   json.decode(
+  //     ascii.decode(
+  //       // get the username ?
+  //       base64.decode(base64.normalize(jwt.split(".")[1]))
+  //     )
+  //   )
+  // );
 }
 
 class _MarketPlaceState extends State<MarketPlace> {
   double width;
 
-  
   // final String jwt;
   // final Map<String, dynamic> payload;
 
@@ -103,7 +101,7 @@ class _MarketPlaceState extends State<MarketPlace> {
   Widget _grid() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 17),
-      height: 1000.0,
+      height: 1500.0,
       child: Container(
         child: GridView.count(
           primary: true,
@@ -113,13 +111,13 @@ class _MarketPlaceState extends State<MarketPlace> {
           crossAxisCount: 2,
           children: <Widget>[
             InkWell(
-              child: _houseContainer("House 1", " \$ 0.12kWh"),
+              child: _houseContainer("House 1", " \$ 0.12kWh", "2kWh"),
               onTap: () {
                 _onButtonPressed();
               },
             ),
             InkWell(
-              child: _houseContainer("House 2", " \$ 0.31kWh"),
+              child: _houseContainer("House 2", " \$ 0.31kWh", "0.5kWh"),
               onTap: () {
                 _onButtonPressed();
               },
@@ -130,7 +128,8 @@ class _MarketPlaceState extends State<MarketPlace> {
     );
   }
 
-  Widget _houseContainer(String houseNum, String elecPrice) {
+  Widget _houseContainer(
+      String houseNum, String elecPrice, String electricityQuantity) {
     return Container(
         margin: EdgeInsets.all(5),
         decoration: BoxDecoration(
@@ -148,7 +147,7 @@ class _MarketPlaceState extends State<MarketPlace> {
         child: Column(children: <Widget>[
           InkWell(
               child: Container(
-                  padding: EdgeInsets.all(30.0),
+                  padding: EdgeInsets.all(25.0),
                   child: Container(
                       child: Text(
                     houseNum,
@@ -160,7 +159,21 @@ class _MarketPlaceState extends State<MarketPlace> {
                         color: Colors.black),
                   )))),
           Padding(
-              padding: EdgeInsets.all(1.0),
+              padding: EdgeInsets.all(4.0),
+              child: Text('Electricity quantity: ',
+                  style: TextStyle(fontSize: 10.0, color: Colors.black))),
+          Padding(
+            padding: EdgeInsets.only(top: 1.0),
+            child: Text(
+              electricityQuantity,
+              style: TextStyle(
+                  fontSize: 10.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue),
+            ),
+          ),
+          Padding(
+              padding: EdgeInsets.symmetric(vertical: 8.0),
               child: Text('Selling at:',
                   style: TextStyle(fontSize: 10.0, color: Colors.black))),
           Padding(
@@ -170,7 +183,7 @@ class _MarketPlaceState extends State<MarketPlace> {
               style: TextStyle(
                   fontSize: 20.0,
                   fontWeight: FontWeight.bold,
-                  color: Colors.blue),
+                  color: Colors.green),
             ),
           ),
         ]));
@@ -444,7 +457,6 @@ class _MarketPlaceState extends State<MarketPlace> {
 
   String _selectedItem = '';
 
-
   void _onButtonPressed() {
     showModalBottomSheet(
         context: context,
@@ -452,7 +464,7 @@ class _MarketPlaceState extends State<MarketPlace> {
           return Container(
             color: Color(0xFF737373),
             height: 210,
-                      child: Container(
+            child: Container(
               child: _buildBottomNavigationMenu(),
               decoration: BoxDecoration(
                   color: Theme.of(context).canvasColor,
@@ -473,15 +485,14 @@ class _MarketPlaceState extends State<MarketPlace> {
         ListTile(
           leading: Icon(Icons.assessment),
           title: Text('Let the system suggest'),
-          onTap: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => BuyPage())),
+          onTap: () => Navigator.push(
+              context, MaterialPageRoute(builder: (context) => TransactionPage())),
         ),
         ListTile(
           leading: Icon(Icons.accessibility_new),
           title: Text('Input my own amount'),
           onTap: () => _selectItem('Input my own amount'),
         ),
-
       ],
     );
   }
@@ -493,7 +504,6 @@ class _MarketPlaceState extends State<MarketPlace> {
     });
   }
 
-  
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;

@@ -4,6 +4,9 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
+// Create storage
 final storage = FlutterSecureStorage();
 
 class LoginPage extends StatefulWidget {
@@ -17,6 +20,8 @@ class _LoginPageState extends State<LoginPage> {
 
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  bool _isLoading = false;
 
   // helper methods to make everything more succint
   void displayDialog(BuildContext context, String title, String text) =>
@@ -34,15 +39,42 @@ class _LoginPageState extends State<LoginPage> {
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
     print(basicAuth);
 
+    // ignore: avoid_init_to_null
+    var jsonData = null;
+
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    // Map data = {
+    //   'email': username,
+    //   'password': password
+    // };
+
     var res = await http.get(
         "https://soular-microservices.azurewebsites.net/api/login",
         headers: <String, String>{'authorization': basicAuth});
 
     print('res v');
-    print(res.body);
+    // print (res); // instance of response 
+    print(res.body); // access token
 
     if (res.statusCode == 200) {
       print(res.statusCode);
+
+      jsonData = json.decode(res.body);
+
+      print('share');
+      print(jsonData);
+
+      setState(() {
+        _isLoading = false;
+        sharedPreferences.setString("token", jsonData['accessToken']);
+        print('share');
+
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (BuildContext context) => MainPage()),
+            (Route<dynamic> route) => false);
+            
+      });
       return res.body;
     }
 
@@ -92,36 +124,34 @@ class _LoginPageState extends State<LoginPage> {
       decoration: InputDecoration(labelText: 'Password'),
     );
 
-    final loginButton = Padding(
+
+    final loginButton = _isLoading ? Center(child: CircularProgressIndicator()) : Padding(
       padding: EdgeInsets.symmetric(vertical: 1.0),
       child: RaisedButton(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () async {
+          setState(() {
+            _isLoading = true;
+          });
           var username = _usernameController.text;
           var password = _passwordController.text;
           var jwt = await attemptLogIn(username, password);
 
           if (jwt != null) {
-            _scaffoldKey.currentState.showSnackBar(new SnackBar(
-              duration: new Duration(seconds: 3),
-              content: new Row(
-                children: <Widget>[
-                  new CircularProgressIndicator(
-                      valueColor:
-                          new AlwaysStoppedAnimation<Color>(Colors.blue)),
-                  new Text("   Signing in...")
-                ],
-              ),
-            ));
+            // Write storage
             storage.write(key: "jwt", value: jwt);
             print("push");
-            attemptLogIn(username, password).whenComplete(() => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MainPage.fromBase64(jwt))));
+            // attemptLogIn(username, password).whenComplete(() => Navigator.push(
+            //     context,
+            //     MaterialPageRoute(
+            //         builder: (context) => MainPage.fromBase64(jwt))));
+            attemptLogIn(username, password);
           } else {
+            setState(() {
+            _isLoading = false;
+          });
             return displayDialog(
               context,
               "An Error Occurred",
