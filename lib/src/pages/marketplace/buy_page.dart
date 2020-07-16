@@ -4,41 +4,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_soular_app/src/pages/home_page.dart';
 import 'package:flutter_soular_app/src/pages/main_page.dart';
-import 'package:flutter_soular_app/src/pages/marketplace/marketplace.dart';
 import 'package:flutter_soular_app/src/theme/color/light_color.dart';
 
 
-class TransactionPage extends StatefulWidget {
+class BuyPage extends StatefulWidget {
 
-  // BuyPage(this.jwt, this.payload);
-  TransactionPage({Key key}) : super(key: key);
+  BuyPage({Key key}) : super(key: key);
   @override
-  _TransactionPageState createState() => _TransactionPageState();
+  _BuyPageState createState() => _BuyPageState();
   
-  // final String jwt;
-  // final Map<String, dynamic> payload;
-
-  // factory BuyPage.fromBase64(String jwt) =>
-  //   BuyPage(
-  //     jwt,
-  //     json.decode(
-  //       ascii.decode(
-  //         // get the username ?
-  //         base64.decode(base64.normalize(jwt.split(".")[1]))
-  //       )
-  //     )
-  //   );
 }
 
-class _TransactionPageState extends State<TransactionPage> {
+class _BuyPageState extends State<BuyPage> {
   double width;
-
-  // final String jwt;
-  // final Map<String, dynamic> payload;
-
-  // _BuyPageState(this.jwt, this.payload);
-
-  
   Widget _header(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     return ClipRRect(
@@ -89,7 +67,7 @@ class _TransactionPageState extends State<TransactionPage> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
                                     Text(
-                                      "Transaction",
+                                      "Buy Electricity",
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 25,
@@ -114,18 +92,26 @@ class _TransactionPageState extends State<TransactionPage> {
         border: Border.all(color: borderColor, width: borderWidth),
       ),
     );
-  }
+  }  
 
-  Widget _field() {
-    String amt = '9.2';
+  Widget _amtField() {
+    String price = '\$0.24 kWh';
+    String amt = '1.0';
     final _inputAmt = TextEditingController(text: amt);
-
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 15),
+      padding: EdgeInsets.all(20.0),
       width: 250,
       child: Column(children: <Widget>[
         Padding(
-          padding: EdgeInsets.only(top: 20.0),
+          padding: EdgeInsets.only(top: 30.0),
+          child: Column(children: <Widget>[
+            Text("Price of Electricity", style: TextStyle(fontSize: 19)),
+            SizedBox(height: 10),
+            Text(price, style: TextStyle(fontSize: 19))]),
+        ),
+        
+        Padding(
+          padding: EdgeInsets.only(top: 50.0),
           child: Text("Enter amount to buy", style: TextStyle(fontSize: 19)),
         ),
         TextField(
@@ -140,92 +126,11 @@ class _TransactionPageState extends State<TransactionPage> {
             keyboardType:
                 TextInputType.numberWithOptions(signed: true, decimal: true),
             autofocus: true),
-        Text("kWh")
+        
       ]),
     );
   }
-
-  Widget _categoryRow(
-    String title,
-  ) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20),
-      height: 30,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Text(
-            title,
-            style: TextStyle(
-                color: LightColor.titleTextColor, fontWeight: FontWeight.bold),
-          ),
-          Container()
-          // _chip("Manage", primary)
-        ],
-      ),
-    );
-  }
-
- Widget _houseContainer(
-      String houseNum, String elecPrice, String electricityQuantity) {
-    return Container(
-        margin: EdgeInsets.all(5),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            shape: BoxShape.rectangle,
-            borderRadius: BorderRadius.all(Radius.circular(30)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.1),
-                spreadRadius: 1,
-                blurRadius: 20,
-                offset: Offset(0, 5),
-              )
-            ]),
-        child: Column(children: <Widget>[
-          InkWell(
-              child: Container(
-                  padding: EdgeInsets.all(25.0),
-                  child: Container(
-                      child: Text(
-                    houseNum,
-                    textAlign: TextAlign.center,
-                    maxLines: 5,
-                    style: TextStyle(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black),
-                  )))),
-          Padding(
-              padding: EdgeInsets.all(4.0),
-              child: Text('Electricity quantity: ',
-                  style: TextStyle(fontSize: 10.0, color: Colors.black))),
-          Padding(
-            padding: EdgeInsets.only(top: 1.0),
-            child: Text(
-              electricityQuantity,
-              style: TextStyle(
-                  fontSize: 10.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blue),
-            ),
-          ),
-          Padding(
-              padding: EdgeInsets.symmetric(vertical: 8.0),
-              child: Text('Selling at:',
-                  style: TextStyle(fontSize: 10.0, color: Colors.black))),
-          Padding(
-            padding: EdgeInsets.only(top: 1.0),
-            child: Text(
-              elecPrice,
-              style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.green),
-            ),
-          ),
-        ]));
-  }
+ 
   void _showDialogPayment() {
     // flutter defined function
     showDialog(
@@ -294,10 +199,9 @@ class _TransactionPageState extends State<TransactionPage> {
       child: Column(children: <Widget>[
         _header(context),
         SizedBox(height: 20),
-        _field(),
+        _amtField(),
         SizedBox(height: 20),
-        _categoryRow("Selected house"),
-        _houseContainer("House 1", " \$ 0.12kWh", "2kWh"),
+
         SizedBox(height: 40),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,

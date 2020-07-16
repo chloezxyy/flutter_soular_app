@@ -7,7 +7,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // Create storage
-final storage = FlutterSecureStorage();
+// final storage = FlutterSecureStorage();
 
 class LoginPage extends StatefulWidget {
   static String tag = 'login-page';
@@ -44,18 +44,15 @@ class _LoginPageState extends State<LoginPage> {
 
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
-    // Map data = {
-    //   'email': username,
-    //   'password': password
-    // };
-
     var res = await http.get(
         "https://soular-microservices.azurewebsites.net/api/login",
-        headers: <String, String>{'authorization': basicAuth});
+        headers: <String, String>{'authorization': basicAuth},
 
-    print('res v');
-    // print (res); // instance of response 
-    print(res.body); // access token
+        );
+
+    print('resbody: ');
+    print(res.headers);
+    
 
     if (res.statusCode == 200) {
       print(res.statusCode);
@@ -88,6 +85,7 @@ class _LoginPageState extends State<LoginPage> {
     String username = _usernameController.text;
     String password = _passwordController.text;
     var url = "https://soular-microservices.azurewebsites.net/api/register";
+    
     final http.Response res = await http.post(url,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -95,10 +93,11 @@ class _LoginPageState extends State<LoginPage> {
         body: jsonEncode(
             <String, String>{'username': username, 'password': password}));
 
-    print('here: ${res}');
     print('username: ${username}');
+    print('pw: ${password}');
     print('body: ${res.body}');
     print(res.statusCode);
+    print(res.headers);
     return res;
   }
 
@@ -140,13 +139,6 @@ class _LoginPageState extends State<LoginPage> {
           var jwt = await attemptLogIn(username, password);
 
           if (jwt != null) {
-            // Write storage
-            storage.write(key: "jwt", value: jwt);
-            print("push");
-            // attemptLogIn(username, password).whenComplete(() => Navigator.push(
-            //     context,
-            //     MaterialPageRoute(
-            //         builder: (context) => MainPage.fromBase64(jwt))));
             attemptLogIn(username, password);
           } else {
             setState(() {

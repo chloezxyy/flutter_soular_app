@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_soular_app/src/helper/quad_clipper.dart';
-import 'package:flutter_soular_app/src/pages/marketplace/marketplace.dart';
+import 'package:flutter_soular_app/src/pages/marketplace/buy_page.dart';
+import 'package:flutter_soular_app/src/pages/marketplace/sell_page.dart';
 import 'package:flutter_soular_app/src/widgets/newsList.dart';
 import 'package:flutter_soular_app/src/theme/color/light_color.dart';
 import 'package:flutter_soular_app/src/pages/wallet/wallet_page.dart';
@@ -179,7 +180,7 @@ class _HomePageState extends State<HomePage> {
             FlatButton(
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MarketPlace()));
+                    MaterialPageRoute(builder: (context) => BuyPage()));
               },
               child: Text('BUY', style: TextStyle(color: Colors.blueAccent)),
               // textColor: Colors.lime,
@@ -213,7 +214,7 @@ class _HomePageState extends State<HomePage> {
             FlatButton(
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MarketPlace()));
+                    MaterialPageRoute(builder: (context) => SellPage()));
               },
               child: Text('SELL', style: TextStyle(color: Colors.green)),
               // textColor: Colors.lime,
@@ -248,108 +249,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // Widget _featuredRowNews() {
-  //   return SingleChildScrollView(
-  //     // scrollDirection: Axis.vertical,
-  //     child: Container(
-  //       child: Column(
-  //         children: <Widget>[
-  //           // _newsCard(chipText1: ""),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  // Widget _newsCard({Color primaryColor = Colors.white, String chipText1}) {
-  //   return Container(
-  //       height: 190,
-  //       width: width * 2,
-  //       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-  //       decoration: BoxDecoration(
-  //         color: primaryColor,
-  //         borderRadius: BorderRadius.all(Radius.circular(20)),
-  //         boxShadow: <BoxShadow>[
-  //           BoxShadow(
-  //               offset: Offset(0, 5), blurRadius: 10, color: Color(0x12000000))
-  //         ],
-  //       ),
-  //       child: ClipRRect(
-  //         borderRadius: BorderRadius.all(Radius.circular(20)),
-  //       ));
-  // }
-
-  // Widget _decorationContainerA(Color primary, double top, double left) {
-  //   return Stack(
-  //     children: <Widget>[
-  //       Positioned(
-  //         top: top,
-  //         left: left,
-  //         child: CircleAvatar(
-  //           radius: 100,
-  //           backgroundColor: primary.withAlpha(255),
-  //         ),
-  //       ),
-  //       _smallContainer(primary, 20, 40),
-  //       Positioned(
-  //         top: 20,
-  //         right: -30,
-  //         child: _circularContainer(80, Colors.transparent,
-  //             borderColor: Colors.white),
-  //       )
-  //     ],
-  //   );
-  // }
-
-  // Widget _decorationContainerB(Color primary, double top, double left) {
-  //   return Stack(
-  //     children: <Widget>[
-  //       Positioned(
-  //         top: -65,
-  //         right: -65,
-  //         child: CircleAvatar(
-  //           radius: 70,
-  //           backgroundColor: Colors.blue.shade100,
-  //           child: CircleAvatar(radius: 30, backgroundColor: primary),
-  //         ),
-  //       ),
-  //       Positioned(
-  //           top: 35,
-  //           right: -40,
-  //           child: ClipRect(
-  //               clipper: QuadClipper(),
-  //               child: CircleAvatar(
-  //                   backgroundColor: LightColor.lightseeBlue, radius: 40)))
-  //     ],
-  //   );
-  // }
-
-  // Widget _decorationContainerC(Color primary, double top, double left) {
-  //   return Stack(
-  //     children: <Widget>[
-  //       Positioned(
-  //         top: -105,
-  //         left: -35,
-  //         child: CircleAvatar(
-  //           radius: 70,
-  //           backgroundColor: LightColor.orange.withAlpha(100),
-  //         ),
-  //       ),
-  //       Positioned(
-  //           top: 35,
-  //           right: -40,
-  //           child: ClipRect(
-  //               clipper: QuadClipper(),
-  //               child: CircleAvatar(
-  //                   backgroundColor: LightColor.orange, radius: 40))),
-  //       _smallContainer(
-  //         LightColor.yellow,
-  //         35,
-  //         70,
-  //       )
-  //     ],
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {

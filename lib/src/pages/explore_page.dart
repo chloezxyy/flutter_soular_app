@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_soular_app/src/pages/marketplace/marketplace.dart';
 import 'package:flutter_soular_app/src/theme/color/light_color.dart';
 import 'package:flutter_soular_app/src/widgets/category_card.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
