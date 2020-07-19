@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_soular_app/src/pages/login_page.dart';
 import 'package:flutter_soular_app/src/theme/color/light_color.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class EditPage extends StatefulWidget {
-
   // profilepage's constructor
   EditPage({Key key}) : super(key: key);
 
@@ -15,15 +16,14 @@ class _EditPageState extends State<EditPage> {
   var _usernameController = TextEditingController();
   var _passwordController = TextEditingController();
 
-  final FocusNode _usernameFocus = FocusNode(); 
-  final FocusNode _passwordFocus = FocusNode(); 
-  
+  final FocusNode _usernameFocus = FocusNode();
+  final FocusNode _passwordFocus = FocusNode();
 
   final formKey = GlobalKey<FormState>();
 
   double width;
-  
-    @override
+
+  @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
     _usernameController.dispose();
@@ -63,12 +63,12 @@ class _EditPageState extends State<EditPage> {
                   top: 50,
                   left: 0,
                   child: Container(
-                    //  padding: EdgeInsets.fromLTRB(20, 5, 20, 20),
+                      //  padding: EdgeInsets.fromLTRB(20, 5, 20, 20),
                       width: width,
                       padding: EdgeInsets.symmetric(horizontal: 10),
                       child: Stack(
                         children: <Widget>[
-                           Align(
+                          Align(
                               alignment: Alignment.centerLeft,
                               child: IconButton(
                                   icon: Icon(Icons.arrow_back),
@@ -105,6 +105,26 @@ class _EditPageState extends State<EditPage> {
     );
   }
 
+  Future<http.Response> attemptEditPassword(String username, String password) async {
+    String password = _passwordController.text;
+    var url =
+        "https://soular-microservices.azurewebsites.net/api//change_password";
+
+    final http.Response res = await http.post(url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(
+            <String, String>{'username': username, 'password': password}));
+
+
+    print('pw: ${password}');
+    print('body: ${res.body}');
+    print(res.statusCode);
+    print(res.headers);
+    return res;
+  }
+
   Widget _profile() {
     return Container(
         child: Center(
@@ -112,7 +132,6 @@ class _EditPageState extends State<EditPage> {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-
         SizedBox(height: 20.0),
         Text(
           "Kham Keow",
@@ -120,78 +139,72 @@ class _EditPageState extends State<EditPage> {
           style: TextStyle(fontSize: 22.0, color: Colors.black),
         ),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 90),
+            padding: EdgeInsets.symmetric(horizontal: 90),
             child: Center(
-          child: Column(
-            children: <Widget>[
-              TextFormField(
-                onFieldSubmitted: (term) {
-          _fieldFocusChange(context, _usernameFocus, _passwordFocus);},
-                textInputAction: TextInputAction.next,
-                focusNode: _usernameFocus,
-                decoration: InputDecoration(labelText: 'Username'),
-                validator:(input) => input.length < 5 ? 'You need at least 5 characters': null,
-                 onSaved: (input) => _usernameController.text = input,
-                style: TextStyle(
-              fontSize: 16.0,
-              color: Colors.grey)
+              child: Column(
+                children: <Widget>[
+                  TextFormField(
+                      onFieldSubmitted: (term) {
+                        _fieldFocusChange(
+                            context, _usernameFocus, _passwordFocus);
+                      },
+                      textInputAction: TextInputAction.next,
+                      focusNode: _usernameFocus,
+                      decoration: InputDecoration(labelText: 'Username'),
+                      validator: (input) => input.length < 5
+                          ? 'You need at least 5 characters'
+                          : null,
+                      onSaved: (input) => _usernameController.text = input,
+                      style: TextStyle(fontSize: 16.0, color: Colors.grey)),
+                  TextFormField(
+                      //       onFieldSubmitted: (term) {
+                      // _fieldFocusChange(context, _usernameFocus, _passwordFocus);},
+                      textInputAction: TextInputAction.done,
+                      focusNode: _passwordFocus,
+                      decoration: InputDecoration(labelText: 'Password'),
+                      validator: (input) => input.length < 8
+                          ? 'You need at least 8 characters'
+                          : null,
+                      onSaved: (input) => _passwordController.text = input,
+                      style: TextStyle(fontSize: 16.0, color: Colors.grey))
+                ],
               ),
-              TextFormField(
-          //       onFieldSubmitted: (term) {
-          // _fieldFocusChange(context, _usernameFocus, _passwordFocus);},
-                textInputAction: TextInputAction.done,
-                focusNode: _passwordFocus,
-                decoration: InputDecoration(labelText: 'Password'),
-                 validator:(input) => input.length < 8 ? 'You need at least 8 characters': null,
-                 onSaved: (input) => _passwordController.text = input,
-                style: TextStyle(
-              fontSize: 16.0,
-              color: Colors.grey)
-              )
-            ],
-          ),
-        )),
+            )),
         SizedBox(height: 20),
         RaisedButton(
           textColor: Colors.white,
           color: Colors.green,
           child: Text("Submit"),
-          onPressed:() {},
-                    shape: new RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(30.0),
-                    ),
-                  ),
-                  
-                ],
-              )));
-            }
+          onPressed: () {
 
-            //  void _saveChanges() {
-            //    if (formKey.currentState.validate()){
-            //      formKey.currentState.save();
-            //      print(_usernameController);
-            //      print(_passwordController);
-            //    }
-            //   }
+          },
+          shape: new RoundedRectangleBorder(
+            borderRadius: new BorderRadius.circular(30.0),
+          ),
+        ),
+      ],
+    )));
+  }
 
-              _fieldFocusChange(BuildContext context, FocusNode currentFocus,FocusNode nextFocus) {
+  _fieldFocusChange(
+      BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
     currentFocus.unfocus();
-    FocusScope.of(context).requestFocus(nextFocus);  
-}
-          
-            @override
-            Widget build(BuildContext context) {
-              width = MediaQuery.of(context).size.width;
-              return Scaffold(
-                  body: SingleChildScrollView(
-                      child: Container(
-                child: Column(
-                  children: <Widget>[
-                    _header(context),
-                    SizedBox(height: 20),
-                    _profile(),
-                  ],
-                ),
-              )));
-            }   
+    FocusScope.of(context).requestFocus(nextFocus);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    width = MediaQuery.of(context).size.width;
+    return Scaffold(
+        body: SingleChildScrollView(
+            child: Container(
+      child: Column(
+        children: <Widget>[
+          _header(context),
+          SizedBox(height: 20),
+          _profile(),
+        ],
+      ),
+    )));
+  }
 }

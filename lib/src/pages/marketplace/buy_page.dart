@@ -105,9 +105,10 @@ class _BuyPageState extends State<BuyPage> {
         Padding(
           padding: EdgeInsets.only(top: 30.0),
           child: Column(children: <Widget>[
-            Text("Price of Electricity", style: TextStyle(fontSize: 19)),
+            Text("Price of Electricity", style: TextStyle(fontSize: 19),
+            ),
             SizedBox(height: 10),
-            Text(price, style: TextStyle(fontSize: 19))]),
+            Text(price, style: TextStyle(fontSize: 19, color: Colors.blueAccent))]),
         ),
         
         Padding(

@@ -3,6 +3,8 @@ import 'package:flutter_soular_app/src/pages/edit_page.dart';
 import 'package:flutter_soular_app/src/pages/login_page.dart';
 import 'package:flutter_soular_app/src/theme/color/light_color.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class ProfilePage extends StatefulWidget {
   // profilepage's constructor
@@ -33,7 +35,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final formKey = GlobalKey<FormState>();
 
   double width;
-  var profileInfo = ['1234', '99999999'];
+  var profileInfo = ['@khamkk'];
   String getProfileInfoString() {
     StringBuffer sb = new StringBuffer();
     for (String line in profileInfo) {
@@ -49,6 +51,7 @@ class _ProfilePageState extends State<ProfilePage> {
     _passwordController.dispose();
     super.dispose();
   }
+
 
   Widget _header(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
