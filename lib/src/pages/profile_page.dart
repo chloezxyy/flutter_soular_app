@@ -19,6 +19,7 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     super.initState();
     checkLoginStatus();
+    getUsername();
   }
 
   SharedPreferences sharedPreferences;
@@ -129,6 +130,7 @@ class _ProfilePageState extends State<ProfilePage> {
             backgroundImage: AssetImage('assets/images/profilepic.jpg'),
             radius: 60.0),
         SizedBox(height: 20.0),
+
         Text(
           "Kham Keow",
           textAlign: TextAlign.center,
@@ -211,6 +213,15 @@ class _ProfilePageState extends State<ProfilePage> {
           (Route<dynamic> route) => false);
     }
   }
+  String username;
+  getUsername() async {
+        final SharedPreferences pref = await SharedPreferences.getInstance();
+        username = pref.getString("username") ?? 'hi';
+        print(username);
+        return username;
+    }
+    Widget name(){return ListTile(title: Text(getUsername()));}
+
 
   @override
   Widget build(BuildContext context) {
@@ -223,8 +234,10 @@ class _ProfilePageState extends State<ProfilePage> {
           _header(context),
           SizedBox(height: 20),
           _profile(),
+
         ],
       ),
     )));
   }
+
 }

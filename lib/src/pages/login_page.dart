@@ -52,18 +52,17 @@ class _LoginPageState extends State<LoginPage> {
     print('resbody: ');
     print(res.headers);
     
-
     if (res.statusCode == 200) {
       print(res.statusCode);
 
       jsonData = json.decode(res.body);
-
-      print('share');
       print(jsonData);
 
       setState(() {
         _isLoading = false;
-        sharedPreferences.setString("token", jsonData['accessToken']);
+        sharedPreferences.setString("token", jsonData["accessToken"]);
+        sharedPreferences.setString("username", username);
+        print(username);
         print('share');
 
         Navigator.of(context).pushAndRemoveUntil(
