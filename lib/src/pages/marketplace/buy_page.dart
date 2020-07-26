@@ -6,16 +6,16 @@ import 'package:flutter_soular_app/src/pages/home_page.dart';
 import 'package:flutter_soular_app/src/pages/main_page.dart';
 import 'package:flutter_soular_app/src/theme/color/light_color.dart';
 
-
 class BuyPage extends StatefulWidget {
-
   BuyPage({Key key}) : super(key: key);
   @override
   _BuyPageState createState() => _BuyPageState();
-  
 }
 
 class _BuyPageState extends State<BuyPage> {
+  final _formKey = GlobalKey<FormState>();
+  var _inpPrice = TextEditingController();
+
   double width;
   Widget _header(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -92,46 +92,74 @@ class _BuyPageState extends State<BuyPage> {
         border: Border.all(color: borderColor, width: borderWidth),
       ),
     );
-  }  
+  }
 
   Widget _amtField() {
-    String price = '\$0.24 kWh';
-    String amt = '1.0';
-    final _inputAmt = TextEditingController(text: amt);
+    String price = '\$0.24 kW/h';
+    String amt = '0.001';
     return Container(
-      padding: EdgeInsets.all(20.0),
-      width: 250,
-      child: Column(children: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(top: 30.0),
-          child: Column(children: <Widget>[
-            Text("Price of Electricity", style: TextStyle(fontSize: 19),
-            ),
-            SizedBox(height: 10),
-            Text(price, style: TextStyle(fontSize: 19, color: Colors.blueAccent))]),
-        ),
-        
-        Padding(
-          padding: EdgeInsets.only(top: 50.0),
-          child: Text("Enter amount to buy", style: TextStyle(fontSize: 19)),
-        ),
-        TextField(
-            controller: new TextEditingController.fromValue(
-                new TextEditingValue(
-                    text: _inputAmt.text,
-                    selection:
-                        new TextSelection.collapsed(offset: amt.length - 1))),
-            onChanged: (inpAmt) => amt = inpAmt,
-            style: TextStyle(fontSize: 30),
-            textAlign: TextAlign.center,
-            keyboardType:
-                TextInputType.numberWithOptions(signed: true, decimal: true),
-            autofocus: true),
-        
-      ]),
-    );
+        padding: EdgeInsets.all(20.0),
+        width: 250,
+        child: Column(children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(top: 30.0),
+            child: Column(children: <Widget>[
+              Text(
+                "Price of Electricity",
+                style: TextStyle(fontSize: 19),
+              ),
+              SizedBox(height: 10),
+              Text(price,
+                  style: TextStyle(fontSize: 19, color: Colors.blueAccent))
+            ]),
+          ),
+          
+          Padding(
+            padding: EdgeInsets.only(top: 50.0),
+            child: Text("Enter amount to buy (kWh)",
+                style: TextStyle(fontSize: 18), textAlign: TextAlign.center),
+          ),
+          // TextField(
+          //     controller: new TextEditingController.fromValue(
+          //         new TextEditingValue(
+          //             text: amt,
+          //             selection:
+          //                 new TextSelection.collapsed(offset: amt.length - 1))),
+          //     onChanged: (_inputPrice) => amt = _inputPrice,
+          //     style: TextStyle(fontSize: 30),
+          //     textAlign: TextAlign.center,
+          //     keyboardType:
+          //         TextInputType.numberWithOptions(signed: true, decimal: true),
+          //     autofocus: true),
+          Form(
+              key: _formKey,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    TextFormField(
+                        keyboardType: TextInputType.number,
+                        // validator: amtValidator(_inpPrice),
+                        validator: (value) {
+                          var priceInt = int.parse(value);
+
+                          if (value.isEmpty) {
+                            return 'Please enter text';
+                          }
+                          if (priceInt < 0.001) {
+                            return 'Invalid amount';
+                          }
+                          return null;
+                        },
+                        onChanged: (text) {
+                          print(text);
+                        },
+                        textAlign: TextAlign.center,
+                        decoration:
+                            InputDecoration(hintText: 'Min. amount: 0.001')),
+                  ]))
+        ]));
   }
- 
+
   void _showDialogPayment() {
     // flutter defined function
     showDialog(
@@ -147,7 +175,6 @@ class _BuyPageState extends State<BuyPage> {
               onPressed: () {
                 Navigator.of(context).pop();
                 _succesfulPayment();
-
               },
             ),
             // usually buttons at the bottom of the dialog
@@ -179,9 +206,9 @@ class _BuyPageState extends State<BuyPage> {
               child: new Text("Done"),
               onPressed: () {
                 Navigator.of(context).pop();
-                
+
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) =>HomePage()));
+                    MaterialPageRoute(builder: (context) => HomePage()));
               },
             ),
           ],
@@ -202,7 +229,6 @@ class _BuyPageState extends State<BuyPage> {
         SizedBox(height: 20),
         _amtField(),
         SizedBox(height: 20),
-
         SizedBox(height: 40),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -213,6 +239,13 @@ class _BuyPageState extends State<BuyPage> {
                   borderRadius: BorderRadius.circular(18.0),
                   side: BorderSide(color: Colors.green)),
               onPressed: () {
+                if (_formKey.currentState.validate()) {
+                  // If the form is valid, display a snackbar. In the real world,
+                  // you'd often call a server or save the information in a database.
+
+                  Scaffold.of(context)
+                      .showSnackBar(SnackBar(content: Text('Processing Data')));
+                }
                 _showDialogPayment();
               },
               color: Colors.green,

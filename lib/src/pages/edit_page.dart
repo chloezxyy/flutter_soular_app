@@ -13,11 +13,11 @@ class EditPage extends StatefulWidget {
 }
 
 class _EditPageState extends State<EditPage> {
-  var _usernameController = TextEditingController();
-  var _passwordController = TextEditingController();
+  var _oldPasswordController = TextEditingController();
+  var _newPasswordController = TextEditingController();
 
-  final FocusNode _usernameFocus = FocusNode();
-  final FocusNode _passwordFocus = FocusNode();
+  final FocusNode _oldPasswordFocus = FocusNode();
+  final FocusNode _newPasswordFocus = FocusNode();
 
   final formKey = GlobalKey<FormState>();
 
@@ -26,8 +26,8 @@ class _EditPageState extends State<EditPage> {
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
-    _usernameController.dispose();
-    _passwordController.dispose();
+    _oldPasswordController.dispose();
+    _newPasswordController.dispose();
     super.dispose();
   }
 
@@ -105,8 +105,10 @@ class _EditPageState extends State<EditPage> {
     );
   }
 
-  Future<http.Response> attemptEditPassword(String username, String password) async {
-    String password = _passwordController.text;
+  Future<http.Response> attemptEditPassword(String oldPassword, String newPassword) async {
+    String oldPassword = _oldPasswordController.text;
+    String newPassword = _newPasswordController.text;
+
     var url =
         "https://soular-microservices.azurewebsites.net/api//change_password";
 
@@ -115,11 +117,8 @@ class _EditPageState extends State<EditPage> {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(
-            <String, String>{'username': username, 'password': password}));
+            <String, String>{'oldPassword': oldPassword, 'newPassword': newPassword}));
 
-
-    print('pw: ${password}');
-    print('body: ${res.body}');
     print(res.statusCode);
     print(res.headers);
     return res;
@@ -146,26 +145,26 @@ class _EditPageState extends State<EditPage> {
                   TextFormField(
                       onFieldSubmitted: (term) {
                         _fieldFocusChange(
-                            context, _usernameFocus, _passwordFocus);
+                            context, _oldPasswordFocus, _newPasswordFocus);
                       },
                       textInputAction: TextInputAction.next,
-                      focusNode: _usernameFocus,
-                      decoration: InputDecoration(labelText: 'Username'),
+                      focusNode: _oldPasswordFocus,
+                      decoration: InputDecoration(labelText: 'Old Password'),
                       validator: (input) => input.length < 5
                           ? 'You need at least 5 characters'
                           : null,
-                      onSaved: (input) => _usernameController.text = input,
+                      onSaved: (input) => _oldPasswordController.text = input,
                       style: TextStyle(fontSize: 16.0, color: Colors.grey)),
                   TextFormField(
                       //       onFieldSubmitted: (term) {
                       // _fieldFocusChange(context, _usernameFocus, _passwordFocus);},
                       textInputAction: TextInputAction.done,
-                      focusNode: _passwordFocus,
+                      focusNode: _newPasswordFocus,
                       decoration: InputDecoration(labelText: 'Password'),
                       validator: (input) => input.length < 8
                           ? 'You need at least 8 characters'
                           : null,
-                      onSaved: (input) => _passwordController.text = input,
+                      onSaved: (input) => _newPasswordController.text = input,
                       style: TextStyle(fontSize: 16.0, color: Colors.grey))
                 ],
               ),
