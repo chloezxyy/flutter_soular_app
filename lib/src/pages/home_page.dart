@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_soular_app/src/helper/quad_clipper.dart';
+import 'package:flutter_soular_app/src/pages/energy/energy_history.dart';
 import 'package:flutter_soular_app/src/pages/marketplace/buy_page.dart';
 import 'package:flutter_soular_app/src/pages/marketplace/sell_page.dart';
 import 'package:flutter_soular_app/src/widgets/newsList.dart';
 import 'package:flutter_soular_app/src/theme/color/light_color.dart';
 import 'package:flutter_soular_app/src/pages/wallet/wallet_page.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_soular_app/src/widgets/newsList.dart';
-import 'dart:convert' show json, base64, ascii;
+
 
 class HomePage extends StatefulWidget {
   // HomePage({Key key}) : super(key: key);
@@ -273,7 +271,8 @@ class _HomePageState extends State<HomePage> {
               indent: 20,
             ),
             _graphTitle("Your Electricity Consumption"),
-            _graphImage(),
+            // _graphImage(),
+            LineChart(),
             // _categoryRow("Houses"),
             // _featuredRowB(),
             SizedBox(height: 5),
