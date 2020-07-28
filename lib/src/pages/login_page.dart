@@ -79,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<http.Response> attemptRegister(
-      String username, String password) async {
+    String username, String password) async {
     String username = _usernameController.text;
     String password = _passwordController.text;
     var url = "https://soular-microservices.azurewebsites.net/api/register";
@@ -93,8 +93,7 @@ class _LoginPageState extends State<LoginPage> {
 
     print('username: ${username}');
     print('pw: ${password}');
-    print('body: ${res.body}');
-    print(res.statusCode);
+    print('res.headers');
     print(res.headers);
     return res;
   }

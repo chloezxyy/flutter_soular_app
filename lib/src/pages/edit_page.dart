@@ -4,6 +4,8 @@ import 'package:flutter_soular_app/src/theme/color/light_color.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class EditPage extends StatefulWidget {
   // profilepage's constructor
   EditPage({Key key}) : super(key: key);
@@ -13,23 +15,17 @@ class EditPage extends StatefulWidget {
 }
 
 class _EditPageState extends State<EditPage> {
-  var _oldPasswordController = TextEditingController();
-  var _newPasswordController = TextEditingController();
+  final TextEditingController _oldPasswordController = TextEditingController();
+  final TextEditingController _newPasswordController = TextEditingController();
 
   final FocusNode _oldPasswordFocus = FocusNode();
   final FocusNode _newPasswordFocus = FocusNode();
 
   final formKey = GlobalKey<FormState>();
 
-  double width;
+  SharedPreferences sharedPreferences;
 
-  @override
-  void dispose() {
-    // Clean up the controller when the widget is disposed.
-    _oldPasswordController.dispose();
-    _newPasswordController.dispose();
-    super.dispose();
-  }
+  double width;
 
   Widget _header(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -105,22 +101,36 @@ class _EditPageState extends State<EditPage> {
     );
   }
 
-  Future<http.Response> attemptEditPassword(String oldPassword, String newPassword) async {
+   Future<String> getToken() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('token');
+  }
+
+
+  Future<http.Response> attemptEditPassword(
+      String oldPassword, String newPassword) async {
     String oldPassword = _oldPasswordController.text;
     String newPassword = _newPasswordController.text;
 
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+     var token = prefs.getString('token');
+    print('Password text input:');
+    print(oldPassword);
+    print(newPassword);
+
     var url =
-        "https://soular-microservices.azurewebsites.net/api//change_password";
+        "https://soular-microservices.azurewebsites.net/api/change_password";
 
-    final http.Response res = await http.post(url,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(
-            <String, String>{'oldPassword': oldPassword, 'newPassword': newPassword}));
-
+    final http.Response res = await http.post(url, headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer $token',
+    },
+    body: jsonEncode(<String, String>{
+          'oldPassword': oldPassword,
+          'newPassword': newPassword
+        }));
     print(res.statusCode);
-    print(res.headers);
+    print(res.body);
     return res;
   }
 
@@ -150,21 +160,23 @@ class _EditPageState extends State<EditPage> {
                       textInputAction: TextInputAction.next,
                       focusNode: _oldPasswordFocus,
                       decoration: InputDecoration(labelText: 'Old Password'),
-                      validator: (input) => input.length < 5
-                          ? 'You need at least 5 characters'
-                          : null,
-                      onSaved: (input) => _oldPasswordController.text = input,
+                      // validator: (input) => input.length < 5
+                      //     ? 'You need at least 5 characters'
+                      //     : null,
+                      controller: _oldPasswordController,
+                      // onSaved: (input) => _oldPasswordController.text = input,
                       style: TextStyle(fontSize: 16.0, color: Colors.grey)),
                   TextFormField(
                       //       onFieldSubmitted: (term) {
                       // _fieldFocusChange(context, _usernameFocus, _passwordFocus);},
                       textInputAction: TextInputAction.done,
                       focusNode: _newPasswordFocus,
-                      decoration: InputDecoration(labelText: 'Password'),
-                      validator: (input) => input.length < 8
-                          ? 'You need at least 8 characters'
-                          : null,
-                      onSaved: (input) => _newPasswordController.text = input,
+                      decoration: InputDecoration(labelText: 'New Password'),
+                      // validator: (input) => input.length < 8
+                      //     ? 'You need at least 8 characters'
+                      //     : null,
+                      // onSaved: (input) => _newPasswordController.text = input,
+                      controller: _newPasswordController,
                       style: TextStyle(fontSize: 16.0, color: Colors.grey))
                 ],
               ),
@@ -174,8 +186,29 @@ class _EditPageState extends State<EditPage> {
           textColor: Colors.white,
           color: Colors.green,
           child: Text("Submit"),
-          onPressed: () {
-
+          onPressed: () async {
+            sharedPreferences = await SharedPreferences.getInstance();
+            var oldPassword = _oldPasswordController.text;
+            var newPassword = _newPasswordController.text;
+            var res = await attemptEditPassword(oldPassword, newPassword);
+            if (res.statusCode == 200) {
+              displayDialog(context, "Success", "Password Changed.");
+              _oldPasswordController.clear();
+              _newPasswordController.clear();
+            } else if (res.statusCode == 400) {
+              print(res.headers);
+              displayDialog(
+                  context, "Bad Input", "Min. 6 characters for new password");
+            } else if (res.statusCode == 401) {
+              print(res.headers);
+              displayDialog(context, "Unauthorized", "401");
+            } else if (res.statusCode == 403) {
+              print(res.headers);
+              displayDialog(context, "Incorrect Old Password", "- 403");
+            } else {
+              print(res.headers);
+              displayDialog(context, "Error", "An unknown error occurred.");
+            }
           },
           shape: new RoundedRectangleBorder(
             borderRadius: new BorderRadius.circular(30.0),
@@ -184,6 +217,14 @@ class _EditPageState extends State<EditPage> {
       ],
     )));
   }
+
+  // helper methods to make everything more succint
+  void displayDialog(BuildContext context, String title, String text) =>
+      showDialog(
+        context: context,
+        builder: (context) =>
+            AlertDialog(title: Text(title), content: Text(text)),
+      );
 
   _fieldFocusChange(
       BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
