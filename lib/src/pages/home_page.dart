@@ -86,10 +86,10 @@ class _HomePageState extends State<HomePage> {
                               ),
                               FlatButton(
                                 onPressed: () {
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(builder:(context) => WalletPage())
-                                  // );
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder:(context) => WalletPage())
+                                  );
                                 },
                                 child: Text('MANAGE WALLET',
                                     style: TextStyle(color: Colors.white)),

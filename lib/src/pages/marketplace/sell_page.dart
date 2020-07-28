@@ -6,20 +6,17 @@ import 'package:flutter_soular_app/src/pages/home_page.dart';
 import 'package:flutter_soular_app/src/pages/main_page.dart';
 import 'package:flutter_soular_app/src/theme/color/light_color.dart';
 
-
 class SellPage extends StatefulWidget {
-
-  // BuyPage(this.jwt, this.payload);
   SellPage({Key key}) : super(key: key);
   @override
   _SellPageState createState() => _SellPageState();
-  
 }
 
 class _SellPageState extends State<SellPage> {
-  double width;
+  final _formKey = GlobalKey<FormState>();
+  var _inpPrice = TextEditingController();
 
-  
+  double width;
   Widget _header(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     return ClipRRect(
@@ -29,7 +26,7 @@ class _SellPageState extends State<SellPage> {
           height: 80,
           width: width,
           decoration: BoxDecoration(
-            color: Colors.yellow[500],
+            color: Colors.purple[500],
           ),
           child: Stack(
             fit: StackFit.expand,
@@ -38,11 +35,11 @@ class _SellPageState extends State<SellPage> {
               Positioned(
                   top: 10,
                   right: -120,
-                  child: _circularContainer(300, Colors.yellow[500])),
+                  child: _circularContainer(300, Colors.purple[500])),
               Positioned(
                   top: -60,
                   left: -65,
-                  child: _circularContainer(width * .5, Colors.yellow[500])),
+                  child: _circularContainer(width * .5, Colors.purple[500])),
               Positioned(
                   top: -230,
                   right: -30,
@@ -60,7 +57,7 @@ class _SellPageState extends State<SellPage> {
                               alignment: Alignment.centerLeft,
                               child: IconButton(
                                   icon: Icon(Icons.arrow_back),
-                                  color: Colors.grey[400],
+                                  color: Colors.white,
                                   onPressed: () {
                                     Navigator.pop(context);
                                   })),
@@ -72,7 +69,7 @@ class _SellPageState extends State<SellPage> {
                                     Text(
                                       "Sell Electricity",
                                       style: TextStyle(
-                                          color: Colors.grey[400],
+                                          color: Colors.white,
                                           fontSize: 25,
                                           fontWeight: FontWeight.w500),
                                     )
@@ -97,132 +94,68 @@ class _SellPageState extends State<SellPage> {
     );
   }
 
-  Widget _field() {
-    String amt = '9.2';
-    final _inputAmt = TextEditingController(text: amt);
+  Widget _amtField() {
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 15),
-      width: 250,
-      child: Column(children: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(top: 20.0),
-          child: Text("Enter amount to sell", style: TextStyle(fontSize: 19)),
-        ),
-        TextField(
-            controller: new TextEditingController.fromValue(
-                new TextEditingValue(
-                    text: _inputAmt.text,
-                    selection:
-                        new TextSelection.collapsed(offset: amt.length - 1))),
-            onChanged: (inpAmt) => amt = inpAmt,
-            style: TextStyle(fontSize: 30),
-            textAlign: TextAlign.center,
-            keyboardType:
-                TextInputType.numberWithOptions(signed: true, decimal: true),
-            autofocus: true),
-        Text("kWh")
-      ]),
-    );
-  }
-
-  Widget _categoryRow(
-    String title,
-  ) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20),
-      height: 30,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Text(
-            title,
-            style: TextStyle(
-                color: LightColor.titleTextColor, fontWeight: FontWeight.bold),
-          ),
-          Container()
-          // _chip("Manage", primary)
-        ],
-      ),
-    );
-  }
-
- Widget _houseContainer(
-      String houseNum, String elecPrice, String electricityQuantity) {
-    return Container(
-        margin: EdgeInsets.all(5),
-        decoration: BoxDecoration(
-            color: Colors.black,
-            shape: BoxShape.rectangle,
-            borderRadius: BorderRadius.all(Radius.circular(30)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.1),
-                spreadRadius: 1,
-                blurRadius: 20,
-                offset: Offset(0, 5),
-              )
-            ]),
+        padding: EdgeInsets.all(20.0),
+        width: 250,
         child: Column(children: <Widget>[
-          InkWell(
-              child: Container(
-                  padding: EdgeInsets.all(25.0),
-                  child: Container(
-                      child: Text(
-                    houseNum,
-                    textAlign: TextAlign.center,
-                    maxLines: 5,
-                    style: TextStyle(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black),
-                  )))),
+          
           Padding(
-              padding: EdgeInsets.all(4.0),
-              child: Text('Electricity quantity: ',
-                  style: TextStyle(fontSize: 10.0, color: Colors.black))),
-          Padding(
-            padding: EdgeInsets.only(top: 1.0),
-            child: Text(
-              electricityQuantity,
-              style: TextStyle(
-                  fontSize: 10.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.yellow),
-            ),
+            padding: EdgeInsets.only(top: 50.0),
+            child: Text("Enter amount to sell",
+                style: TextStyle(fontSize: 18), textAlign: TextAlign.center),
           ),
           Padding(
-              padding: EdgeInsets.symmetric(vertical: 8.0),
-              child: Text('Selling at:',
-                  style: TextStyle(fontSize: 10.0, color: Colors.black))),
-          Padding(
-            padding: EdgeInsets.only(top: 1.0),
-            child: Text(
-              elecPrice,
-              style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.green),
-            ),
+            padding: EdgeInsets.only(top: 10.0),
+            child: Text(" (kW/h)",
+                style: TextStyle(fontSize: 18), textAlign: TextAlign.center),
           ),
+
+          Form(
+              key: _formKey,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    TextFormField(
+                        keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
+                        // validator: amtValidator(_inpPrice),
+                        validator: (value) {
+                          var priceInt = double.parse(value);
+
+                          if (value.isEmpty) {
+                            return 'Please enter text';
+                          }
+                          if (priceInt < 0.001) {
+                            return 'Invalid amount';
+                          }
+                          return null;
+                        },
+                        onChanged: (text) {
+                          print(text);
+                        },
+                        textAlign: TextAlign.center,
+                        decoration:
+                            InputDecoration(hintText: 'Min. amount: 0.001')),
+                  ]))
         ]));
   }
-  void _showDialogPayment() {
+
+  void _showDialogSell() {
     // flutter defined function
     showDialog(
       context: context,
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          title: new Text("Amount to be paid:"),
+          title: new Text("Selling price:"),
           content: new Text(" \$0.92"),
           actions: <Widget>[
             new FlatButton(
               child: new Text("Confirm"),
               onPressed: () {
                 Navigator.of(context).pop();
-                _succesfulPayment();
-
+                _succesfulSell();
               },
             ),
             // usually buttons at the bottom of the dialog
@@ -239,7 +172,7 @@ class _SellPageState extends State<SellPage> {
     );
   }
 
-  void _succesfulPayment() {
+  void _succesfulSell() {
     // flutter defined function
     showDialog(
       context: context,
@@ -247,16 +180,15 @@ class _SellPageState extends State<SellPage> {
         // return object of type Dialog
         return AlertDialog(
           title: new Text("Congratulations!"),
-          content: new Text("Payment is successful"),
+          content: new Text("Energy contract is posted"),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             new FlatButton(
               child: new Text("Done"),
               onPressed: () {
                 Navigator.of(context).pop();
-                
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) =>HomePage()));
+                    MaterialPageRoute(builder: (context) => MainPage()));
               },
             ),
           ],
@@ -275,9 +207,8 @@ class _SellPageState extends State<SellPage> {
       child: Column(children: <Widget>[
         _header(context),
         SizedBox(height: 20),
-        _field(),
+        _amtField(),
         SizedBox(height: 20),
-
         SizedBox(height: 40),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -288,11 +219,20 @@ class _SellPageState extends State<SellPage> {
                   borderRadius: BorderRadius.circular(18.0),
                   side: BorderSide(color: Colors.green)),
               onPressed: () {
-                _showDialogPayment();
+                if (_formKey.currentState.validate()) {
+                  // If the form is valid, display a snackbar. In the real world,
+                  // you'd often call a server or save the information in a database.
+
+                  // Scaffold.of(context)
+                  //     .showSnackBar(SnackBar(content: Text('Processing Data')));
+                  print('processing amount');
+                  _showDialogSell();
+                }
+                
               },
               color: Colors.green,
               textColor: Colors.white,
-              child: Text("confirm".toUpperCase(),
+              child: Text("Confirm Amount".toUpperCase(),
                   style: TextStyle(fontSize: 14)),
             ),
           ],

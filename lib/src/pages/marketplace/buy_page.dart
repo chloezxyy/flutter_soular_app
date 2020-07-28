@@ -14,9 +14,8 @@ class BuyPage extends StatefulWidget {
 
 class _BuyPageState extends State<BuyPage> {
   final _formKey = GlobalKey<FormState>();
-  var _inpPrice = TextEditingController();
-
   double width;
+  
   Widget _header(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     return ClipRRect(
@@ -110,7 +109,7 @@ class _BuyPageState extends State<BuyPage> {
               ),
               SizedBox(height: 10),
               Text(price,
-                  style: TextStyle(fontSize: 19, color: Colors.blueAccent))
+                  style: TextStyle(fontSize: 25, color: Colors.blueAccent, fontWeight: FontWeight.bold))
             ]),
           ),
           
@@ -137,10 +136,10 @@ class _BuyPageState extends State<BuyPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     TextFormField(
-                        keyboardType: TextInputType.number,
+                        keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
                         // validator: amtValidator(_inpPrice),
                         validator: (value) {
-                          var priceInt = int.parse(value);
+                          var priceInt = double.parse(value);
 
                           if (value.isEmpty) {
                             return 'Please enter text';
@@ -208,7 +207,7 @@ class _BuyPageState extends State<BuyPage> {
                 Navigator.of(context).pop();
 
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => HomePage()));
+                    MaterialPageRoute(builder: (context) => MainPage()));
               },
             ),
           ],
@@ -243,10 +242,12 @@ class _BuyPageState extends State<BuyPage> {
                   // If the form is valid, display a snackbar. In the real world,
                   // you'd often call a server or save the information in a database.
 
-                  Scaffold.of(context)
-                      .showSnackBar(SnackBar(content: Text('Processing Data')));
+                  // Scaffold.of(context)
+                  //     .showSnackBar(SnackBar(content: Text('Processing Data')));
+                  print('processing data');
+                  _showDialogPayment();
                 }
-                _showDialogPayment();
+                
               },
               color: Colors.green,
               textColor: Colors.white,
