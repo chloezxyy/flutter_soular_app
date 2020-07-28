@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_soular_app/src/pages/home_page.dart';
 import 'package:flutter_soular_app/src/pages/main_page.dart';
-import 'package:flutter_soular_app/src/theme/color/light_color.dart';
+import 'package:http/http.dart' as http;
+
 
 class SellPage extends StatefulWidget {
   SellPage({Key key}) : super(key: key);
@@ -14,7 +14,8 @@ class SellPage extends StatefulWidget {
 
 class _SellPageState extends State<SellPage> {
   final _formKey = GlobalKey<FormState>();
-  var _inpPrice = TextEditingController();
+  final TextEditingController _amtInputController = TextEditingController();
+
 
   double width;
   Widget _header(BuildContext context) {
@@ -93,9 +94,26 @@ class _SellPageState extends State<SellPage> {
       ),
     );
   }
+    Future<http.Response> attemptPurchase(String amtInput) async {
+    String amtInput = _amtInputController.text;
+    print('amt input:');
+    print(amtInput);
+
+    var url = "https://soular-microservices.azurewebsites.net/api/sell";
+
+    final http.Response res = await http.post(url,
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'amtInput': amtInput,
+        }));
+    print(res.statusCode);
+    print(res.body);
+    return res;
+  }
 
   Widget _amtField() {
-
     return Container(
         padding: EdgeInsets.all(20.0),
         width: 250,
@@ -108,7 +126,7 @@ class _SellPageState extends State<SellPage> {
           ),
           Padding(
             padding: EdgeInsets.only(top: 10.0),
-            child: Text(" (kW/h)",
+            child: Text(" (W/h)",
                 style: TextStyle(fontSize: 18), textAlign: TextAlign.center),
           ),
 
@@ -131,12 +149,13 @@ class _SellPageState extends State<SellPage> {
                           }
                           return null;
                         },
+                        controller: _amtInputController,
                         onChanged: (text) {
                           print(text);
                         },
                         textAlign: TextAlign.center,
                         decoration:
-                            InputDecoration(hintText: 'Min. amount: 0.001')),
+                            InputDecoration(hintText: 'Min. amount: 1')),
                   ]))
         ]));
   }
@@ -198,6 +217,14 @@ class _SellPageState extends State<SellPage> {
     );
   }
 
+    // helper methods to make everything more succint
+  void displayDialog(BuildContext context, String title, String text) =>
+      showDialog(
+        context: context,
+        builder: (context) =>
+            AlertDialog(title: Text(title), content: Text(text)),
+      );
+
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
@@ -218,15 +245,36 @@ class _SellPageState extends State<SellPage> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(18.0),
                   side: BorderSide(color: Colors.green)),
-              onPressed: () {
+              onPressed: () async {
                 if (_formKey.currentState.validate()) {
-                  // If the form is valid, display a snackbar. In the real world,
-                  // you'd often call a server or save the information in a database.
 
-                  // Scaffold.of(context)
-                  //     .showSnackBar(SnackBar(content: Text('Processing Data')));
-                  print('processing amount');
-                  _showDialogSell();
+                  var amtInput = _amtInputController.text;
+                  var res = await attemptPurchase(amtInput);
+
+                  if (res.statusCode == 200) {
+                    // displayDialog(context, "Success", "Password Changed.");
+                    _showDialogSell();
+                    _amtInputController.clear();
+                  } else if (res.statusCode == 400) {
+                    print(res.headers);
+                    displayDialog(context, "Bad Input", "Input valid amount");
+                  } else if (res.statusCode == 401) {
+                    print(res.headers);
+                    displayDialog(context, "Unauthorized purhcase", "401");
+                  } else if (res.statusCode == 403) {
+                    print(res.headers);
+                    displayDialog(context, "Purchase failed", "403");
+                  } else if (res.statusCode == 500) {
+                    print(res.headers);
+                    displayDialog(context, "Internal server error", "500");
+                  } else {
+                    print(res.headers);
+                    displayDialog(
+                        context, "Error", "An unknown error occurred.");
+                  }
+
+                  print('processing data');
+                  
                 }
                 
               },
