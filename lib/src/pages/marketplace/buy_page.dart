@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_soular_app/src/pages/main_page.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BuyPage extends StatefulWidget {
   BuyPage({Key key}) : super(key: key);
@@ -15,6 +15,7 @@ class BuyPage extends StatefulWidget {
 class _BuyPageState extends State<BuyPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _amtInputController = TextEditingController();
+  SharedPreferences sharedPreferences;
 
   double width;
 
@@ -166,6 +167,9 @@ class _BuyPageState extends State<BuyPage> {
   }
 
   Future<http.Response> attemptPurchase(String amtInput) async {
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+     var token = prefs.getString('token');
     String amtInput = _amtInputController.text;
     print('amt input:');
     print(amtInput);
@@ -175,12 +179,16 @@ class _BuyPageState extends State<BuyPage> {
     final http.Response res = await http.post(url,
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token',
         },
         body: jsonEncode(<String, String>{
-          'amtInput': amtInput,
+          'amount': amtInput,
         }));
-    print(res.statusCode);
-    print(res.body);
+        print('HERE');
+        print(res.statusCode);
+        print(res.headers);
+        print(res.body);
+        // print(res.statusCode);
     return res;
   }
 
@@ -272,7 +280,6 @@ class _BuyPageState extends State<BuyPage> {
                   side: BorderSide(color: Colors.green)),
               onPressed: () async {
                 if (_formKey.currentState.validate()) {
-
                   var amtInput = _amtInputController.text;
                   var res = await attemptPurchase(amtInput);
 
@@ -282,24 +289,50 @@ class _BuyPageState extends State<BuyPage> {
                     _amtInputController.clear();
                   } else if (res.statusCode == 400) {
                     print(res.headers);
-                    displayDialog(context, "Bad Input", "Input valid amount");
-                  } else if (res.statusCode == 401) {
+                    displayDialog(context, "Bad Input param", "400");
+                  }  else if (res.statusCode == 403) {
                     print(res.headers);
-                    displayDialog(context, "Unauthorized purhcase", "401");
-                  } else if (res.statusCode == 403) {
-                    print(res.headers);
-                    displayDialog(context, "Purchase failed", "403");
-                  } else if (res.statusCode == 500) {
-                    print(res.headers);
-                    displayDialog(context, "Internal server error", "500");
+                    displayDialog(context, "Purchase failed", "Insufficient credits");}
+                  else if (res.statusCode == 401) {
+                    print("401");
+                    // get new refresh token
+                    final SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    var refreshtoken =
+                        prefs.getString('refreshtoken'); // refresh token
+                    var token = prefs.getString('token');
+                    print('YO');
+                    print(token);
+                    var url =
+                        "https://soular-microservices.azurewebsites.net/api/refresh_token";
+
+                    final http.Response res = await http.post(url,
+                        headers: {
+                          'Content-Type': 'application/json; charset=UTF-8',
+                        },
+                        body: jsonEncode(<String, String>{
+                          'refreshToken': refreshtoken,
+                        }));
+
+                    // set new access token
+                    var jsonData = null;
+                    jsonData = json.decode(res.body);
+                    print('jsondata');
+                    print(jsonData);
+
+                    sharedPreferences.setString(
+                          "token", jsonData["accessToken"]);
+
+                    print('attempt to purchase again');
+                    attemptPurchase(amtInput);
+
+                    // displayDialog(context, "Unauthorized purchase", "401");
+
                   } else {
-                    print(res.headers);
                     displayDialog(
                         context, "Error", "An unknown error occurred.");
                   }
-
                   print('processing data');
-                  
                 }
               },
               color: Colors.green,

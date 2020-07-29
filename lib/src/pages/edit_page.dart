@@ -101,10 +101,10 @@ class _EditPageState extends State<EditPage> {
     );
   }
 
-   Future<String> getToken() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('token');
-  }
+  //  Future<String> getToken() async {
+  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   return prefs.getString('token');
+  // }
 
 
   Future<http.Response> attemptEditPassword(

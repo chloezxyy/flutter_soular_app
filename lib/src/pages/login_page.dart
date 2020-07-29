@@ -59,11 +59,10 @@ class _LoginPageState extends State<LoginPage> {
       print(jsonData);
 
       setState(() {
-        _isLoading = false;
+        _isLoading = false; 
         sharedPreferences.setString("token", jsonData["accessToken"]);
+        sharedPreferences.setString("refreshtoken", jsonData["refreshToken"]);
         sharedPreferences.setString("username", username);
-        print(username);
-        print('share');
 
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (BuildContext context) => MainPage()),
