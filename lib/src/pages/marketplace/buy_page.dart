@@ -167,9 +167,8 @@ class _BuyPageState extends State<BuyPage> {
   }
 
   Future<http.Response> attemptPurchase(String amtInput) async {
-
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-     var token = prefs.getString('token');
+    var token = prefs.getString('token');
     String amtInput = _amtInputController.text;
     print('amt input:');
     print(amtInput);
@@ -184,11 +183,11 @@ class _BuyPageState extends State<BuyPage> {
         body: jsonEncode(<String, String>{
           'amount': amtInput,
         }));
-        print('HERE');
-        print(res.statusCode);
-        print(res.headers);
-        print(res.body);
-        // print(res.statusCode);
+    print('HERE');
+    print(res.statusCode);
+    print(res.headers);
+    print(res.body);
+    // print(res.statusCode);
     return res;
   }
 
@@ -258,6 +257,22 @@ class _BuyPageState extends State<BuyPage> {
             AlertDialog(title: Text(title), content: Text(text)),
       );
 
+  Widget _elecInfo() {
+    return Container(child: Card(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            const ListTile(
+              leading: Icon(Icons.lightbulb_outline ),
+              title: Text('FYI'),
+              subtitle: Text('100W can power up one lightbulb for 1 hour'),
+            ),
+
+          ],
+        ),
+      ));
+  }
+
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
@@ -290,10 +305,11 @@ class _BuyPageState extends State<BuyPage> {
                   } else if (res.statusCode == 400) {
                     print(res.headers);
                     displayDialog(context, "Bad Input param", "400");
-                  }  else if (res.statusCode == 403) {
+                  } else if (res.statusCode == 403) {
                     print(res.headers);
-                    displayDialog(context, "Purchase failed", "Insufficient credits");}
-                  else if (res.statusCode == 401) {
+                    displayDialog(
+                        context, "Purchase failed", "Insufficient credits");
+                  } else if (res.statusCode == 401) {
                     print("401");
                     // get new refresh token
                     final SharedPreferences prefs =
@@ -321,7 +337,7 @@ class _BuyPageState extends State<BuyPage> {
                     print(jsonData);
 
                     sharedPreferences.setString(
-                          "token", jsonData["accessToken"]);
+                        "token", jsonData["accessToken"]);
 
                     print('attempt to purchase again');
                     attemptPurchase(amtInput);
@@ -341,7 +357,9 @@ class _BuyPageState extends State<BuyPage> {
                   style: TextStyle(fontSize: 14)),
             ),
           ],
-        )
+        ),
+        SizedBox(height: 20),
+        _elecInfo()
       ]),
     )));
   }
