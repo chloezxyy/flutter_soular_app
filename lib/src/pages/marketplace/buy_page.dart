@@ -123,18 +123,6 @@ class _BuyPageState extends State<BuyPage> {
             child: Text("Enter amount to buy (Wh)",
                 style: TextStyle(fontSize: 18), textAlign: TextAlign.center),
           ),
-          // TextField(
-          //     controller: new TextEditingController.fromValue(
-          //         new TextEditingValue(
-          //             text: amt,
-          //             selection:
-          //                 new TextSelection.collapsed(offset: amt.length - 1))),
-          //     onChanged: (_inputPrice) => amt = _inputPrice,
-          //     style: TextStyle(fontSize: 30),
-          //     textAlign: TextAlign.center,
-          //     keyboardType:
-          //         TextInputType.numberWithOptions(signed: true, decimal: true),
-          //     autofocus: true),
           Form(
               key: _formKey,
               child: Column(

@@ -26,6 +26,17 @@ class _EditPageState extends State<EditPage> {
   SharedPreferences sharedPreferences;
 
   double width;
+    var _usernameController = TextEditingController();
+  var _passwordController = TextEditingController();
+
+  
+    @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   Widget _header(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -134,6 +145,8 @@ class _EditPageState extends State<EditPage> {
     return res;
   }
 
+  String get username => sharedPreferences.getString("username");
+
   Widget _profile() {
     return Container(
         child: Center(
@@ -143,10 +156,11 @@ class _EditPageState extends State<EditPage> {
       children: <Widget>[
         SizedBox(height: 20.0),
         Text(
-          "Kham Keow",
+          "Change password",
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 22.0, color: Colors.black),
         ),
+        SizedBox(height: 20.0),
         Container(
             padding: EdgeInsets.symmetric(horizontal: 90),
             child: Center(

@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_soular_app/src/pages/main_page.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 
 class SellPage extends StatefulWidget {
@@ -15,7 +17,7 @@ class SellPage extends StatefulWidget {
 class _SellPageState extends State<SellPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _amtInputController = TextEditingController();
-
+  SharedPreferences sharedPreferences;
 
   double width;
   Widget _header(BuildContext context) {
@@ -94,19 +96,22 @@ class _SellPageState extends State<SellPage> {
       ),
     );
   }
-    Future<http.Response> attemptPurchase(String amtInput) async {
+    Future<http.Response> attemptSell(String amtInput) async {
+       final SharedPreferences prefs = await SharedPreferences.getInstance();
     String amtInput = _amtInputController.text;
     print('amt input:');
     print(amtInput);
+    var token = prefs.getString('token');
 
     var url = "https://soular-microservices.azurewebsites.net/api/sell";
 
     final http.Response res = await http.post(url,
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token'
         },
         body: jsonEncode(<String, String>{
-          'amtInput': amtInput,
+          'amount': amtInput,
         }));
     print(res.statusCode);
     print(res.body);
@@ -249,7 +254,7 @@ class _SellPageState extends State<SellPage> {
                 if (_formKey.currentState.validate()) {
 
                   var amtInput = _amtInputController.text;
-                  var res = await attemptPurchase(amtInput);
+                  var res = await attemptSell(amtInput);
 
                   if (res.statusCode == 200) {
                     // displayDialog(context, "Success", "Password Changed.");
@@ -259,11 +264,46 @@ class _SellPageState extends State<SellPage> {
                     print(res.headers);
                     displayDialog(context, "Bad Input", "Input valid amount");
                   } else if (res.statusCode == 401) {
+                    print("401");
+                    // get new refresh token
+                    final SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    var refreshtoken =
+                        prefs.getString('refreshtoken'); // refresh token
+                    var token = prefs.getString('token');
+                    print('YO');
+                    print(token);
+                    var url =
+                        "https://soular-microservices.azurewebsites.net/api/refresh_token";
+
+                    final http.Response res = await http.post(url,
+                        headers: {
+                          'Content-Type': 'application/json; charset=UTF-8',
+                          
+                        },
+                        body: jsonEncode(<String, String>{
+                          'refreshToken': refreshtoken,
+                        }));
+
+                    // set new access token
+                    var jsonData = null;
+                    jsonData = json.decode(res.body);
+                    print('jsondata');
+                    print(jsonData);
+
+                    sharedPreferences.setString(
+                        "token", jsonData["accessToken"]);
+
+                    print('attempt to purchase again');
+                    attemptSell(amtInput);
+
+                    // displayDialog(context, "Unauthorized purchase", "401");
                     print(res.headers);
-                    displayDialog(context, "Unauthorized purhcase", "401");
+
+                    displayDialog(context, "Unauthorized purchase", "401");
                   } else if (res.statusCode == 403) {
                     print(res.headers);
-                    displayDialog(context, "Purchase failed", "403");
+                    displayDialog(context, "Failed to put energy up for sales", "403");
                   } else if (res.statusCode == 500) {
                     print(res.headers);
                     displayDialog(context, "Internal server error", "500");

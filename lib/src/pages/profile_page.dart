@@ -19,24 +19,19 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     super.initState();
     checkLoginStatus();
-    getUsername();
+
   }
 
   SharedPreferences sharedPreferences;
 
-  var _usernameController = TextEditingController();
-  var _passwordController = TextEditingController();
 
-  // set true when user tape on text
-  bool _isEditingText = false;
-
-  final FocusNode _usernameFocus = FocusNode();
-  final FocusNode _passwordFocus = FocusNode();
 
   final formKey = GlobalKey<FormState>();
 
   double width;
-  var profileInfo = ['@khamkk'];
+
+
+  var profileInfo = [''];
   String getProfileInfoString() {
     StringBuffer sb = new StringBuffer();
     for (String line in profileInfo) {
@@ -44,14 +39,9 @@ class _ProfilePageState extends State<ProfilePage> {
     }
     return sb.toString();
   }
+    String get username => sharedPreferences.getString("username");
 
-  @override
-  void dispose() {
-    // Clean up the controller when the widget is disposed.
-    _usernameController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
+
 
 
   Widget _header(BuildContext context) {
@@ -131,11 +121,7 @@ class _ProfilePageState extends State<ProfilePage> {
             radius: 60.0),
         SizedBox(height: 20.0),
 
-        Text(
-          "Kham Keow",
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 22.0, color: Colors.black),
-        ),
+        
         Container(
             padding: EdgeInsets.symmetric(horizontal: 90),
             child: Center(
@@ -144,19 +130,27 @@ class _ProfilePageState extends State<ProfilePage> {
                   Container(
                     child: Center(
                         child: Text(
-                      getProfileInfoString(),
+                          "Username",
+                      // getProfileInfoString(),
                       textAlign: TextAlign.center,
                       maxLines: 20,
                       style: TextStyle(
                         fontSize: 16.0,
                         color: Colors.grey,
                       ),
-                    )),
+                    )
+                    ),
                   ),
                 ],
               ),
             )),
-        SizedBox(height: 20),
+        SizedBox(height: 5),
+        Text(
+          username,
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 22.0, color: Colors.black),
+        ),
+        SizedBox(height: 30),
         RaisedButton(
           textColor: Colors.white,
           color: Colors.grey,
@@ -197,14 +191,6 @@ class _ProfilePageState extends State<ProfilePage> {
     )));
   }
 
-  //  void _saveChanges() {
-  //    if (formKey.currentState.validate()){
-  //      formKey.currentState.save();
-  //      print(_usernameController);
-  //      print(_passwordController);
-  //    }
-  //   }
-
   checkLoginStatus() async {
     sharedPreferences = await SharedPreferences.getInstance();
     if (sharedPreferences.getString("token") == null) {
@@ -213,14 +199,6 @@ class _ProfilePageState extends State<ProfilePage> {
           (Route<dynamic> route) => false);
     }
   }
-  String username;
-  getUsername() async {
-        final SharedPreferences pref = await SharedPreferences.getInstance();
-        username = pref.getString("username") ?? 'hi';
-        print(username);
-        return username;
-    }
-    Widget name(){return ListTile(title: Text(getUsername()));}
 
 
   @override
