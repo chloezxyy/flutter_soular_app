@@ -104,7 +104,7 @@ class _WalletPageState extends State<WalletPage> {
 
     final SharedPreferences prefs = await SharedPreferences.getInstance();
      var token = prefs.getString('token');
-    print('Password text input:');
+    print('redeem code input:');
     print(redeemCode);
 
     var url =
@@ -156,7 +156,8 @@ class _WalletPageState extends State<WalletPage> {
                           print(text);
                         },
                         textAlign: TextAlign.center,
-                        
+                        controller: _redeemCodeController,
+                                                
                         ),
                   ]))
         ]));
@@ -184,8 +185,10 @@ class _WalletPageState extends State<WalletPage> {
           child: Text("Submit"),
           onPressed: () async {
             sharedPreferences = await SharedPreferences.getInstance();
-            var redeeomCode = _redeemCodeController.text;
-            var res = await attemptRedeemCode(redeeomCode);
+            var redeemCode = _redeemCodeController.text;
+            var res = await attemptRedeemCode(redeemCode);
+            print('this code:');
+            print(redeemCode);
             if (res.statusCode == 200) {
               displayDialog(context, "Success", "Code has been redeemed.");
 

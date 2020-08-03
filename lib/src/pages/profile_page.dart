@@ -17,8 +17,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-
-    SharedPreferences sharedPreferences;
+  SharedPreferences sharedPreferences;
 
   final formKey = GlobalKey<FormState>();
 
@@ -29,197 +28,194 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     getUsername().then(getName);
-        super.initState();
-        checkLoginStatus();
-      }
-    
-          Future<String> getUsername() async {
-        final sharedPreferences = await SharedPreferences.getInstance();
-        
-        final username = sharedPreferences.getString("username");
-        print(username);
-        if (username == null){
-          return "Username";
-        }
-        return username;
-      }
-  
-    
-      Widget _header(BuildContext context) {
-        var width = MediaQuery.of(context).size.width;
-        return ClipRRect(
-          borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(50), bottomRight: Radius.circular(50)),
-          child: Container(
-              height: 120,
-              width: width,
-              decoration: BoxDecoration(
-                color: LightColor.grey,
-              ),
-              child: Stack(
-                fit: StackFit.expand,
-                alignment: Alignment.center,
-                children: <Widget>[
-                  Positioned(
-                      top: 10,
-                      right: -120,
-                      child: _circularContainer(300, LightColor.grey)),
-                  Positioned(
-                      top: -60,
-                      left: -65,
-                      child: _circularContainer(width * .5, Colors.grey[600])),
-                  Positioned(
-                      top: -230,
-                      right: -30,
-                      child: _circularContainer(width * .7, Colors.transparent,
-                          borderColor: Colors.white38)),
-                  Positioned(
-                      top: 50,
-                      left: 0,
-                      child: Container(
-                          width: width,
-                          padding: EdgeInsets.symmetric(horizontal: 20),
-                          child: Stack(
-                            children: <Widget>[
-                              Align(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    "Your Profile",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 30,
-                                        fontWeight: FontWeight.w500),
-                                  ))
-                            ],
-                          ))),
-                ],
-              )),
-        );
-      }
-    
-      Widget _circularContainer(double height, Color color,
-          {Color borderColor = Colors.transparent, double borderWidth = 2}) {
-        return Container(
-          height: height,
-          width: height,
+    super.initState();
+    checkLoginStatus();
+  }
+
+  Future<String> getUsername() async {
+    final sharedPreferences = await SharedPreferences.getInstance();
+
+    final username = sharedPreferences.getString("username");
+    print(username);
+    if (username == null) {
+      return "Username";
+    }
+    return username;
+  }
+
+  Widget _header(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
+    return ClipRRect(
+      borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(50), bottomRight: Radius.circular(50)),
+      child: Container(
+          height: 120,
+          width: width,
           decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: color,
-            border: Border.all(color: borderColor, width: borderWidth),
+            color: LightColor.grey,
           ),
-        );
-      }
-    
-      Widget _profile() {
-        return Container(
-            child: Center(
-                child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            CircleAvatar(
-                backgroundImage: AssetImage('assets/images/profilepic.jpg'),
-                radius: 60.0),
-            SizedBox(height: 20.0), 
-            Container(
-                padding: EdgeInsets.symmetric(horizontal: 90),
-                child: Center(
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                        child: Center(
-                            child: Text(
-                              "Username",
-                          // getProfileInfoString(),
-                          textAlign: TextAlign.center,
-                          maxLines: 20,
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            color: Colors.grey,
-                          ),
-                        )
-                        ),
-                      ),
-                    ],
-                  ),
-                )),
-            SizedBox(height: 5),
-            Text(
-              _username,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 22.0, color: Colors.black),
-            ),
-            SizedBox(height: 30),
-            RaisedButton(
-              textColor: Colors.white,
-              color: Colors.grey,
-              child: Text("Edit Profile"),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => EditPage()),
-                );
-              },
-              shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(30.0),
-              ),
-            ),
-            RaisedButton(
-              textColor: Colors.white,
-              color: Colors.redAccent,
-              child: Text("Sign Out"),
-              onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => LoginPage()),
-                // );
-    
-                sharedPreferences.clear();
-                // ignore: deprecated_member_use
-                sharedPreferences.commit();
-                // checkLoginStatus();
-                Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
-              (Route<dynamic> route) => false);
-              },
-              shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(30.0),
-              ),
-            )
-          ],
-        )));
-      }
-    
-      checkLoginStatus() async {
-        sharedPreferences = await SharedPreferences.getInstance();
-        if (sharedPreferences.getString("token") == null) {
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
-              (Route<dynamic> route) => false);
-        }
-      }
-    
-      @override
-      Widget build(BuildContext context) {
-        width = MediaQuery.of(context).size.width;
-        return Scaffold(
-            body: SingleChildScrollView(
-                child: Container(
-          child: Column(
+          child: Stack(
+            fit: StackFit.expand,
+            alignment: Alignment.center,
             children: <Widget>[
-              _header(context),
-              SizedBox(height: 20),
-              _profile(),
-              
+              Positioned(
+                  top: 10,
+                  right: -120,
+                  child: _circularContainer(300, LightColor.grey)),
+              Positioned(
+                  top: -60,
+                  left: -65,
+                  child: _circularContainer(width * .5, Colors.grey[600])),
+              Positioned(
+                  top: -230,
+                  right: -30,
+                  child: _circularContainer(width * .7, Colors.transparent,
+                      borderColor: Colors.white38)),
+              Positioned(
+                  top: 50,
+                  left: 0,
+                  child: Container(
+                      width: width,
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: Stack(
+                        children: <Widget>[
+                          Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                "Your Profile",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.w500),
+                              ))
+                        ],
+                      ))),
             ],
+          )),
+    );
+  }
+
+  Widget _circularContainer(double height, Color color,
+      {Color borderColor = Colors.transparent, double borderWidth = 2}) {
+    return Container(
+      height: height,
+      width: height,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: color,
+        border: Border.all(color: borderColor, width: borderWidth),
+      ),
+    );
+  }
+
+  Widget _profile() {
+    return Container(
+        child: Center(
+            child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        CircleAvatar(
+            backgroundImage: AssetImage('assets/images/profilepic.jpg'),
+            radius: 60.0),
+        SizedBox(height: 20.0),
+        Container(
+            padding: EdgeInsets.symmetric(horizontal: 90),
+            child: Center(
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    child: Center(
+                        child: Text(
+                      "Username",
+                      // getProfileInfoString(),
+                      textAlign: TextAlign.center,
+                      maxLines: 20,
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.grey,
+                      ),
+                    )),
+                  ),
+                ],
+              ),
+            )),
+        SizedBox(height: 5),
+        Text(
+          _username,
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 22.0, color: Colors.black),
+        ),
+        SizedBox(height: 30),
+        RaisedButton(
+          textColor: Colors.white,
+          color: Colors.grey,
+          child: Text("Edit Profile"),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => EditPage()),
+            );
+          },
+          shape: new RoundedRectangleBorder(
+            borderRadius: new BorderRadius.circular(30.0),
           ),
-        )));
-      }
-    
-    
-      void getName(String username) {
-        setState((){
-          this._username = username;
-        });
+        ),
+        RaisedButton(
+          textColor: Colors.white,
+          color: Colors.redAccent,
+          child: Text("Sign Out"),
+          onPressed: () {
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(builder: (context) => LoginPage()),
+            // );
+
+            sharedPreferences.clear();
+            // ignore: deprecated_member_use
+            sharedPreferences.commit();
+            // checkLoginStatus();
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                    builder: (BuildContext context) => LoginPage()),
+                (Route<dynamic> route) => false);
+          },
+          shape: new RoundedRectangleBorder(
+            borderRadius: new BorderRadius.circular(30.0),
+          ),
+        )
+      ],
+    )));
+  }
+
+  checkLoginStatus() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    if (sharedPreferences.getString("token") == null) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+          (Route<dynamic> route) => false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    width = MediaQuery.of(context).size.width;
+    return Scaffold(
+        body: SingleChildScrollView(
+            child: Container(
+      child: Column(
+        children: <Widget>[
+          _header(context),
+          SizedBox(height: 20),
+          _profile(),
+        ],
+      ),
+    )));
+  }
+
+  void getName(String username) {
+    setState(() {
+      this._username = username;
+    });
   }
 }
