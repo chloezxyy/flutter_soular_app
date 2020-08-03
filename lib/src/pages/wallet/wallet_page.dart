@@ -3,6 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_soular_app/src/pages/home_page.dart';
 import 'package:flutter_soular_app/src/pages/main_page.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 class WalletPage extends StatefulWidget {
   WalletPage({Key key}) : super(key: key);
@@ -11,8 +15,12 @@ class WalletPage extends StatefulWidget {
 }
 
 class _WalletPageState extends State<WalletPage> {
+
+  SharedPreferences sharedPreferences;
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController _redeemCodeController = TextEditingController();
   double width;
+  
   Widget _header(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     return ClipRRect(
@@ -90,6 +98,30 @@ class _WalletPageState extends State<WalletPage> {
     );
   }
 
+    Future<http.Response> attemptRedeemCode(
+      String redeemCode) async {
+    String redeemCode = _redeemCodeController.text;
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+     var token = prefs.getString('token');
+    print('Password text input:');
+    print(redeemCode);
+
+    var url =
+        "https://soular-microservices.azurewebsites.net/api/topup";
+
+    final http.Response res = await http.post(url, headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer $token',
+    },
+    body: jsonEncode(<String, String>{
+          'redeemCode': redeemCode
+        }));
+    print(res.statusCode);
+    print(res.body);
+    return res;
+  }
+
   Widget _redeemCodeField() {
     return Container(
         padding: EdgeInsets.all(20.0),
@@ -129,6 +161,12 @@ class _WalletPageState extends State<WalletPage> {
                   ]))
         ]));
   }
+    void displayDialog(BuildContext context, String title, String text) =>
+      showDialog(
+        context: context,
+        builder: (context) =>
+            AlertDialog(title: Text(title), content: Text(text)),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +177,71 @@ class _WalletPageState extends State<WalletPage> {
       child: Column(children: <Widget>[
         _header(context),
         SizedBox(height: 20),
-        _redeemCodeField()
+        _redeemCodeField(),
+        RaisedButton(
+          textColor: Colors.white,
+          color: Colors.green,
+          child: Text("Submit"),
+          onPressed: () async {
+            sharedPreferences = await SharedPreferences.getInstance();
+            var redeeomCode = _redeemCodeController.text;
+            var res = await attemptRedeemCode(redeeomCode);
+            if (res.statusCode == 200) {
+              displayDialog(context, "Success", "Code has been redeemed.");
+
+            } else if (res.statusCode == 400) {
+              print(res.headers);
+              displayDialog(
+                  context, "400", "Bad input parameter");
+            } else if (res.statusCode == 401) {
+               print("401");
+               String redeemCode = _redeemCodeController.text;
+                    // get new refresh token
+                    final SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    var refreshtoken =
+                        prefs.getString('refreshtoken'); // refresh token
+                    var token = prefs.getString('token');
+                    print('YO');
+                    print(token);
+                    var url =
+                        "https://soular-microservices.azurewebsites.net/api/refresh_token";
+
+                    final http.Response res = await http.post(url,
+                        headers: {
+                          'Content-Type': 'application/json; charset=UTF-8',
+                        },
+                        body: jsonEncode(<String, String>{
+                          'refreshToken': refreshtoken,
+                        }));
+
+                    // set new access token
+                    var jsonData = null;
+                    jsonData = json.decode(res.body);
+                    print('jsondata');
+                    print(jsonData);
+
+                    sharedPreferences.setString(
+                        "token", jsonData["accessToken"]);
+
+                    print('attempt to purchase again');
+                    attemptRedeemCode(redeemCode);
+
+                    // displayDialog(context, "Unauthorized purchase", "401");
+
+              displayDialog(context, "Unauthorized", "401");
+            } else if (res.statusCode == 403) {
+              print(res.headers);
+              displayDialog(context, "Redeemption code error", "- 403");
+            } else {
+              print(res.headers);
+              displayDialog(context, "Error", "An unknown error occurred.");
+            }
+          },
+          shape: new RoundedRectangleBorder(
+            borderRadius: new BorderRadius.circular(30.0),
+          ),
+        )
       ]),
     )));
   }

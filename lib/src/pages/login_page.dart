@@ -77,6 +77,12 @@ class _LoginPageState extends State<LoginPage> {
     return null;
   }
 
+  Future<bool> saveUsernamePref(String username) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("username", username);
+    return prefs.commit();
+  }
+
   Future<http.Response> attemptRegister(
     String username, String password) async {
     String username = _usernameController.text;
