@@ -20,16 +20,6 @@ class MainPage extends StatefulWidget {
   final String jwt;
   final Map<String, dynamic> payload;
 
-  // factory MainPage.fromBase64(String jwt) =>
-  //   MainPage(
-  //     jwt,
-  //     json.decode(
-  //       ascii.decode(
-  //         // get the username ?
-  //         base64.decode(base64.normalize(jwt.split(".")[1]))
-  //       )
-  //     )
-  //   );
 }
 
 

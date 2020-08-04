@@ -14,20 +14,6 @@ class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 
-  // final String jwt;
-  // final Map<String, dynamic> payload;
-
-  // HomePage(this.jwt, this.payload);
-  // factory HomePage.fromBase64(String jwt) =>
-  //   HomePage(
-  //     jwt,
-  //     json.decode(
-  //       ascii.decode(
-  //         // get the username ?
-  //         base64.decode(base64.normalize(jwt.split(".")[1]))
-  //       )
-  //     )
-  //   );
 }
 
 class _HomePageState extends State<HomePage> {
@@ -103,7 +89,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                           SizedBox(height: 1),
                           Text(
-                            " USD 48.42 ",
+                            " USD 20.01",
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 30,
@@ -146,19 +132,6 @@ class _HomePageState extends State<HomePage> {
             ),
           )
         ]));
-  }
-
-  Widget _graphImage() {
-    return Container(
-        margin: EdgeInsets.symmetric(horizontal: 20),
-        height: 200,
-        // padding: const EdgeInsets.all(3.0),
-        child:
-            FittedBox(
-              // padding: EdgeInsets.all(1.0),
-              child: Image.asset('assets/images/graph.jpg'),
-              fit: BoxFit.fill
-    ));
   }
 
   Widget _buyRow() {
@@ -271,10 +244,7 @@ class _HomePageState extends State<HomePage> {
               indent: 20,
             ),
             _graphTitle("Your Electricity Consumption"),
-            // _graphImage(),
             LineChart(),
-            // _categoryRow("Houses"),
-            // _featuredRowB(),
             SizedBox(height: 5),
             _categoryRow("News"),
             NewsList(),

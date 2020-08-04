@@ -96,6 +96,35 @@ class _BuyPageState extends State<BuyPage> {
     );
   }
 
+  Future<String> getEnergyInfo() async {
+    // ignore: avoid_init_to_null
+    var jsonData = null;
+
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    var res = await http.get(
+      "https://soular-microservices.azurewebsites.net/api/energy_info",
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    print('resbody: ');
+    print(res.body);
+
+    if (res.statusCode == 200) {
+      print(res.statusCode);
+
+      jsonData = json.decode(res.body);
+      print(jsonData);
+      return res.body;
+    }
+
+    print("attemptLogIn returns null jwt");
+    print(res.statusCode);
+    return null;
+  }
+
   Widget _amtField() {
     String price = '\$0.024 W/h';
     return Container(
@@ -117,7 +146,6 @@ class _BuyPageState extends State<BuyPage> {
                       fontWeight: FontWeight.bold))
             ]),
           ),
-
           Padding(
             padding: EdgeInsets.only(top: 50.0),
             child: Text("Enter amount to buy (Wh)",
@@ -157,7 +185,6 @@ class _BuyPageState extends State<BuyPage> {
   Future<http.Response> attemptPurchase(String amtInput) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('token');
-    String amtInput = _amtInputController.text;
     print('amt input:');
     print(amtInput);
 
@@ -245,20 +272,44 @@ class _BuyPageState extends State<BuyPage> {
             AlertDialog(title: Text(title), content: Text(text)),
       );
 
+  // Widget _elecInfo() {
+  //   return Container(child: Card(
+  //       child: Column(
+  //         mainAxisSize: MainAxisSize.min,
+  //         children: <Widget>[
+  //           const ListTile(
+  //             leading: Icon(Icons.lightbulb_outline ),
+  //             title: Text('FYI'),
+  //             subtitle: Text('100W can power up one lightbulb for 1 hour'),
+  //           ),
+
+  //         ],
+  //       ),
+  //     ));
+  // }
+
   Widget _elecInfo() {
-    return Container(child: Card(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+    return Container(
+        child: Card(
+      child: Padding(
+        padding: EdgeInsets.all(3.0),
+        child: ExpansionTile(
+          title: Text('Appliances usage'),
           children: <Widget>[
             const ListTile(
-              leading: Icon(Icons.lightbulb_outline ),
-              title: Text('FYI'),
-              subtitle: Text('100W can power up one lightbulb for 1 hour'),
+              leading: Icon(Icons.lightbulb_outline),
+              title: Text('Lightbulb'),
+              subtitle: Text('100W powers up one lightbulb for 1 hour'),
             ),
-
+            const ListTile(
+              leading: Icon(Icons.power),
+              title: Text('Fan'),
+              subtitle: Text(' 80W powers up one fan for 1 hour'),
+            )
           ],
         ),
-      ));
+      ),
+    ));
   }
 
   @override
@@ -281,6 +332,8 @@ class _BuyPageState extends State<BuyPage> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(18.0),
                   side: BorderSide(color: Colors.green)),
+              // onPressed: (){
+              //   _showDialogPayment()''
               onPressed: () async {
                 if (_formKey.currentState.validate()) {
                   var amtInput = _amtInputController.text;
@@ -302,17 +355,18 @@ class _BuyPageState extends State<BuyPage> {
                     // get new refresh token
                     final SharedPreferences prefs =
                         await SharedPreferences.getInstance();
-                    var refreshtoken =
+                    String refreshtoken =
                         prefs.getString('refreshtoken'); // refresh token
-                    var token = prefs.getString('token');
-                    print('YO');
-                    print(token);
+                    String token = prefs.getString('token');
+                    print('Token : ${token}');
                     var url =
                         "https://soular-microservices.azurewebsites.net/api/refresh_token";
 
                     final http.Response res = await http.post(url,
                         headers: {
                           'Content-Type': 'application/json; charset=UTF-8',
+                          'Accept': 'application/json',
+                          'Authorization': 'Bearer $token'
                         },
                         body: jsonEncode(<String, String>{
                           'refreshToken': refreshtoken,
@@ -324,8 +378,10 @@ class _BuyPageState extends State<BuyPage> {
                     print('jsondata');
                     print(jsonData);
 
-                    sharedPreferences.setString(
-                        "token", jsonData["accessToken"]);
+                    setState(() {
+                      sharedPreferences.setString(
+                          "token", jsonData["accessToken"]);
+                    });
 
                     print('attempt to purchase again');
                     attemptPurchase(amtInput);

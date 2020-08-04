@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_soular_app/src/pages/main_page.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 import 'package:shared_preferences/shared_preferences.dart';
-
-// Create storage
-// final storage = FlutterSecureStorage();
 
 class LoginPage extends StatefulWidget {
   static String tag = 'login-page';

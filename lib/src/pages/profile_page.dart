@@ -34,13 +34,21 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<String> getUsername() async {
     final sharedPreferences = await SharedPreferences.getInstance();
-
     final username = sharedPreferences.getString("username");
     print(username);
     if (username == null) {
       return "Username";
     }
     return username;
+  }
+
+    checkLoginStatus() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    if (sharedPreferences.getString("token") == null) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+          (Route<dynamic> route) => false);
+    }
   }
 
   Widget _header(BuildContext context) {
@@ -186,15 +194,6 @@ class _ProfilePageState extends State<ProfilePage> {
         )
       ],
     )));
-  }
-
-  checkLoginStatus() async {
-    sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getString("token") == null) {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
-          (Route<dynamic> route) => false);
-    }
   }
 
   @override

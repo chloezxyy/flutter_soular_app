@@ -291,8 +291,10 @@ class _SellPageState extends State<SellPage> {
                     print('jsondata');
                     print(jsonData);
 
-                    sharedPreferences.setString(
-                        "token", jsonData["accessToken"]);
+                    setState(() {
+                      sharedPreferences.setString(
+                        "accessToken:", jsonData["accessToken"]);
+                    });
 
                     print('attempt to purchase again');
                     attemptSell(amtInput);
@@ -303,7 +305,7 @@ class _SellPageState extends State<SellPage> {
                     displayDialog(context, "Unauthorized purchase", "401");
                   } else if (res.statusCode == 403) {
                     print(res.headers);
-                    displayDialog(context, "Failed to put energy up for sales", "403");
+                    displayDialog(context, "Failed to put energy up for sales", "403: Insufficient ");
                   } else if (res.statusCode == 500) {
                     print(res.headers);
                     displayDialog(context, "Internal server error", "500");
