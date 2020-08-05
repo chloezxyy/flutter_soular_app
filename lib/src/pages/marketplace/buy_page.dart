@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_soular_app/src/pages/main_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../models/energy_info.dart';
 
 class BuyPage extends StatefulWidget {
   BuyPage({Key key}) : super(key: key);
@@ -14,39 +15,10 @@ class BuyPage extends StatefulWidget {
 
 class _BuyPageState extends State<BuyPage> {
   Future<EnergyInfo> energyInfo;
-
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _amtInputController = TextEditingController();
-  SharedPreferences sharedPreferences;
+  // SharedPreferences sharedPreferences;
   double width;
-
-  @override
-  void initState() {
-    super.initState();
-    energyInfo = getEnergyInfo();
-    print(energyInfo);
-  }
-
-  Widget energyInfoWidget() {
-    return Container(
-        child: FutureBuilder<EnergyInfo>(
-      future: energyInfo,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Text(snapshot.data.currentPrice.toString());
-        } else if (snapshot.hasError) {
-          return Text("${snapshot.error}");
-        }
-        // By default, show a loading spinner.
-        // return CircularProgressIndicator();
-        return Text(
-          "\$ 0.024 W/h",
-          style: TextStyle(
-              color: Colors.blue, fontSize: 25, fontWeight: FontWeight.w500),
-        );
-      },
-    ));
-  }
 
   Widget _header(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -175,8 +147,8 @@ class _BuyPageState extends State<BuyPage> {
             padding: EdgeInsets.only(top: 30.0),
             child: Column(children: <Widget>[
               Text(
-                "Price of Electricity",
-                style: TextStyle(fontSize: 19),
+                "Price of Electricity (\$ W/h)",
+                style: TextStyle(fontSize: 18),
               ),
               SizedBox(height: 10),
             ]),
@@ -184,14 +156,43 @@ class _BuyPageState extends State<BuyPage> {
         ]));
   }
 
+  @override
+  void initState() {
+    super.initState();
+    energyInfo = getEnergyInfo();
+  }
+
+  Widget energyInfoWidget() {
+    return Container(
+        child: FutureBuilder<EnergyInfo>(
+      future: energyInfo,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Text(
+            snapshot.data.currentPrice.toString(),
+            style: TextStyle(
+                color: Colors.blue, fontSize: 25, fontWeight: FontWeight.w500),
+          );
+        } else if (snapshot.hasError) {
+          print("${snapshot.error}");
+          // return Text(
+          //   "\$ 0.024 W/h",
+          //   style: TextStyle(
+          //       color: Colors.blue, fontSize: 25, fontWeight: FontWeight.w500),
+          // );
+        }
+        // By default, show a loading spinner.
+        return CircularProgressIndicator();
+      },
+    ));
+  }
+
   Future<http.Response> attemptPurchase(String amtInput) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('token');
     // print('amt input:');
     // print(amtInput);
-
     var url = "https://soular-microservices.azurewebsites.net/api/purchase";
-
     final http.Response res = await http.post(url,
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
@@ -206,6 +207,23 @@ class _BuyPageState extends State<BuyPage> {
     print(res.body);
     // print(res.statusCode);
     return res;
+  }
+
+  Future<EnergyInfo> getEnergyInfo() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('token');
+    var url = "https://soular-microservices.azurewebsites.net/api/energy_info";
+    final http.Response res = await http.get(url, headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer $token',
+    });
+    // print('getEnergyInfo');
+    // print('rescode: ${res.statusCode}');
+    // // print('res.headers: ${res.headers}');
+    // print('res.body: ${res.body}');
+    // print('json: $json');
+
+    return EnergyInfo.fromJson(json.decode(res.body));
   }
 
   void _showDialogPayment() {
@@ -339,43 +357,11 @@ class _BuyPageState extends State<BuyPage> {
                     displayDialog(
                         context, "Purchase failed", "Insufficient credits");
                   } else if (res.statusCode == 401) {
-                    print("401");
+                    print("HERE 401");
                     // get new refresh token
-                    final SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    String refreshtoken =
-                        prefs.getString('refreshtoken'); // refresh token
-                    String token = prefs.getString('token');
-                    print('Token : ${token}');
-                    var url =
-                        "https://soular-microservices.azurewebsites.net/api/refresh_token";
-
-                    final http.Response res = await http.post(url,
-                        headers: {
-                          'Content-Type': 'application/json; charset=UTF-8',
-                          'Accept': 'application/json',
-                          'Authorization': 'Bearer $token'
-                        },
-                        body: jsonEncode(<String, String>{
-                          'refreshToken': refreshtoken,
-                        }));
-
-                    // set new access token
-                    var jsonData = null;
-                    jsonData = json.decode(res.body);
-                    print('jsondata');
-                    print(jsonData);
-
-                    setState(() {
-                      sharedPreferences.setString(
-                          "token", jsonData["accessToken"]);
-                    });
-
+                    refreshToken();
                     print('attempt to purchase again');
                     attemptPurchase(amtInput);
-
-                    // displayDialog(context, "Unauthorized purchase", "401");
-
                   } else {
                     displayDialog(
                         context, "Error", "An unknown error occurred.");
@@ -395,51 +381,35 @@ class _BuyPageState extends State<BuyPage> {
       ]),
     )));
   }
-}
 
-Future<EnergyInfo> getEnergyInfo() async {
-  // ignore: avoid_init_to_null
-  var json = null;
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  var token = prefs.getString('token');
-  var res = await http.get(
-    "https://soular-microservices.azurewebsites.net/api/energy_info",
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-      'Authorization': 'Bearer $token',
-    },
-  );
-  if (res.statusCode == 200) {
-    print(json);
-    return EnergyInfo.fromJson(json.decode(res.body));
-  } else {
-    throw Exception('Failed to load /energy_info');
+  void refreshToken() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String refreshtoken = prefs.getString('refreshtoken'); // refresh token
+    String token = prefs.getString('token');
+    // String token = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsInVzZXJuYW1lIjoidGVzdCIsImV4cCI6MTU5NjYwMTU5MiwiaWF0IjoxNTk2NjAwNjkyfQ.nxcA7vN2rDDEIGFmYW3BbgKBY2Gey1_9SG2hIHqes4DZOUBt9psHDIueWRoixDq0i4EYwW3Gn9-x1lVp37u-zocNrhhiHI4ufMXmLiNZocl8_65IxgThGQAVYAOqaGdhDNm3ZY-_0AtaoE8R0rUBIGzJc9C_Ql80ql4NYQxqPoYexpCHLUY5nFP5hSv5hHOdOHoEOgP5TLPqDuotkbsN9UydO6QcwlyOBDVZMuO-n27i7AtbE8Fk0YRneVgdDQfUAtZw3unRC87W1Vo6Tl2qVD1ap-zivWJoIst3u3DYgWFsnMftvptjIgC576_CvRz99Rf8suar-NSH1DnZJ8JDNw';
+    print('Token : ${token}');
+    var url =
+        "https://soular-microservices.azurewebsites.net/api/refresh_token";
+
+    final http.Response res = await http.post(url,
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Accept': 'application/json'
+        },
+        body: jsonEncode(<String, String>{
+          'refreshToken': refreshtoken,
+        }));
+
+    // set new access token
+    var jsonData = null;
+    jsonData = json.decode(res.body);
+    print('jsondata');
+    print(jsonData);
+
+    setState(() {
+      prefs.setString("token", jsonData["accessToken"]);
+      prefs.setString("refreshtoken", jsonData["refreshToken:"]);
+    });
   }
 }
 
-// to convert raw Future<http.Response into a Dart object
-
-class EnergyInfo {
-  final double energyBalance;
-  final double creditBalance;
-  final double energyOnSaleBalance;
-  final double currentPrice;
-
-  EnergyInfo(
-      {this.energyBalance,
-      this.creditBalance,
-      this.energyOnSaleBalance,
-      this.currentPrice});
-
-  factory EnergyInfo.fromJson(Map<String, dynamic> json) {
-    return EnergyInfo(
-      energyBalance: json['energyBalance'],
-      creditBalance: json['creditBalance'],
-      energyOnSaleBalance: json['energyOnSaleBalance'],
-      currentPrice: json['currentPrice'],
-    );
-  }
-
-  // function that fetches energy info from endpoint
-
-}

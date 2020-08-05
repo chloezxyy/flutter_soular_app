@@ -21,6 +21,8 @@ class _HomePageState extends State<HomePage> {
 
   double width;
 
+  
+
   Widget _header(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     return ClipRRect(
