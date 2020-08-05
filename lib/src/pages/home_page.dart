@@ -1,27 +1,80 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_soular_app/src/helper/quad_clipper.dart';
+import 'package:flutter_soular_app/src/models/energy_info.dart';
 import 'package:flutter_soular_app/src/pages/energy/energy_history.dart';
 import 'package:flutter_soular_app/src/pages/marketplace/buy_page.dart';
 import 'package:flutter_soular_app/src/pages/marketplace/sell_page.dart';
 import 'package:flutter_soular_app/src/widgets/newsList.dart';
 import 'package:flutter_soular_app/src/theme/color/light_color.dart';
 import 'package:flutter_soular_app/src/pages/wallet/wallet_page.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class HomePage extends StatefulWidget {
   // HomePage({Key key}) : super(key: key);
-
   @override
   _HomePageState createState() => _HomePageState();
-
 }
 
 class _HomePageState extends State<HomePage> {
 // class HomePage extends StatelessWidget{
-
+  Future<EnergyInfo> energyInfo;
   double width;
 
-  
+  @override
+  void initState() {
+    super.initState();
+    energyInfo = getEnergyInfo();
+  }
+
+  Future<EnergyInfo> getEnergyInfo() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('token');
+    var url = "https://soular-microservices.azurewebsites.net/api/energy_info";
+    final http.Response res = await http.get(url, headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer $token',
+    });
+
+    return EnergyInfo.fromJson(json.decode(res.body));
+  }
+
+  Widget creditBalWidget() {
+    return Container(
+        child: FutureBuilder<EnergyInfo>(
+      future: energyInfo,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Row(children: <Widget>[
+            Text(
+              "USD ",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 30,
+                  fontWeight: FontWeight.w600),
+            ),
+            Text(
+              snapshot.data.creditBalance.toString(),
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 30,
+                  fontWeight: FontWeight.w600),
+            )
+          ]);
+        } else if (snapshot.hasError) {
+          print("${snapshot.error}");
+          // return Text(
+          //   "\$ 0.024 W/h",
+          //   style: TextStyle(
+          //       color: Colors.blue, fontSize: 25, fontWeight: FontWeight.w500),
+          // );
+        }
+        // By default, show a loading spinner.
+        return CircularProgressIndicator();
+      },
+    ));
+  }
 
   Widget _header(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -73,9 +126,9 @@ class _HomePageState extends State<HomePage> {
                               FlatButton(
                                 onPressed: () {
                                   Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder:(context) => WalletPage())
-                                  );
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => WalletPage()));
                                 },
                                 child: Text('MANAGE WALLET',
                                     style: TextStyle(color: Colors.white)),
@@ -90,13 +143,14 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
                           SizedBox(height: 1),
-                          Text(
-                            " USD 20.01",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 30,
-                                fontWeight: FontWeight.w600),
-                          ),
+                          creditBalWidget(),
+                          // Text(
+                          //   " USD 20.01",
+                          //   style: TextStyle(
+                          //       color: Colors.white,
+                          //       fontSize: 30,
+                          //       fontWeight: FontWeight.w600),
+                          // ),
                         ],
                       ))),
             ],
@@ -221,7 +275,6 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
