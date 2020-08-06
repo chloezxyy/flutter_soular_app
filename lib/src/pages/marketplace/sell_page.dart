@@ -5,7 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_soular_app/src/pages/main_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-
+import '../../models/energy_info.dart';
+import 'buy_page.dart';
 
 
 class SellPage extends StatefulWidget {
@@ -18,6 +19,13 @@ class _SellPageState extends State<SellPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _amtInputController = TextEditingController();
   SharedPreferences sharedPreferences;
+  Future<EnergyInfo> energyInfo;
+
+    @override
+  void initState() {
+    super.initState();
+    energyInfo = getEnergyInfo();
+  }
 
   double width;
   Widget _header(BuildContext context) {
@@ -196,6 +204,35 @@ class _SellPageState extends State<SellPage> {
     );
   }
 
+    Future<EnergyInfo> getEnergyInfo() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('token');
+    var url = "https://soular-microservices.azurewebsites.net/api/energy_info";
+    final http.Response res = await http.get(url, headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer $token',
+    });
+
+    var jsonData = null;
+    jsonData = jsonDecode(res.body) as Map;
+    String getCurPriceStr = jsonData['currentPrice'].toString();
+    // print(getCurPriceStr);
+
+    setState(() {
+      prefs.setString("currentPrice",getCurPriceStr );
+      print('getcurPricepref: ${prefs.getString("currentPrice")}');
+    });
+
+    // print('jsonData key val: ${jsonData.get("currentPrice")}');
+    // print('getEnergyInfo');
+    // print('rescode: ${res.statusCode}');
+    // // print('res.headers: ${res.headers}');
+    // print('res.body: ${res.body}');
+    // print('json: $json');
+
+    return EnergyInfo.fromJson(json.decode(res.body));
+  }
+
   void _succesfulSell() {
     // flutter defined function
     showDialog(
@@ -230,6 +267,47 @@ class _SellPageState extends State<SellPage> {
             AlertDialog(title: Text(title), content: Text(text)),
       );
 
+        Widget _priceField() {
+    return Container(
+        padding: EdgeInsets.all(20.0),
+        width: 250,
+        child: Column(children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(top: 30.0),
+            child: Column(children: <Widget>[
+              Text(
+                "Price of Electricity (\$ W/h)",
+                style: TextStyle(fontSize: 18),
+              ),
+              SizedBox(height: 10),
+            ]),
+          ),
+        ]));
+  }
+
+  
+  Widget energyInfoWidget() {
+    return Container(
+        child: FutureBuilder<EnergyInfo>(
+      future: energyInfo,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Text(
+            snapshot.data.currentPrice.toString(),
+            style: TextStyle(
+                color: Colors.blue, fontSize: 25, fontWeight: FontWeight.w500),
+          );
+        } else if (snapshot.hasError) {
+          print("${snapshot.error}");
+        }
+        // By default, show a loading spinner.
+        return CircularProgressIndicator();
+      },
+      
+    ));
+  }
+
+
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
@@ -238,13 +316,14 @@ class _SellPageState extends State<SellPage> {
             child: Container(
       child: Column(children: <Widget>[
         _header(context),
-        SizedBox(height: 20),
+        _priceField(),
+        energyInfoWidget(),
         _amtField(),
         SizedBox(height: 20),
-        SizedBox(height: 40),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            
             SizedBox(width: 10),
             RaisedButton(
               shape: RoundedRectangleBorder(

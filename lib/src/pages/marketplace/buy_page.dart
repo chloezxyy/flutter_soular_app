@@ -122,7 +122,7 @@ class _BuyPageState extends State<BuyPage> {
                           if (value.isEmpty) {
                             return 'Please enter text';
                           }
-                          if (priceInt < 0.001) {
+                          if (priceInt < 1) {
                             return 'Invalid amount';
                           }
                           return null;
@@ -168,7 +168,6 @@ class _BuyPageState extends State<BuyPage> {
       future: energyInfo,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-         
           return Text(
             snapshot.data.currentPrice.toString(),
             style: TextStyle(
@@ -217,12 +216,12 @@ class _BuyPageState extends State<BuyPage> {
 
     var jsonData = null;
     jsonData = jsonDecode(res.body) as Map;
-    String getCurPriceStr = jsonData['currentPrice'].toString();
+    getCurPriceStr = jsonData['currentPrice'].toString();
     // print(getCurPriceStr);
 
     setState(() {
       prefs.setString("currentPrice",getCurPriceStr );
-      print('getcurPricepref: ${prefs.getString("currentPrice")}');
+      print('getcurPriceprefs: ${prefs.getString("currentPrice")}');
     });
 
     // print('jsonData key val: ${jsonData.get("currentPrice")}');
@@ -232,16 +231,12 @@ class _BuyPageState extends State<BuyPage> {
     // print('res.body: ${res.body}');
     // print('json: $json');
 
-    setState(() {
-      // prefs.setString("currentPrice", value);
-    });
-
     return EnergyInfo.fromJson(json.decode(res.body));
   }
 
   void _showDialogPayment() {
     var amtInput = _amtInputController.text;
-    String price = '0.000376';
+    String price = getCurPriceStr;
     // var priceStatic = 
     // double curPriceNum = int.parse(getCurPriceStr) as double;
     // var getCurPriceDouble = int.parse(getCurPriceStr); 
