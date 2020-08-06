@@ -254,14 +254,45 @@ class _BuyPageState extends State<BuyPage> {
           title: new Text("Amount to be paid:"),
           content: new Text(
             // " \$0.92"
-            "${double.parse(price) * double.parse(amtInput)}"
+            "\$ ${double.parse(price) * double.parse(amtInput)}"
             ),
           actions: <Widget>[
             new FlatButton(
               child: new Text("Confirm"),
-              onPressed: () {
-                Navigator.of(context).pop();
+              // onPressed: () {
+                 onPressed: () async {
+                if (_formKey.currentState.validate()) {
+                  var amtInput = _amtInputController.text;
+                  var res = await attemptPurchase(amtInput);
+
+                  if (res.statusCode == 200) {
+                    // displayDialog(context, "Success", "Password Changed.");
+                    // _succesfulPayment();
+                    Navigator.of(context).pop();
                 _succesfulPayment();
+                    _amtInputController.clear();
+                  } else if (res.statusCode == 400) {
+                    print(res.headers);
+                    displayDialog(context, "Bad Input param", "400");
+                  } else if (res.statusCode == 403) {
+                    print(res.headers);
+                    displayDialog(
+                        context, "Purchase failed", "Insufficient credits/energy");
+                  } else if (res.statusCode == 401) {
+                    print("HERE 401");
+                    // get new refresh token
+                    refreshToken();
+                    print('attempt to purchase again');
+                    attemptPurchase(amtInput);
+                    displayDialog(
+                        context, "Error", "Please login again.");
+                  } else {
+                    displayDialog(
+                        context, "Error", "An unknown error occurred.");
+                  }
+                  print('processing data');
+                }
+               
               },
             ),
             // usually buttons at the bottom of the dialog
@@ -358,39 +389,8 @@ class _BuyPageState extends State<BuyPage> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(18.0),
                   side: BorderSide(color: Colors.green)),
-              // onPressed: (){
-              //   _showDialogPayment()''
-              onPressed: () async {
-                if (_formKey.currentState.validate()) {
-                  var amtInput = _amtInputController.text;
-                  var res = await attemptPurchase(amtInput);
-
-                  if (res.statusCode == 200) {
-                    // displayDialog(context, "Success", "Password Changed.");
-                    // _succesfulPayment();
+              onPressed: ()  {
                     _showDialogPayment();
-                    _amtInputController.clear();
-                  } else if (res.statusCode == 400) {
-                    print(res.headers);
-                    displayDialog(context, "Bad Input param", "400");
-                  } else if (res.statusCode == 403) {
-                    print(res.headers);
-                    displayDialog(
-                        context, "Purchase failed", "Insufficient credits/energy");
-                  } else if (res.statusCode == 401) {
-                    print("HERE 401");
-                    // get new refresh token
-                    refreshToken();
-                    print('attempt to purchase again');
-                    attemptPurchase(amtInput);
-                    displayDialog(
-                        context, "Error", "Please login again.");
-                  } else {
-                    displayDialog(
-                        context, "Error", "An unknown error occurred.");
-                  }
-                  print('processing data');
-                }
               },
               color: Colors.green,
               textColor: Colors.white,
