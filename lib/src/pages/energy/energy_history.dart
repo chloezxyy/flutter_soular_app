@@ -5,23 +5,23 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:http/http.dart' as http;
 
 class LineChart extends StatelessWidget {
-  // Defining the data
+  // Defining the data - L00PPY energyConsumption
   final data = [
-    new EnergyData(0, 15000),
-    new EnergyData(1, 17350),
-    new EnergyData(2, 16780),
-    new EnergyData(3, 18900),
-    new EnergyData(4, 19070),
-    new EnergyData(5, 23000),
-    new EnergyData(6, 23600),
-    new EnergyData(7, 19800),
-    new EnergyData(8, 26540),
-    new EnergyData(9, 27890),
-    new EnergyData(10, 30200),
-    new EnergyData(11, 32459),
-    new EnergyData(12, 40985),
-    new EnergyData(13, 45000),
-    new EnergyData(14, 44565),
+    new EnergyData(0, 5000),
+    new EnergyData(1, 5350),
+    new EnergyData(2, 5780),
+    new EnergyData(3, 5900),
+    // new EnergyData(4, 5070),
+    // new EnergyData(5, 5000),
+    // new EnergyData(6, 5600),
+    // new EnergyData(7, 4800),
+    // new EnergyData(8, 5540),
+    // new EnergyData(9, 5890),
+    // new EnergyData(10, 5200),
+    // new EnergyData(11, 5459),
+    // new EnergyData(12, 5985),
+    // new EnergyData(13, 5000),
+    // new EnergyData(14, 5565),
   ];
 
   _getSeriesData() {
@@ -32,7 +32,7 @@ class LineChart extends StatelessWidget {
           domainFn: (EnergyData series, _) => series.day,
           measureFn: (EnergyData series, _) => series.energy,
           colorFn: (EnergyData series, _) =>
-              charts.MaterialPalette.blue.shadeDefault)
+              charts.MaterialPalette.purple.shadeDefault)
     ];
     return series;
   }
@@ -40,7 +40,7 @@ class LineChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 500,
+        height: 300,
         padding: EdgeInsets.all(10),
         child: Padding(
           padding: const EdgeInsets.all(10.0),

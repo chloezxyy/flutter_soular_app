@@ -237,10 +237,7 @@ class _BuyPageState extends State<BuyPage> {
   void _showDialogPayment() {
     var amtInput = _amtInputController.text;
     String price = getCurPriceStr;
-    // var priceStatic = 
-    // double curPriceNum = int.parse(getCurPriceStr) as double;
-    // var getCurPriceDouble = int.parse(getCurPriceStr); 
-    // flutter defined function
+
     showDialog(
       context: context,
       builder: (BuildContext context) {

@@ -20,6 +20,8 @@ class _SellPageState extends State<SellPage> {
   final TextEditingController _amtInputController = TextEditingController();
   SharedPreferences sharedPreferences;
   Future<EnergyInfo> energyInfo;
+  String getCurPriceStr = '';
+
 
     @override
   void initState() {
@@ -152,7 +154,7 @@ class _SellPageState extends State<SellPage> {
                         keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
                         // validator: amtValidator(_inpPrice),
                         validator: (value) {
-                          var priceInt = double.parse(value);
+                          var priceInt = int.parse(value);
 
                           if (value.isEmpty) {
                             return 'Please enter text';
@@ -174,6 +176,8 @@ class _SellPageState extends State<SellPage> {
   }
 
   void _showDialogSell() {
+    var amtInput = _amtInputController.text;
+    // String price = getCurPriceStr;
     // flutter defined function
     showDialog(
       context: context,
@@ -181,7 +185,11 @@ class _SellPageState extends State<SellPage> {
         // return object of type Dialog
         return AlertDialog(
           title: new Text("Selling price:"),
-          content: new Text(" \$0.92"),
+          content: new Text(
+            "hi"
+            "${ double.parse(amtInput)}"
+            // "\$ ${double.parse(price)}"
+            ),
           actions: <Widget>[
             new FlatButton(
               child: new Text("Confirm"),
@@ -215,7 +223,7 @@ class _SellPageState extends State<SellPage> {
 
     var jsonData = null;
     jsonData = jsonDecode(res.body) as Map;
-    String getCurPriceStr = jsonData['currentPrice'].toString();
+    getCurPriceStr = jsonData['currentPrice'].toString();
     // print(getCurPriceStr);
 
     setState(() {
@@ -284,8 +292,7 @@ class _SellPageState extends State<SellPage> {
           ),
         ]));
   }
-
-  
+ 
   Widget energyInfoWidget() {
     return Container(
         child: FutureBuilder<EnergyInfo>(
@@ -303,10 +310,8 @@ class _SellPageState extends State<SellPage> {
         // By default, show a loading spinner.
         return CircularProgressIndicator();
       },
-      
     ));
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -351,8 +356,8 @@ class _SellPageState extends State<SellPage> {
                     var refreshtoken =
                         prefs.getString('refreshtoken'); // refresh token
                     var token = prefs.getString('token');
-                    print('YO');
-                    print(token);
+                    // print('YO');
+                    // print(token);
                     var url =
                         "https://soular-microservices.azurewebsites.net/api/refresh_token";
 
