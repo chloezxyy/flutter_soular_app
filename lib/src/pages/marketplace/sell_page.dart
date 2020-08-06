@@ -256,8 +256,9 @@ class _SellPageState extends State<SellPage> {
                   var amtInput = _amtInputController.text;
                   var res = await attemptSell(amtInput);
 
-                  if (res.statusCode == 200) {
-                    // displayDialog(context, "Success", "Password Changed.");
+                  print('processing sell function');   
+
+                  if (res.statusCode == 200) {                    
                     _showDialogSell();
                     _amtInputController.clear();
                   } else if (res.statusCode == 400) {
@@ -279,7 +280,6 @@ class _SellPageState extends State<SellPage> {
                     final http.Response res = await http.post(url,
                         headers: {
                           'Content-Type': 'application/json; charset=UTF-8',
-                          
                         },
                         body: jsonEncode(<String, String>{
                           'refreshToken': refreshtoken,
@@ -295,10 +295,8 @@ class _SellPageState extends State<SellPage> {
                       sharedPreferences.setString(
                         "accessToken:", jsonData["accessToken"]);
                     });
-
                     print('attempt to purchase again');
                     attemptSell(amtInput);
-
                     // displayDialog(context, "Unauthorized purchase", "401");
                     print(res.headers);
 
@@ -314,11 +312,7 @@ class _SellPageState extends State<SellPage> {
                     displayDialog(
                         context, "Error", "An unknown error occurred.");
                   }
-
-                  print('processing data');
-                  
                 }
-                
               },
               color: Colors.green,
               textColor: Colors.white,

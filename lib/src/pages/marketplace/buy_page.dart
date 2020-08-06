@@ -18,6 +18,7 @@ class _BuyPageState extends State<BuyPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _amtInputController = TextEditingController();
   double width;
+  String getCurPriceStr = '';
 
   Widget _header(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -183,11 +184,6 @@ class _BuyPageState extends State<BuyPage> {
     ));
   }
 
-  // Method to save the current price 
-  static Future<bool> getCurPrice(double price) async{
-
-  }
-
   Future<http.Response> attemptPurchase(String amtInput) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('token');
@@ -223,13 +219,17 @@ class _BuyPageState extends State<BuyPage> {
     jsonData = jsonDecode(res.body) as Map;
     String getCurPriceStr = jsonData['currentPrice'].toString();
     // print(getCurPriceStr);
-    prefs.setString("currentPrice",getCurPriceStr );
-    print('getcurPricepref: ${prefs.getString("currentPrice")}');
+
+    setState(() {
+      prefs.setString("currentPrice",getCurPriceStr );
+      print('getcurPricepref: ${prefs.getString("currentPrice")}');
+    });
+
     // print('jsonData key val: ${jsonData.get("currentPrice")}');
     // print('getEnergyInfo');
     // print('rescode: ${res.statusCode}');
     // // print('res.headers: ${res.headers}');
-    print('res.body: ${res.body}');
+    // print('res.body: ${res.body}');
     // print('json: $json');
 
     setState(() {
@@ -240,6 +240,9 @@ class _BuyPageState extends State<BuyPage> {
   }
 
   void _showDialogPayment() {
+    var amtInput = _amtInputController.text;
+    // double curPriceNum = int.parse(getCurPriceStr) as double;
+    // var getCurPriceDouble = int.parse(getCurPriceStr); 
     // flutter defined function
     showDialog(
       context: context,
@@ -247,7 +250,10 @@ class _BuyPageState extends State<BuyPage> {
         // return object of type Dialog
         return AlertDialog(
           title: new Text("Amount to be paid:"),
-          content: new Text(" \$0.92"),
+          content: new Text(
+            // " \$0.92"
+            "${amtInput} Wh of electricity"
+            ),
           actions: <Widget>[
             new FlatButton(
               child: new Text("Confirm"),
@@ -285,7 +291,6 @@ class _BuyPageState extends State<BuyPage> {
               child: new Text("Done"),
               onPressed: () {
                 Navigator.of(context).pop();
-
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => MainPage()));
               },
