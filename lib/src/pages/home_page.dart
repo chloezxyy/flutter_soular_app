@@ -42,8 +42,8 @@ class _HomePageState extends State<HomePage> {
 
   Widget creditBalWidget() {
     return Container(
-        child: FutureBuilder<EnergyInfo>(
-      future: energyInfo,
+        child: StreamBuilder<EnergyInfo>(
+      stream: energyInfo.asStream(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Row(children: <Widget>[

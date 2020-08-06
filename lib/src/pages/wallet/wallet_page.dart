@@ -15,12 +15,11 @@ class WalletPage extends StatefulWidget {
 }
 
 class _WalletPageState extends State<WalletPage> {
-
   SharedPreferences sharedPreferences;
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _redeemCodeController = TextEditingController();
   double width;
-  
+
   Widget _header(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     return ClipRRect(
@@ -98,25 +97,22 @@ class _WalletPageState extends State<WalletPage> {
     );
   }
 
-    Future<http.Response> attemptRedeemCode(
-      String redeemCode) async {
+  Future<http.Response> attemptRedeemCode(String redeemCode) async {
     String redeemCode = _redeemCodeController.text;
 
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-     var token = prefs.getString('token');
+    var token = prefs.getString('token');
     print('redeem code input:');
     print(redeemCode);
 
-    var url =
-        "https://soular-microservices.azurewebsites.net/api/topup";
+    var url = "https://soular-microservices.azurewebsites.net/api/topup";
 
-    final http.Response res = await http.post(url, headers: {
-      'Content-Type': 'application/json; charset=UTF-8',
-      'Authorization': 'Bearer $token',
-    },
-    body: jsonEncode(<String, String>{
-          'redeemCode': redeemCode
-        }));
+    final http.Response res = await http.post(url,
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode(<String, String>{'redeemCode': redeemCode}));
     print(res.statusCode);
     print(res.body);
     return res;
@@ -127,10 +123,13 @@ class _WalletPageState extends State<WalletPage> {
         padding: EdgeInsets.all(20.0),
         width: 250,
         child: Column(children: <Widget>[
-                    Padding(
+          Padding(
             padding: EdgeInsets.only(bottom: 50.0),
-            child: Text("Enter Redeemption Code",
-                style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
+            child: Text(
+              "Enter Redeemption Code",
+              style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
           ),
           Form(
               key: _formKey,
@@ -138,31 +137,19 @@ class _WalletPageState extends State<WalletPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     TextFormField(
-                        keyboardType: TextInputType.numberWithOptions(
-                            signed: true, decimal: true),
-                        // validator: amtValidator(_inpPrice),
-                        validator: (value) {
-                          var priceInt = double.parse(value);
-
-                          if (value.isEmpty) {
-                            return 'Please enter text';
-                          }
-                          if (priceInt < 0.001) {
-                            return 'Invalid amount';
-                          }
-                          return null;
-                        },
-                        onChanged: (text) {
-                          print(text);
-                        },
-                        textAlign: TextAlign.center,
-                        controller: _redeemCodeController,
-                                                
-                        ),
+                      keyboardType: TextInputType.numberWithOptions(
+                          signed: true, decimal: true),
+                      onChanged: (text) {
+                        print(text);
+                      },
+                      textAlign: TextAlign.center,
+                      controller: _redeemCodeController,
+                    ),
                   ]))
         ]));
   }
-    void displayDialog(BuildContext context, String title, String text) =>
+
+  void displayDialog(BuildContext context, String title, String text) =>
       showDialog(
         context: context,
         builder: (context) =>
@@ -191,46 +178,44 @@ class _WalletPageState extends State<WalletPage> {
             print(redeemCode);
             if (res.statusCode == 200) {
               displayDialog(context, "Success", "Code has been redeemed.");
-
+              _successfulRedeem();
             } else if (res.statusCode == 400) {
               print(res.headers);
-              displayDialog(
-                  context, "400", "Bad input parameter");
+              displayDialog(context, "400", "Bad input parameter");
             } else if (res.statusCode == 401) {
-               print("401");
-               String redeemCode = _redeemCodeController.text;
-                    // get new refresh token
-                    final SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    var refreshtoken =
-                        prefs.getString('refreshtoken'); // refresh token
-                    var token = prefs.getString('token');
-                    print('YO');
-                    print(token);
-                    var url =
-                        "https://soular-microservices.azurewebsites.net/api/refresh_token";
+              print("401");
+              String redeemCode = _redeemCodeController.text;
+              // get new refresh token
+              final SharedPreferences prefs =
+                  await SharedPreferences.getInstance();
+              var refreshtoken =
+                  prefs.getString('refreshtoken'); // refresh token
+              var token = prefs.getString('token');
+              print('YO');
+              print(token);
+              var url =
+                  "https://soular-microservices.azurewebsites.net/api/refresh_token";
 
-                    final http.Response res = await http.post(url,
-                        headers: {
-                          'Content-Type': 'application/json; charset=UTF-8',
-                        },
-                        body: jsonEncode(<String, String>{
-                          'refreshToken': refreshtoken,
-                        }));
+              final http.Response res = await http.post(url,
+                  headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                  },
+                  body: jsonEncode(<String, String>{
+                    'refreshToken': refreshtoken,
+                  }));
 
-                    // set new access token
-                    var jsonData = null;
-                    jsonData = json.decode(res.body);
-                    print('jsondata');
-                    print(jsonData);
+              // set new access token
+              var jsonData = null;
+              jsonData = json.decode(res.body);
+              print('jsondata');
+              print(jsonData);
 
-                    sharedPreferences.setString(
-                        "token", jsonData["accessToken"]);
+              sharedPreferences.setString("token", jsonData["accessToken"]);
 
-                    print('attempt to purchase again');
-                    attemptRedeemCode(redeemCode);
+              print('attempt to purchase again');
+              attemptRedeemCode(redeemCode);
 
-                    // displayDialog(context, "Unauthorized purchase", "401");
+              // displayDialog(context, "Unauthorized purchase", "401");
 
               displayDialog(context, "Unauthorized", "401");
             } else if (res.statusCode == 403) {
@@ -247,5 +232,34 @@ class _WalletPageState extends State<WalletPage> {
         )
       ]),
     )));
+  }
+
+  void _successfulRedeem() {
+    {
+      // flutter defined function
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          // return object of type Dialog
+          return AlertDialog(
+            title: new Text("Redeemption Code Succesful!"),
+            content: new Text("You will be redirected back to Home page."),
+            actions: <Widget>[
+              // usually buttons at the bottom of the dialog
+              new FlatButton(
+                child: new Text("Done"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => MainPage()));
+                },
+              ),
+            ],
+            elevation: 24.0,
+          );
+        },
+      );
+    }
   }
 }

@@ -37,25 +37,7 @@ class NewsListState extends State<NewsList> {
             style: TextStyle(color: LightColor.titleTextColor)));
   }
 
-  // ListTile _buildItemsForListView(BuildContext context, int index) {
-  //   return ListTile(
-  //     title: _newsArticles[index].urlToImage == null
-  //         ? Image.asset(Constants.NEWS_PLACEHOLDER_IMAGE_ASSET_URL)
-  //         : Image.network(_newsArticles[index].urlToImage),
-  //     subtitle:
-  //         Text(_newsArticles[index].title, style: TextStyle(fontSize: 18)),
-  //   );
-  // }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //       body: ListView.builder(
-  //     // itemCount: _newsArticles.length,
-  //     itemCount: 3,
-  //     itemBuilder: _listView,
-  //   ));
-  // }
 
   @override
   Widget build(BuildContext context) {

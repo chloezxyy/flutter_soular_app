@@ -201,7 +201,7 @@ class _BuyPageState extends State<BuyPage> {
         body: jsonEncode(<String, String>{
           'amount': amtInput,
         }));
-    print('HERE');
+    print('attemptPurchase func');
     print(res.statusCode);
     print(res.headers);
     print(res.body);
@@ -355,7 +355,7 @@ class _BuyPageState extends State<BuyPage> {
                   } else if (res.statusCode == 403) {
                     print(res.headers);
                     displayDialog(
-                        context, "Purchase failed", "Insufficient credits");
+                        context, "Purchase failed", "Insufficient credits/energy");
                   } else if (res.statusCode == 401) {
                     print("HERE 401");
                     // get new refresh token
