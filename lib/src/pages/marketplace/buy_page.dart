@@ -241,6 +241,8 @@ class _BuyPageState extends State<BuyPage> {
 
   void _showDialogPayment() {
     var amtInput = _amtInputController.text;
+    String price = '0.000376';
+    // var priceStatic = 
     // double curPriceNum = int.parse(getCurPriceStr) as double;
     // var getCurPriceDouble = int.parse(getCurPriceStr); 
     // flutter defined function
@@ -252,7 +254,7 @@ class _BuyPageState extends State<BuyPage> {
           title: new Text("Amount to be paid:"),
           content: new Text(
             // " \$0.92"
-            "${amtInput} Wh of electricity"
+            "${double.parse(price) * double.parse(amtInput)}"
             ),
           actions: <Widget>[
             new FlatButton(
@@ -365,6 +367,7 @@ class _BuyPageState extends State<BuyPage> {
 
                   if (res.statusCode == 200) {
                     // displayDialog(context, "Success", "Password Changed.");
+                    // _succesfulPayment();
                     _showDialogPayment();
                     _amtInputController.clear();
                   } else if (res.statusCode == 400) {
