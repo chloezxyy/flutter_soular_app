@@ -27,8 +27,8 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     energyInfo = getEnergyInfo();
-    getEnergyHistory();
-    print(getEnergyHistory());
+    // getEnergyHistory();
+    // print(getEnergyHistory());
       }
     
       Future<EnergyInfo> getEnergyInfo() async {
@@ -278,6 +278,23 @@ class _HomePageState extends State<HomePage> {
           ),
         );
       }
+
+          Future<http.Response> getEnergyHistory() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('token');
+    var url = "https://soular-microservices.azurewebsites.net/api/energy_history?from=1590845047&to=1590848647";
+    final http.Response res = await http.get(url, headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer $token',
+    });
+    print('/energy_history');
+    print('res.body: ${res.body}');
+    print('res.headers: ${res.headers}');
+    print('res.statusCode: ${res.statusCode}');
+    // return EnergyData(day, energy)
+    return res;
+    // return EnergyData(day, energy);
+  }
     
       @override
       Widget build(BuildContext context) {
@@ -313,21 +330,4 @@ class _HomePageState extends State<HomePage> {
         );
       }
     
-      
-    Future<http.Response> getEnergyHistory() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    var token = prefs.getString('token');
-    var url = "https://soular-microservices.azurewebsites.net/api/energy_history?from=1590845047&to=1590848647";
-    final http.Response res = await http.get(url, headers: {
-      'Content-Type': 'application/json; charset=UTF-8',
-      'Authorization': 'Bearer $token',
-    });
-    print('/energy_history');
-    print('res.body: ${res.body}');
-    print('res.headers: ${res.headers}');
-    print('res.statusCode: ${res.statusCode}');
-    // return EnergyData(day, energy)
-    return res;
-    // return EnergyData(day, energy);
-  }
 }

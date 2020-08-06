@@ -6,32 +6,18 @@ import 'package:flutter_soular_app/src/theme/color/light_color.dart';
 import 'package:flutter_soular_app/src/widgets/category_card.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-
 class ExplorePage extends StatefulWidget {
-
-  
   //  ExplorePage(this.jwt, this.payload);
   ExplorePage({Key key, this.jwt, this.payload}) : super(key: key);
 
   @override
   _ExplorePageState createState() => _ExplorePageState();
 
-   final String jwt;
+  final String jwt;
   final Map<String, dynamic> payload;
-
-    // factory ExplorePage.fromBase64(String jwt) =>
-    // ExplorePage(
-    //   jwt,
-    //   json.decode(
-    //     ascii.decode(
-    //       // get the username ?
-    //       base64.decode(base64.normalize(jwt.split(".")[1]))
-    //     )
-    //   )
-    // );
 }
 
-class _ExplorePageState extends State<ExplorePage>{
+class _ExplorePageState extends State<ExplorePage> {
   double width;
   static const IconData account_balance =
       IconData(0xe84f, fontFamily: 'MaterialIcons');
@@ -90,8 +76,8 @@ class _ExplorePageState extends State<ExplorePage>{
 
   Widget _grid() {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 17),
-      height: 1000.0,
+      margin: EdgeInsets.symmetric(horizontal: 1),
+      height: 200.0,
       child: Container(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -107,9 +93,7 @@ class _ExplorePageState extends State<ExplorePage>{
                       Container(
                         padding: EdgeInsets.all(30),
                         child: InkWell(
-                            onTap: () {
-                              
-                            },
+                            onTap: () {},
                             child: Column(children: <Widget>[
                               Icon(MdiIcons.help, color: Colors.grey),
                               Spacer(),
@@ -122,28 +106,40 @@ class _ExplorePageState extends State<ExplorePage>{
                         padding: EdgeInsets.all(30),
                         child: InkWell(
                             onTap: () {
-  //                               Navigator.push(
-  // context,
-  // MaterialPageRoute(builder: (context) => MarketPlace(this.jwt, this.payload)));
-
+                              //                               Navigator.push(
+                              // context,
+                              // MaterialPageRoute(builder: (context) => MarketPlace(this.jwt, this.payload)));
                             },
                             child: Column(children: <Widget>[
-                          
                               Icon(MdiIcons.store, color: Colors.grey),
                               Spacer(),
-                              
-                              Text(
-                                "Energy Store",
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 2,
-                                textAlign: TextAlign.center
-                              )
+                              Text("Energy Store",
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
+                                  textAlign: TextAlign.center)
                             ])),
                       )
                     ])),
           ],
         ),
       ),
+    );
+  }
+
+  Widget iconView() {
+    return GridView.count(
+      // Create a grid with 2 columns. If you change the scrollDirection to
+      // horizontal, this produces 2 rows.
+      crossAxisCount: 2,
+      // Generate 100 widgets that display their index in the List.
+      children: List.generate(2, (index) {
+        return Center(
+          child: Text(
+            'Item $index',
+            // style: Theme.of(context).textTheme.headline5,
+          ),
+        );
+      }),
     );
   }
 
@@ -165,12 +161,13 @@ class _ExplorePageState extends State<ExplorePage>{
     width = MediaQuery.of(context).size.width;
     return Scaffold(
         body: SingleChildScrollView(
-            child: Container(
+            child: ConstrainedBox(
+      constraints: BoxConstraints(),
       child: Column(
         children: <Widget>[
           _header(context),
-          SizedBox(height: 20),
           _grid(),
+          // iconView()
         ],
       ),
     )));

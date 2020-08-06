@@ -157,7 +157,7 @@ class _NotificationPageState extends State<NotificationPage> {
       child: Column(
         children: <Widget>[
           _header(context),
-          SizedBox(height: 20),
+          SizedBox(height: 10),
           _profile(),
         ],
       ),

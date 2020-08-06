@@ -177,7 +177,7 @@ class _SellPageState extends State<SellPage> {
 
   void _showDialogSell() {
     var amtInput = _amtInputController.text;
-    // String price = getCurPriceStr;
+    String price = getCurPriceStr;
     // flutter defined function
     showDialog(
       context: context,
@@ -186,8 +186,8 @@ class _SellPageState extends State<SellPage> {
         return AlertDialog(
           title: new Text("Selling price:"),
           content: new Text(
-            "hi"
-            "${ double.parse(amtInput)}"
+            // "hi"
+             "\$ ${double.parse(price) * double.parse(amtInput)}"
             // "\$ ${double.parse(price)}"
             ),
           actions: <Widget>[
