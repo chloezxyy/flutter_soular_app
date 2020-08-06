@@ -250,7 +250,6 @@ class _WalletPageState extends State<WalletPage> {
                 child: new Text("Done"),
                 onPressed: () {
                   Navigator.of(context).pop();
-
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => MainPage()));
                 },

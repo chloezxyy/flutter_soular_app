@@ -17,7 +17,6 @@ class _BuyPageState extends State<BuyPage> {
   Future<EnergyInfo> energyInfo;
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _amtInputController = TextEditingController();
-  // SharedPreferences sharedPreferences;
   double width;
 
   Widget _header(BuildContext context) {
@@ -168,6 +167,7 @@ class _BuyPageState extends State<BuyPage> {
       future: energyInfo,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
+         
           return Text(
             snapshot.data.currentPrice.toString(),
             style: TextStyle(
@@ -175,16 +175,17 @@ class _BuyPageState extends State<BuyPage> {
           );
         } else if (snapshot.hasError) {
           print("${snapshot.error}");
-          // return Text(
-          //   "\$ 0.024 W/h",
-          //   style: TextStyle(
-          //       color: Colors.blue, fontSize: 25, fontWeight: FontWeight.w500),
-          // );
         }
         // By default, show a loading spinner.
         return CircularProgressIndicator();
       },
+      
     ));
+  }
+
+  // Method to save the current price 
+  static Future<bool> getCurPrice(double price) async{
+
   }
 
   Future<http.Response> attemptPurchase(String amtInput) async {
@@ -217,11 +218,23 @@ class _BuyPageState extends State<BuyPage> {
       'Content-Type': 'application/json; charset=UTF-8',
       'Authorization': 'Bearer $token',
     });
+
+    var jsonData = null;
+    jsonData = jsonDecode(res.body) as Map;
+    String getCurPriceStr = jsonData['currentPrice'].toString();
+    // print(getCurPriceStr);
+    prefs.setString("currentPrice",getCurPriceStr );
+    print('getcurPricepref: ${prefs.getString("currentPrice")}');
+    // print('jsonData key val: ${jsonData.get("currentPrice")}');
     // print('getEnergyInfo');
     // print('rescode: ${res.statusCode}');
     // // print('res.headers: ${res.headers}');
-    // print('res.body: ${res.body}');
+    print('res.body: ${res.body}');
     // print('json: $json');
+
+    setState(() {
+      // prefs.setString("currentPrice", value);
+    });
 
     return EnergyInfo.fromJson(json.decode(res.body));
   }
@@ -362,6 +375,8 @@ class _BuyPageState extends State<BuyPage> {
                     refreshToken();
                     print('attempt to purchase again');
                     attemptPurchase(amtInput);
+                    displayDialog(
+                        context, "Error", "Please login again.");
                   } else {
                     displayDialog(
                         context, "Error", "An unknown error occurred.");
