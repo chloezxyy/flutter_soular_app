@@ -5,19 +5,6 @@ Smart course app is built in flutter. App design is based on [Smart Course](http
 
 <img src="https://cdn.dribbble.com/users/792073/screenshots/10090738/media/d3428df173d81d3722d3f16bfcd0ccc9.png"  /> 
 
-## Screenshots
-
- Android HomePage              |  Android Recommend Page 
-:-------------------------:|:-------------------------:
-![](https://github.com/TheAlphamerc/flutter_soular_app/blob/master/screenshots/screenshot_1.jpg?raw=true)|![](https://github.com/TheAlphamerc/flutter_soular_app/blob/master/screenshots/screenshot_2.jpg?raw=true)
-
-iOS HomePage              |  iOS Recommend Page 
-:-------------------------:|:-------------------------:
-![](https://github.com/TheAlphamerc/flutter_soular_app/blob/master/screenshots/screenshot_ios_1.png?raw=true)|![](https://github.com/TheAlphamerc/flutter_soular_app/blob/master/screenshots/screenshot_ios_2.png?raw=true)
-
-## Pull Requests
-
-I welcome and encourage all pull requests. It usually will take me within 24-48 hours to respond to any issue or request.
 
 ## Created & Maintained By
 
